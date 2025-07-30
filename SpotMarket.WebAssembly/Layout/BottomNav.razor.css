@@ -1,0 +1,57 @@
+﻿.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--card-background-color);
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.75rem;
+    padding-bottom: calc(0.75rem + var(--safe-area-inset-bottom));
+    height: calc(var(--bottom-nav-height) + var(--safe-area-inset-bottom));
+    z-index: 10;
+    box-sizing: border-box;
+}
+.bottom-nav-inner-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+[data-bs-theme="dark"] .bottom-nav {
+    background-color: var(--gray-800);
+    border-top-color: var(--gray-700);
+}
+[data-bs-theme="dark"] ::deep .nav-item {
+    color: var(--gray-400);
+}
+
+    [data-bs-theme="dark"] ::deep .nav-item.active {
+        color: var(--primary-color);
+    }
+::deep .nav-item {
+    text-align: center;
+    flex: 1;
+    color: var(--text-secondary-color);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    transition: color 0.2s ease-in-out;
+}
+    ::deep .nav-item.active {
+        color: var(--primary-color);
+    }
+::deep .nav-icon {
+    font-size: 1.25rem;
+    margin-bottom: 4px;
+}
+
+::deep .nav-text {
+    font-size: 0.75rem;
+    display: block;
+    line-height: 1.2;
+}

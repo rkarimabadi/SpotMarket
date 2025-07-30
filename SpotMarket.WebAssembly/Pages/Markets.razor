@@ -1,0 +1,12 @@
+﻿@page "/markets"
+@inject NavStateService NavState
+<PageTitle>بازارها</PageTitle>
+<ComingSoonContainer Title="بازارها" />
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavState.SetNavState("بازارها", true);
+        base.OnInitialized();
+    }
+}

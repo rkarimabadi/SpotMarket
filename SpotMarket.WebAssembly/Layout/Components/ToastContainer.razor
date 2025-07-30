@@ -1,0 +1,58 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div class="swift-toast-container">
+    @foreach (var toast in toasts)
+    {
+        <div id="@toast.Id" class="swift-toast @toast.Type.ToString().ToLower()">
+            <div class="swift-toast-icon">
+                <i class="bi @toast.IconClass"></i>
+            </div>
+            <div class="swift-toast-message">@toast.Message</div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<ToastItem> toasts = new List<ToastItem>();
+
+    public async Task ShowToast(string message, ToastType type = ToastType.Success)
+    {
+        var toast = new ToastItem
+        {
+            Id = "toast-" + Guid.NewGuid().ToString(),
+            Message = message,
+            Type = type
+        };
+
+        toasts.Add(toast);
+        await InvokeAsync(StateHasChanged);
+
+        var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "js/toast.js");
+        await module.InvokeVoidAsync("showSwiftToast", toast.Id);
+
+        // Automatically remove the toast from the UI after a delay
+        _ = Task.Delay(4000).ContinueWith(async _ =>
+        {
+            await RemoveToast(toast.Id);
+        });
+    }
+
+    private async Task RemoveToast(string toastId)
+    {
+        var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "js/toast.js");
+        await module.InvokeVoidAsync("hideSwiftToast", toastId);
+
+        // Wait for the animation to complete before removing from the list
+        await Task.Delay(500);
+
+        await InvokeAsync(() =>
+        {
+            var toastToRemove = toasts.FirstOrDefault(t => t.Id == toastId);
+            if (toastToRemove != null)
+            {
+                toasts.Remove(toastToRemove);
+                StateHasChanged();
+            }
+        });
+    }
+}

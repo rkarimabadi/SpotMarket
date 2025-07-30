@@ -1,0 +1,80 @@
+﻿@using SpotMarket.WebAssembly.Layout.Components
+@inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
+@implements IDisposable
+@* <CascadingValue Value="AppData"> *@
+    <nav class="top-nav" @ref="topNavRef">
+        <TopNav/>
+    </nav>
+<CascadingValue Value="toastContainer">
+<CascadingValue Value="genericModal">
+
+    <div class="main-container"  @ref="mainContainerRef" style="@MainContainerStyle">
+        <div class="content-area" id="mainContent">
+            <div class="tab-pane active d-block" data-initialized="true">
+                @Body
+            </div>
+        </div>
+        <FloatingActionButton/>
+        <BottomNav/>
+    </div>
+    <ToastContainer @ref="toastContainer" />
+    <GenericModalContainer @ref="genericModal" />
+</CascadingValue>
+</CascadingValue>
+@* </CascadingValue> *@
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+@code{
+    public ToastContainer toastContainer { get; set; } = default!;
+    public GenericModalContainer genericModal { get; set; } = default!;
+    //public UserProfile AppData { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        // AppData = await StorageProvider.LoadAppDataAsync();
+        // AppData.OnDataChanged += HandleAppDataChanged;
+    }
+    // private async Task HandleAppDataChanged(UserProfile userProfile)
+    // {
+    //     AppData = userProfile;
+    //     await StorageProvider.SaveAppDataAsync(userProfile);
+    //     StateHasChanged();
+    // }
+
+    private ElementReference topNavRef;
+    private ElementReference mainContainerRef;
+    private string MainContainerStyle = "padding-top: 71px;";
+    private DotNetObjectReference<MainLayout>? dotNetHelper;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            dotNetHelper = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("setupResizeObserver",
+                topNavRef, dotNetHelper);
+            await AdjustPadding();
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnTopNavResized()
+    {
+        await AdjustPadding();
+    }
+
+    private async Task AdjustPadding()
+    {
+        var height = await JSRuntime.InvokeAsync<double>("getElementHeight", topNavRef);
+        MainContainerStyle = $"padding-top: {height}px;";
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        dotNetHelper?.Dispose();
+    }
+}

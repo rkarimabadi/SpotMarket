@@ -1,0 +1,11 @@
+﻿@page "/search"
+@inject NavStateService NavState
+<PageTitle>جستجو</PageTitle>
+<ComingSoonContainer Title="جستجو"/>
+@code {
+    protected override void OnInitialized()
+    {
+        NavState.SetNavState("جستجو", true);
+        base.OnInitialized();
+    }
+}

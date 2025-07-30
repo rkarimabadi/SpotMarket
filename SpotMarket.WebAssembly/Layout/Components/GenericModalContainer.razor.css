@@ -1,0 +1,39 @@
+﻿/* iOS-style modal animations */
+.modal.fade.show {
+    animation: fadeIn 0.2s ease-out;
+}
+.modal{
+    z-index:1061!important;
+}
+.modal-backdrop {
+    z-index: 1061!important;
+}
+.modal-backdrop.fade.show {
+    opacity: 0.4;
+    background-color: #000;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(1.05);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* iOS-style button effects */
+.btn-link {
+    transition: background-color 0.1s ease;
+}
+
+    .btn-link:active {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+.text-danger {
+    color: #ff3b30 !important; /* iOS red color */
+}

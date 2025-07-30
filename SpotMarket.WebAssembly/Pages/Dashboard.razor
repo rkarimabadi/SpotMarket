@@ -1,0 +1,13 @@
+﻿@page "/"
+
+@inject NavStateService NavState
+<PageTitle>داشبورد</PageTitle>
+<ComingSoonContainer Title="داشبورد" />
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavState.SetNavState("کالا نما", false);
+        base.OnInitialized();
+    }
+}

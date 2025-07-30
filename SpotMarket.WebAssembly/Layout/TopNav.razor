@@ -1,0 +1,55 @@
+﻿@using SpotMarket.WebAssembly.Services.App
+@inject NavigationManager Navigation
+@inject NavStateService NavState
+@implements IDisposable
+
+<header class="top-nav">
+    <div class="top-nav-content">
+        <div class="nav-section left">
+            @if (NavState.ShowBackButton)
+            {
+                <button class="icon-button" @onclick="GoBack" aria-label="بازگشت">
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+            }
+            else
+            {
+                <div class="app-logo" aria-label="آیکون برنامه کالا نما">
+                    <svg class="app-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 20V10M12 20V4M20 20V14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            }
+        </div>
+        <div class="nav-section center">
+            <h1 class="page-title">@NavState.CurrentTitle</h1>
+        </div>
+        <div class="nav-section right">
+            <NavLink href="account" class="icon-button" aria-label="حساب کاربری">
+                <i class="bi bi-person-circle"></i>
+            </NavLink>
+        </div>
+    </div>
+</header>
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavState.OnStateChange += OnStateChanged;
+    }
+
+    private void OnStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    public void Dispose()
+    {
+        NavState.OnStateChange -= OnStateChanged;
+    }
+}

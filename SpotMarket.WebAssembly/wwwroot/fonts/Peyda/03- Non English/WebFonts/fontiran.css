@@ -1,0 +1,83 @@
+﻿/**
+*
+*	Name:			Peyda Fonts
+*	Version:			4.1
+*	Author:			Naser Khadem
+*	Created on:		March 11, 2019
+*	Updated on:		July 17, 2021
+*	Website:			http://fontiran.com
+*	Copyright:		Commercial/Proprietary Software
+--------------------------------------------------------------------------------------
+فونت کلمه یک نرم افزار مالکیتی محسوب می شود. جهت آگاهی از قوانین استفاده از این فونت ها لطفا به وب سایت (فونت ایران دات کام) مراجعه نمایید
+--------------------------------------------------------------------------------------
+Peyda fonts are considered a proprietary software. To gain information about the laws regarding the use of these fonts, please visit www.fontiran.com 
+--------------------------------------------------------------------------------------
+This set of fonts are used in this project under the license: (.....)
+------------------------------------------------------------------------------------- fonts/-
+*	
+**/
+
+@font-face {
+	font-family: PeydaWebNoEn;
+	font-style: normal;
+	font-weight: 100;
+	src: url('fonts/woff2/PeydaWebNoEn-Thin.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('fonts/woff/PeydaWebNoEn-Thin.woff') format('woff');  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+@font-face {
+	font-family: PeydaWebNoEn;
+	font-style: normal;
+	font-weight: 200;
+	src: url('fonts/woff2/PeydaWebNoEn-ExtraLight.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('fonts/woff/PeydaWebNoEn-ExtraLight.woff') format('woff');  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+@font-face {
+	font-family: PeydaWebNoEn;
+	font-style: normal;
+	font-weight: 300;
+	src: url('fonts/woff2/PeydaWebNoEn-Light.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('fonts/woff/PeydaWebNoEn-Light.woff') format('woff');  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+@font-face {
+	font-family: PeydaWebNoEn;
+	font-style: normal;
+	font-weight: 500;
+	src: url('fonts/woff2/PeydaWebNoEn-Medium.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('fonts/woff/PeydaWebNoEn-Medium.woff') format('woff');  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+@font-face {
+	font-family: PeydaWebNoEn;
+	font-style: normal;
+	font-weight: 600;
+	src: url('fonts/woff2/PeydaWebNoEn-SemiBold.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('fonts/woff/PeydaWebNoEn-SemiBold.woff') format('woff');  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+
+@font-face {
+	font-family: PeydaWebNoEn;
+	font-style: normal;
+	font-weight: 800;
+	src: url('fonts/woff2/PeydaWebNoEn-ExtraBold.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('fonts/woff/PeydaWebNoEn-ExtraBold.woff') format('woff');  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+@font-face {
+	font-family: PeydaWebNoEn;
+	font-style: normal;
+	font-weight: 900;
+	src: url('fonts/woff2/PeydaWebNoEn-Black.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('fonts/woff/PeydaWebNoEn-Black.woff') format('woff');  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+@font-face {
+	font-family: PeydaWebNoEn;
+	font-style: normal;
+	font-weight: bold;
+	src: url('fonts/woff2/PeydaWebNoEn-Bold.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('fonts/woff/PeydaWebNoEn-Bold.woff') format('woff');  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}
+@font-face {
+	font-family: PeydaWebNoEn;
+	font-style: normal;
+	font-weight: normal;
+	src: url('fonts/woff2/PeydaWebNoEn-Regular.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('fonts/woff/PeydaWebNoEn-Regular.woff') format('woff');  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+}

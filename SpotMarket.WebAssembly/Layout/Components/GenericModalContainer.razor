@@ -1,0 +1,108 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div class="modal fade modal-bottom-sheet" id="genericItemModal" tabindex="-1" aria-labelledby="genericItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center" id="genericItemModalLabel">@ModalParameters.Label</h5>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="بستن"></button>
+            </div>
+            <div class="modal-body" id="genericItemModalBody">
+                <CascadingValue Value="OnActionCompletedCallback" Name="OnActionCompleted">
+                    <CascadingValue Value="this" Name="GenericModalContainer">
+                        @ModalParameters.Body
+                    </CascadingValue>
+                </CascadingValue>
+            </div>
+            <div class="modal-footer d-flex justify-content-between align-items-center">
+                <button type="button"
+                        class="btn btn-danger modal-footer-btn@(ModalParameters.ShowDeleteButton ? "" : " d-none")"
+                        @onclick="OnDeleteClicked"
+                        id="deleteGenericItemButton">
+                    <i class="bi bi-trash3"></i> حذف
+                </button>
+                <div class="ms-auto">
+                    <button type="reset" form="save-@ModalParameters.FormName" class="btn btn-outline-secondary modal-footer-btn me-2" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i> انصراف</button>
+                    <button type="submit" form="save-@ModalParameters.FormName" class="btn btn-primary modal-footer-btn@(ModalParameters.ShowSaveButton ? "" : " d-none")" id="saveGenericItemButton"><i class="bi bi-check-lg me-1"></i> ذخیره</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ShowDeleteConfirmation)
+{
+    <div class="modal-backdrop fade show" style="background-color: rgba(0,0,0,0.4);"></div>
+    <div class="modal fade show" style="display: block;" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered justify-content-center">
+            <div class="modal-content" style="border-radius: 13px; overflow: hidden;max-width: 270px;">
+                <div class="modal-header text-center" style="border-bottom: none; padding: 16px;">
+                    <div class="d-flex flex-column justify-content-center w-100">
+                        <h5 class="modal-title w-100" style="font-weight: 600; font-size: 17px; padding-bottom:16px;">@ModalParameters.Label</h5>
+                        @if (!string.IsNullOrEmpty(ModalParameters.DeleteConfirmationMessage))
+                        {
+                            <p style="font-size: 13px; color: #666; margin-top: 4px; margin-bottom: 0;">@ModalParameters.DeleteConfirmationMessage</p>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer p-0" style="border-top: 0.5px solid #e5e5e5;">
+                    <div class="d-flex justify-content-between w-100 m-0">
+                        <button type="submit" form="delete-@ModalParameters.FormName"
+                                class="flex-fill btn btn-link p-2 text-decoration-none"
+                                style="font-weight: 600; font-size: 17px; color: #ff3b30;">
+                            حذف
+                        </button>
+                        <div style="border-right: 0.5px solid #e5e5e5;"></div>
+                        <button type="reset" form="delete-@ModalParameters.FormName"
+                                class="flex-fill btn btn-link p-2  text-decoration-none"
+                                style="font-weight: 400; font-size: 17px;"
+                                @onclick="CancelDelete">
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private GenericModal _genericModal = new GenericModal();
+    private bool ShowDeleteConfirmation { get; set; } = false;
+
+    public EventCallback OnDelete { get; set; }
+    private EventCallback OnActionCompletedCallback { get; set; }
+
+    protected override void OnInitialized()
+    {
+        OnActionCompletedCallback = EventCallback.Factory.Create(this, CloseModalAsync);
+    }
+
+    public GenericModal ModalParameters
+    {
+        get => _genericModal;
+        set
+        {
+            _genericModal = value;
+            StateHasChanged();
+        }
+    }
+
+    private void OnDeleteClicked() => ShowDeleteConfirmation = true;
+
+    private void CancelDelete() => ShowDeleteConfirmation = false;
+
+    private async Task CloseModalAsync()
+    {
+        ShowDeleteConfirmation = false;
+        try
+        {
+            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", $"js/modal.js");
+            await module.InvokeVoidAsync("hideModal", "genericItemModal");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error closing modal: {ex.Message}");
+        }
+    }
+}

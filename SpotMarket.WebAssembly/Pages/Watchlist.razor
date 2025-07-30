@@ -1,0 +1,11 @@
+﻿@page "/watchlist"
+@inject NavStateService NavState
+<PageTitle>لیست پیگیری</PageTitle>
+<ComingSoonContainer Title="لیست پیگیری" />
+@code {
+    protected override void OnInitialized()
+    {
+        NavState.SetNavState("پیگیری", true);
+        base.OnInitialized();
+    }
+}

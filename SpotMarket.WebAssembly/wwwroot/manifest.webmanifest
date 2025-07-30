@@ -1,0 +1,23 @@
+{
+  "name": "بورس کالا: داستان بازار",
+  "short_name": "داستان بازار",
+  "lang": "fa-IR",
+  "id": "./",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#5e72e4",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
+}

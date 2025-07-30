@@ -1,0 +1,811 @@
+﻿:root {
+    --primary-color: #5e72e4;
+    --primary-dark: #4a5acf;
+    --primary-semi-dark: #5767D6;
+    --primary-middle: #6474DC;
+    --primary-semi-light: #7181E3;
+    --primary-light: #7e8ee9;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #0dcaf0;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --mood-excellent-bg: #2dce89;
+    --mood-good-bg: #5e72e4;
+    --mood-neutral-bg: #8898aa;
+    --mood-unhappy-bg: #ffda77;
+    --mood-sad-bg: #fb6340;
+    --mood-angry-bg: #f5365c;
+    --secondary-color: var(--gray-600);
+    --background-color: var(--gray-100);
+    --card-background-color: #FFFFFF;
+    --text-color: var(--gray-800);
+    --text-secondary-color: var(--gray-600);
+    --border-color: var(--gray-300);
+    --font-family-sans-serif: 'peydawebfanum', 'SF Pro Text', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --bottom-nav-height: 70px;
+    --fab-size: 56px;
+    --primary-color-rgb: 94, 114, 228;
+    --risk-color-high: #3c4ca0;
+    --risk-color-medium: var(--primary-color);
+    --risk-color-low: #A0B3F0;
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+    --day-cell-bg: #ebedf0;
+    --day-cell-size: 14px;
+    --day-cell-gap: 3px;
+}
+h1:focus {
+    outline: none;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid #e50000;
+}
+
+.validation-message {
+    color: #e50000;
+}
+
+#blazor-error-ui {
+    color-scheme: light only;
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+.blazor-error-boundary {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
+    padding: 1rem 1rem 1rem 3.7rem;
+    color: white;
+}
+
+    .blazor-error-boundary::after {
+        content: "An error has occurred."
+    }
+
+.loading-progress {
+    position: relative;
+    display: block;
+    width: 8rem;
+    height: 8rem;
+    margin: 20vh auto 1rem auto;
+}
+
+    .loading-progress circle {
+        fill: none;
+        stroke: #e0e0e0;
+        stroke-width: 0.6rem;
+        transform-origin: 50% 50%;
+        transform: rotate(-90deg);
+    }
+
+        .loading-progress circle:last-child {
+            stroke: #1b6ec2;
+            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
+            transition: stroke-dasharray 0.05s ease-in-out;
+        }
+
+.loading-progress-text {
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+}
+
+    .loading-progress-text:after {
+        content: var(--blazor-load-percentage-text, "Loading");
+    }
+
+.darker-border-checkbox.form-check-input {
+    border-color: #929292;
+}
+
+
+[data-bs-theme="dark"] {
+    --background-color: var(--gray-900);
+    --card-background-color: var(--gray-800);
+    --text-color: var(--gray-100);
+    --text-secondary-color: var(--gray-400);
+    --border-color: var(--gray-700);
+    --primary-light: #4a5acf;
+    --risk-color-high: #5a6abf;
+    --risk-color-medium: var(--primary-light);
+    --risk-color-low: #7986cb;
+}
+
+
+
+    [data-bs-theme="dark"] .mood-btn-enhanced-mono {
+        background-color: var(--gray-700);
+        border-color: var(--gray-600);
+        color: var(--gray-100);
+    }
+
+        [data-bs-theme="dark"] .mood-btn-enhanced-mono:hover {
+            border-color: var(--primary-light);
+            background-color: var(--gray-600);
+            color: var(--primary-light);
+        }
+
+        [data-bs-theme="dark"] .mood-btn-enhanced-mono.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-dark);
+            color: white;
+        }
+
+    [data-bs-theme="dark"] .quote-card {
+        background-color: var(--primary-dark);
+    }
+
+    [data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select {
+        background-color: var(--gray-700);
+        border-color: var(--gray-600);
+        color: var(--gray-100);
+    }
+
+        [data-bs-theme="dark"] .form-control:focus, [data-bs-theme="dark"] .form-select:focus {
+            background-color: var(--gray-700);
+            border-color: var(--primary-color);
+            color: var(--gray-100);
+        }
+
+
+
+
+    [data-bs-theme="dark"] .moment-grid-item {
+        background-color: var(--gray-700);
+    }
+
+    [data-bs-theme="dark"] .modal-content {
+        background-color: var(--gray-800);
+    }
+
+    [data-bs-theme="dark"] .modal-header, [data-bs-theme="dark"] .modal-footer {
+        border-color: var(--gray-700);
+    }
+
+    [data-bs-theme="dark"] .list-group-item {
+        background-color: var(--gray-800);
+        border-color: var(--gray-700);
+    }
+
+    [data-bs-theme="dark"] .btn-outline-secondary {
+        color: var(--gray-300);
+        border-color: var(--gray-500);
+    }
+
+        [data-bs-theme="dark"] .btn-outline-secondary:hover,
+        [data-bs-theme="dark"] .btn-outline-secondary.active {
+            background-color: var(--primary-light);
+            border-color: var(--primary-light);
+            color: white;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-secondary .bi {
+            color: var(--primary-color);
+        }
+
+        [data-bs-theme="dark"] .btn-outline-secondary:hover .bi,
+        [data-bs-theme="dark"] .btn-outline-secondary.active .bi {
+            color: white;
+        }
+
+
+
+    [data-bs-theme="dark"] #mementoMoriCard .card-body {
+        background-color: var(--gray-700);
+    }
+
+    [data-bs-theme="dark"] #mementoMoriMessage {
+        color: var(--gray-200);
+    }
+
+
+
+    [data-bs-theme="dark"] .challenge-item .progress-bar {
+        background-color: var(--primary-light);
+    }
+
+    [data-bs-theme="dark"] .challenge-item .progress {
+        background-color: var(--gray-600);
+    }
+
+
+body {
+    font-family: var(--font-family-sans-serif);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    overscroll-behavior-y: contain;
+    -webkit-tap-highlight-color: transparent;
+    margin: 0;
+}
+
+
+
+.card {
+    border: none;
+    border-radius: 12px;
+    background-color: var(--card-background-color);
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 500;
+    padding: 1rem;
+    font-size: 1rem;
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .card-header .card-title-main {
+        flex-grow: 1;
+    }
+
+    .card-header .small-text-left {
+        font-weight: normal;
+        color: var(--text-secondary-color);
+        margin-right: auto;
+        padding-left: 0.5rem;
+    }
+
+.card-body {
+    padding: 1rem;
+}
+
+.card-body-alt {
+    padding: 1rem;
+}
+
+.card-body h6 {
+    font-weight: 500;
+}
+
+.card-footer {
+    background-color: transparent;
+    border-top: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: 10px;
+    font-weight: 500;
+    padding: 0.625rem 1rem;
+}
+
+    .btn-primary:hover, .btn-primary:focus {
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+    }
+
+.btn-outline-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+    .btn-outline-primary:hover, .btn-outline-primary.active {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+.btn-outline-secondary {
+    border-color: var(--gray-400);
+    color: var(--gray-700);
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+    .btn-outline-secondary .bi {
+        color: var(--primary-color);
+    }
+
+    .btn-outline-secondary:hover, .btn-outline-secondary.active {
+        background-color: var(--primary-light);
+        border-color: var(--primary-light);
+        color: white;
+    }
+
+        .btn-outline-secondary:hover .bi, .btn-outline-secondary.active .bi {
+            color: white;
+        }
+
+.btn-subtle {
+    color: var(--primary-color);
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 0.75rem;
+}
+
+    .btn-subtle:hover {
+        background-color: rgba(var(--primary-color-rgb), 0.1);
+    }
+
+[data-bs-theme="dark"] .btn-subtle:hover {
+    background-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    background-color: var(--card-background-color);
+    color: var(--text-color);
+}
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
+        background-color: var(--card-background-color);
+    }
+
+
+
+.life-calendar-bar {
+    height: 6px;
+    background-color: var(--gray-300);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+[data-bs-theme="dark"] .life-calendar-bar {
+    background-color: var(--gray-600);
+}
+
+.life-calendar-progress {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 3px;
+    transition: width 0.5s ease-in-out;
+}
+
+.card .list-group.list-group-flush .list-group-item {
+    background-color: transparent;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    border-color: var(--border-color);
+}
+
+    .card .list-group.list-group-flush .list-group-item:first-child {
+        border-top: none;
+    }
+
+    .card .list-group.list-group-flush .list-group-item:last-child {
+        border-bottom: none;
+    }
+
+.card .list-group-item .bi {
+    color: var(--primary-color);
+}
+
+
+.moments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+.moment-grid-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0.75rem;
+    background-color: var(--gray-200);
+    border-radius: 8px;
+}
+
+[data-bs-theme="dark"] .moment-grid-item {
+    background-color: var(--gray-700);
+}
+
+.moment-grid-item .bi {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+    color: var(--primary-color);
+}
+
+.moment-grid-item .value {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.moment-grid-item .label {
+    font-size: 0.75rem;
+    color: var(--text-secondary-color);
+}
+
+
+
+
+#birthdatePromptInput, #profileBirthdateInputModal, #annivOriginalDateInput, #reflectBirthdatePromptInput,
+#tombstoneBirthDateInput, #tombstoneDeathDateInput {
+    direction: ltr;
+    text-align: right;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeIn 0.3s ease-out;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.modal-content {
+    border: none;
+    border-radius: 16px;
+    font-family: var(--font-family-sans-serif);
+    background-color: var(--card-background-color);
+}
+
+.modal-header, .modal-footer {
+    border-color: var(--border-color);
+}
+
+.modal-title {
+    color: var(--text-color);
+}
+
+.btn-close {
+    filter: var(--bs-btn-close-white-filter);
+}
+
+[data-bs-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.modal.modal-bottom-sheet .modal-dialog {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-out;
+    display: flex;
+    align-items: flex-end;
+}
+
+.modal.modal-bottom-sheet.show .modal-dialog {
+    transform: translateY(0);
+}
+
+.modal.modal-bottom-sheet .modal-content {
+    border-radius: 20px 20px 0 0;
+    border: none;
+    max-height: 85vh;
+    width: 100%;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+}
+
+.modal.modal-bottom-sheet .modal-body {
+    overflow-y: auto;
+    max-height: calc(85vh - 120px);
+    padding-bottom: var(--safe-area-inset-bottom);
+}
+
+.modal.modal-bottom-sheet .modal-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1rem 0.5rem 1rem;
+}
+
+.modal.modal-bottom-sheet .modal-footer {
+    border-top: 1px solid var(--border-color);
+    padding-bottom: calc(0.75rem + var(--safe-area-inset-bottom));
+}
+
+.modal-bottom-sheet .modal-header::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background-color: var(--gray-400);
+    border-radius: 2px;
+    margin: 0 auto 10px;
+}
+
+[data-bs-theme="dark"] .modal-bottom-sheet .modal-header::before {
+    background-color: var(--gray-600);
+}
+
+.modal-footer-btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+}
+
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+}
+
+.top-nav .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+}
+
+.breathing-visualizer {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: var(--primary-light);
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    transition: transform 2s ease-in-out, background-color 1s ease;
+    position: relative;
+}
+
+    .breathing-visualizer.inhale {
+        transform: scale(1.3);
+        background-color: var(--primary-color);
+    }
+
+    .breathing-visualizer.hold {
+        transform: scale(1.3);
+        background-color: var(--primary-dark);
+    }
+
+    .breathing-visualizer.exhale {
+        transform: scale(1);
+        background-color: var(--primary-light);
+    }
+
+.breathing-phase-text {
+    z-index: 1;
+}
+
+.breathing-timer {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.ai-chat-box {
+    height: 300px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    background-color: var(--background-color);
+}
+
+[data-bs-theme="dark"] .ai-chat-box {
+    background-color: var(--gray-700);
+}
+
+.chat-message {
+    padding: 8px 12px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+    .chat-message.user {
+        background-color: var(--primary-color);
+        color: white;
+        margin-right: auto;
+        border-bottom-right-radius: 3px;
+    }
+
+    .chat-message.ai {
+        background-color: var(--gray-200);
+        color: var(--text-color);
+        margin-left: auto;
+        border-bottom-left-radius: 3px;
+    }
+
+[data-bs-theme="dark"] .chat-message.ai {
+    background-color: var(--gray-600);
+    color: var(--gray-100);
+}
+
+.progress-bar {
+    background-color: var(--primary-light);
+}
+
+.list-group-item-action:hover {
+    background-color: rgba(var(--primary-color-rgb), 0.05);
+}
+
+[data-bs-theme="dark"] .list-group-item-action:hover {
+    background-color: rgba(var(--primary-color-rgb), 0.15);
+}
+
+
+
+
+#mementoMoriCard .card-body {
+    background-color: var(--primary-light);
+    color: white;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#mementoMoriMessage {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#refreshMementoMoriBtn {
+    font-weight: 500;
+    background-color: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.3);
+    color: white;
+}
+
+    #refreshMementoMoriBtn:hover {
+        background-color: rgba(255,255,255,0.3);
+    }
+
+[data-bs-theme="dark"] #mementoMoriCard .card-body {
+    background-color: var(--primary-dark);
+}
+
+[data-bs-theme="dark"] #mementoMoriMessage {
+    color: var(--gray-100);
+}
+
+[data-bs-theme="dark"] #refreshMementoMoriBtn {
+    background-color: rgba(0,0,0,0.2);
+    border-color: rgba(255,255,255,0.2);
+}
+
+    [data-bs-theme="dark"] #refreshMementoMoriBtn:hover {
+        background-color: rgba(0,0,0,0.3);
+    }
+
+/* Mortality Challenges Styles */
+.challenge-item {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+    .challenge-item:last-child {
+        border-bottom: none;
+    }
+
+.challenge-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.challenge-progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+}
+
+.challenge-status {
+    font-weight: 500;
+}
+
+    .challenge-status.status-not_started {
+        color: var(--gray-500);
+    }
+
+    .challenge-status.status-in_progress {
+        color: var(--primary-color);
+    }
+
+    .challenge-status.status-completed {
+        color: var(--bs-success);
+    }
+
+.challenge-item .progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: var(--gray-200);
+    margin-bottom: 0.75rem;
+}
+
+.challenge-item .progress-bar {
+    background-color: var(--primary-color);
+    transition: width 0.3s ease-in-out;
+}
+
+.challenge-actions .btn {
+    font-size: 0.8rem;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: var(--primary-color);
+}
+
