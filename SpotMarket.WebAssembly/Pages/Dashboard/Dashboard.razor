@@ -1,0 +1,32 @@
+﻿@page "/"
+@inject NavStateService NavState
+<PageTitle>داشبورد</PageTitle>
+<div class="dashboard-container">
+    
+    <DashboardHeader />
+
+@*     <WatchlistWidget/> *@
+
+    <TradingHallsWidget />
+
+    <MarketMoversWidget />
+    
+    <MainPlayersWidget />
+
+    <MarketExcitementWidget />
+
+    <MarketSentimentWidget />
+
+    <SupplyRiskWidget />
+    
+    <NewsWidget/>
+
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavState.SetNavState("کالا نما", false);
+        base.OnInitialized();
+    }
+}

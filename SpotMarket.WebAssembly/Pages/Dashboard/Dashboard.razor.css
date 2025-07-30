@@ -1,0 +1,99 @@
+﻿.dashboard-container {
+    padding: 0 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: calc(60px + var(--safe-area-inset-top, 0));
+    padding-bottom: calc(var(--bottom-nav-height, 70px) + var(--safe-area-inset-bottom, 0) + 1rem);
+}
+
+::deep .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 2rem 0 1rem 0;
+}
+
+::deep .section-title {
+    font-size: 1.375rem; /* 22px */
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+::deep .section-action {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+
+
+/* Generic Data Card for lists */
+::deep .data-card {
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    /*margin: 0 1rem 0 1rem;*/
+    overflow: hidden;
+}
+
+::deep .data-list-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+    ::deep .data-list-item:last-child {
+        border-bottom: none;
+    }
+
+::deep .item-rank {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+    width: 20px;
+    text-align: center;
+}
+
+::deep .item-main-info .title {
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+::deep .item-main-info .subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+::deep .item-value {
+    font-weight: 600;
+    color: var(--success-color);
+    text-align: right;
+}
+
+    ::deep .item-value.negative {
+        color: var(--danger-color);
+    }
+
+    ::deep .item-value.neutral {
+        color: var(--text-primary-color);
+    }
+
+
+::deep [data-bs-theme="dark"] .hall-card,
+::deep [data-bs-theme="dark"] .data-card,
+::deep [data-bs-theme="dark"] .player-card,
+::deep [data-bs-theme="dark"] .excitement-widget {
+    background-color: var(--gray-800);
+}
+
+::deep [data-bs-theme="dark"] .segmented-control {
+    background-color: var(--gray-900);
+}
+
+    ::deep [data-bs-theme="dark"] .segmented-control button.active {
+        background-color: var(--gray-700);
+    }

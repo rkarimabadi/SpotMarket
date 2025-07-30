@@ -1,0 +1,91 @@
+﻿
+    .hall-icon .bi {
+        vertical-align: middle;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+
+.horizontal-scroll-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 1rem 1.5rem 1rem;
+    margin: 0 -1rem;
+}
+
+    .horizontal-scroll-container::-webkit-scrollbar {
+        display: none;
+    }
+
+.hall-card {
+    display: inline-block;
+    width: 280px;
+    margin-left: 1rem;
+    padding: 1.25rem;
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    vertical-align: top;
+    white-space: normal;
+}
+
+    .hall-card:last-child {
+        margin-left: 0;
+    }
+
+.hall-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.hall-icon {
+    font-size: 1.25rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+}
+
+    .hall-icon.industrial {
+        background-color: var(--gray-600);
+    }
+
+    .hall-icon.petro {
+        background-color: var(--success-color);
+    }
+
+    .hall-icon.agri {
+        background-color: #e67e22;
+    }
+
+.hall-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.hall-stats .stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+.hall-stats .stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.hall-stats .stat-change {
+    font-weight: 500;
+    color: var(--success-color);
+}
+
+    .hall-stats .stat-change.negative {
+        color: var(--danger-color);
+    }

@@ -1,0 +1,34 @@
+﻿.market-pulse-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.pulse-card {
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+    .pulse-card .pulse-title {
+        font-size: 0.875rem;
+        color: var(--text-secondary-color);
+        margin-bottom: 0.25rem;
+    }
+
+    .pulse-card .pulse-value {
+        font-size: 1.5rem; /* 24px */
+        font-weight: 600;
+        color: var(--text-primary-color);
+    }
+
+    .pulse-card .pulse-change {
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--success-color);
+    }
+
+        .pulse-card .pulse-change.negative {
+            color: var(--danger-color);
+        }

@@ -1,0 +1,25 @@
+﻿.segmented-control {
+    display: flex;
+    padding: 3px;
+    background-color: var(--gray-200);
+    border-radius: 0.625rem;
+    margin: 0 0 1rem 0;
+}
+
+    .segmented-control button {
+        flex: 1;
+        padding: 0.5rem;
+        border: none;
+        background-color: transparent;
+        border-radius: 0.5rem;
+        color: var(--text-secondary-color);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .segmented-control button.active {
+            background-color: var(--card-background-color);
+            color: var(--text-primary-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }

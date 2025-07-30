@@ -1,0 +1,37 @@
+﻿.players-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 0;
+}
+
+.player-card {
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+    .player-card .player-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: var(--primary-color);
+    }
+
+    .player-card .player-title {
+        font-size: 0.875rem;
+        color: var(--text-secondary-color);
+    }
+
+    .player-card .player-name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary-color);
+    }
+
+    .player-card .player-share {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-top: 0.25rem;
+    }
