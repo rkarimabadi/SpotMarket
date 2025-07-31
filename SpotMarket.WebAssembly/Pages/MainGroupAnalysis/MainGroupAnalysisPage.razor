@@ -1,0 +1,20 @@
+﻿@page "/markets/{groupName}"
+@inject NavStateService NavState
+
+<div class="page-container">
+    <GroupHeaderWidget GroupName="@groupName" />
+    <SubGroupListWidget />
+</div>
+
+@code {
+    [Parameter]
+    public string? groupName { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // عنوان TopNav را بر اساس نام گروه تنظیم می‌کند
+        var pageTitle = !string.IsNullOrEmpty(groupName) ? groupName : "تحلیل گروه";
+        NavState.SetNavState(pageTitle, true);
+        base.OnInitialized();
+    }
+}

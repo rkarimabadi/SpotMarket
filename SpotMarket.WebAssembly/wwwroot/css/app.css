@@ -808,4 +808,10 @@ body {
 .dropdown-item.active, .dropdown-item:active {
     background-color: var(--primary-color);
 }
-
+.bi {
+    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}

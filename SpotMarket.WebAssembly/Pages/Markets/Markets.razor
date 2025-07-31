@@ -1,0 +1,36 @@
+﻿@page "/markets"
+@inject NavStateService NavState
+<PageTitle>بازارها</PageTitle>
+<div class="page-container">
+    <div class="page-header">
+        <h1 class="page-title-large">بازارها</h1>
+    </div>
+
+    <MarketSearch OnSearchStateChanged="HandleSearchStateChange" />
+
+    @if (!isSearching)
+    {
+        <MarketListWidget/>
+        <MarketHeatmapWidget />
+        <IndustryComparisonWidget />
+        <MarketSignalsWidget />
+    }
+</div>
+
+@code {
+    private bool isSearching;
+
+    protected override void OnInitialized()
+    {
+        NavState.SetNavState("بازارها", true);
+        base.OnInitialized();
+    }
+
+    private void HandleSearchStateChange(bool searching)
+    {
+        isSearching = searching;
+        StateHasChanged();
+    }
+}
+
+

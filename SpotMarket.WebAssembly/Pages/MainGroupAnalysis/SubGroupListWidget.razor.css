@@ -1,0 +1,53 @@
+﻿.section-header {
+    padding: 1rem 1rem 0 1rem;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+}
+
+.subgroup-list {
+    margin: 0 1rem;
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.subgroup-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+    .subgroup-item:last-child {
+        border-bottom: none;
+    }
+
+.item-info .title {
+    font-weight: 600;
+    font-size: 1.0625rem;
+}
+
+.item-info .subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+.item-stat {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+[data-bs-theme="dark"] .subgroup-list {
+    background-color: var(--gray-800);
+}
+
+[data-bs-theme="dark"] .subgroup-item {
+    border-color: var(--gray-700);
+}

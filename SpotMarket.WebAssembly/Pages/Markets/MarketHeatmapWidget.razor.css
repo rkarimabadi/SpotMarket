@@ -1,0 +1,86 @@
+﻿/* Market Heatmap Widget - Redesigned Layout */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 2rem 1rem 0 1rem;
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+}
+
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    grid-auto-rows: minmax(80px, auto); /* Set a minimum row height */
+    gap: 0.75rem;
+    padding: 0 1rem;
+}
+
+.heatmap-tile {
+    padding: 1rem;
+    border-radius: 1rem;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+}
+
+    /* Define colors */
+    .heatmap-tile.high {
+        background-color: var(--danger-color);
+    }
+
+    .heatmap-tile.medium {
+        background-color: var(--primary-color);
+    }
+
+    .heatmap-tile.low {
+        background-color: var(--success-color);
+    }
+
+    .heatmap-tile.neutral {
+        background-color: var(--gray-600);
+    }
+
+/* Define grid spans for the new layout */
+.tile-steel {
+    grid-column: 1 / 4; /* Spans 3 columns */
+    grid-row: 1 / 4; /* Spans 3 rows */
+}
+
+.tile-petro {
+    grid-column: 4 / 5; /* 4th column */
+    grid-row: 1 / 5; /* Spans all 4 rows */
+}
+
+.tile-cement {
+    grid-column: 1 / 4; /* Spans 3 columns */
+    grid-row: 4 / 5; /* 4th row */
+}
+
+/* The rest are 1x1 tiles and will flow automatically into the remaining cells */
+
+/* Dark Theme */
+[data-bs-theme="dark"] .heatmap-tile.high {
+    background-color: #c2364d;
+}
+
+[data-bs-theme="dark"] .heatmap-tile.medium {
+    background-color: var(--primary-dark);
+}
+
+[data-bs-theme="dark"] .heatmap-tile.low {
+    background-color: #22863a;
+}
+
+[data-bs-theme="dark"] .heatmap-tile.neutral {
+    background-color: var(--gray-700);
+}

@@ -1,0 +1,155 @@
+﻿@using System.Timers
+@implements IDisposable
+
+<div class="search-container @(isFocused ? "is-searching" : "")">
+    <div class="search-bar-wrapper">
+        <div class="search-input-wrapper">
+            <i class="bi bi-search search-icon"></i>
+            <input @ref="searchInput"
+                   type="search"
+                   class="search-input"
+                   placeholder="جستجوی بازار یا گروه کالایی"
+                   @bind="searchTerm"
+                   @bind:event="oninput"
+                   @onfocus="ActivateSearch" />
+        </div>
+        <button class="cancel-button" @onclick="DeactivateSearch">لغو</button>
+    </div>
+
+    <div class="search-results-container">
+        @if (isLoading)
+        {
+            <div class="text-center p-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">در حال بارگذاری...</span>
+                </div>
+            </div>
+        }
+        else if (searchResults?.Any() == true)
+        {
+            <div class="search-results-list">
+                @foreach (var result in searchResults)
+                {
+                    <div class="result-item">
+                        <div class="result-icon @result.IconCssClass"><i class="bi @result.Icon"></i></div>
+                        <div class="result-info">
+                            <div class="title">@result.Title</div>
+                            <div class="subtitle">@result.Subtitle</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(searchTerm))
+        {
+            <div class="no-results">
+                <p>نتیجه‌ای برای «@searchTerm» یافت نشد.</p>
+            </div>
+        }
+        else
+        {
+            <div class="no-results">
+                <p class="text-secondary">بازارها، گروه‌ها و کالاها را جستجو کنید.</p>
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    private ElementReference searchInput;
+    private string? searchTerm;
+    private bool isFocused;
+    private bool isLoading;
+    private List<SearchResult>? searchResults;
+    private Timer? debounceTimer;
+
+    // Mock Data
+    private readonly List<SearchResult> allItems = new()
+    {
+        new("صنعتی و معدنی", "تالار معاملاتی", "bi-building", "industrial"),
+        new("پتروشیمی", "تالار معاملاتی", "bi-droplet-fill", "petro"),
+        new("سیمان", "تالار معاملاتی", "bi-cone-striped", "cement"),
+        new("کشاورزی", "تالار معاملاتی", "bi-tree-fill", "agri"),
+        new("فولاد", "گروه کالایی", "bi-building", "industrial"),
+        new("مس", "گروه کالایی", "bi-building", "industrial"),
+        new("میلگرد", "کالا", "bi-building", "industrial"),
+        new("قیر", "کالا", "bi-droplet-fill", "petro"),
+    };
+
+    [Parameter]
+    public EventCallback<bool> OnSearchStateChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+        debounceTimer = new Timer(300);
+        debounceTimer.Elapsed += OnTimerElapsed;
+        debounceTimer.AutoReset = false;
+    }
+
+    private async Task ActivateSearch()
+    {
+        isFocused = true;
+        await OnSearchStateChanged.InvokeAsync(true);
+    }
+
+    private async Task DeactivateSearch()
+    {
+        searchTerm = string.Empty;
+        searchResults = null;
+        isFocused = false;
+        await OnSearchStateChanged.InvokeAsync(false);
+    }
+
+    private void OnSearchTermChanged(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString();
+        debounceTimer?.Stop();
+        debounceTimer?.Start();
+    }
+
+    private async void OnTimerElapsed(object? sender, ElapsedEventArgs e)
+    {
+        await InvokeAsync(async () =>
+        {
+            isLoading = true;
+            StateHasChanged();
+
+            await Task.Delay(500); // Simulate network latency
+
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                searchResults = new List<SearchResult>();
+            }
+            else
+            {
+                searchResults = allItems
+                    .Where(i => i.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || i.Subtitle.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+            isLoading = false;
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        debounceTimer?.Dispose();
+    }
+
+    public class SearchResult
+    {
+        public string Title { get; }
+        public string Subtitle { get; }
+        public string Icon { get; }
+        public string IconCssClass { get; }
+
+        public SearchResult(string title, string subtitle, string icon, string iconCssClass)
+        {
+            Title = title;
+            Subtitle = subtitle;
+            Icon = icon;
+            IconCssClass = iconCssClass;
+        }
+    }
+}

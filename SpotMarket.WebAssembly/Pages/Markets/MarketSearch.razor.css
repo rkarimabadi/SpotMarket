@@ -1,0 +1,165 @@
+﻿.search-container {
+    position: initial;
+    top: calc(60px + var(--safe-area-inset-top, 0));
+    background-color: var(--background-color);
+    z-index: 5;
+    padding: 1rem;
+    margin: 0;
+}
+    .search-container.is-searching {
+        position: sticky;
+    }
+    .search-bar-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+.search-input-wrapper {
+    position: relative;
+    flex-grow: 1;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 2.75rem 0.75rem 1rem;
+    border-radius: 0.75rem;
+    border: none;
+    background-color: var(--gray-200);
+    font-size: 1rem;
+    color: var(--text-primary-color);
+    transition: background-color 0.2s ease;
+}
+
+.search-input-wrapper .search-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary-color);
+    font-size: 1.25rem;
+}
+
+.cancel-button {
+    border: none;
+    background: none;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-width 0.3s ease, opacity 0.3s ease;
+    white-space: nowrap;
+    display: none;
+}
+
+.search-container.is-searching .cancel-button {
+    max-width: 100px; /* Adjust as needed */
+    opacity: 1;
+    display: block;
+}
+
+.search-results-container {
+    position: fixed;
+    top: calc(60px + var(--safe-area-inset-top, 0) + 170px); /* Below search bar */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--background-color);
+    z-index: 4;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.search-container.is-searching .search-results-container {
+    opacity: 1;
+    visibility: visible;
+}
+
+.search-results-list {
+    background-color: var(--card-background-color);
+    margin: 0 1rem;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.result-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+    .result-item:last-child {
+        border-bottom: none;
+    }
+
+.result-icon {
+    font-size: 1.25rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+}
+
+    .result-icon.industrial {
+        background-color: var(--gray-600);
+    }
+
+    .result-icon.petro {
+        background-color: var(--success-color);
+    }
+
+    .result-icon.cement {
+        background-color: var(--warning-color);
+    }
+
+    .result-icon.agri {
+        background-color: #e67e22;
+    }
+
+.result-info .title {
+    font-weight: 600;
+}
+
+.result-info .subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+.no-results {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary-color);
+}
+
+
+/* Dark Theme */
+[data-bs-theme="dark"] .search-container {
+    background-color: var(--background-color);
+}
+
+[data-bs-theme="dark"] .search-input {
+    background-color: var(--gray-800);
+}
+
+[data-bs-theme="dark"] .search-results-container {
+    background-color: var(--background-color);
+}
+
+[data-bs-theme="dark"] .search-results-list {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .result-item {
+    border-color: var(--gray-700);
+}
