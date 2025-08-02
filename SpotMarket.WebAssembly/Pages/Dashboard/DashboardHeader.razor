@@ -1,8 +1,14 @@
-﻿<div class="dashboard-header">
-    <p class="dashboard-date">چهارشنبه، ۸ مرداد</p>
+﻿@using SpotMarket.WebAssembly.Helpers
+<div class="dashboard-header">
+    <p class="dashboard-date">@currentPersianDate</p>
     <h1 class="dashboard-title">داشبورد</h1>
 </div>
 
 @code {
+    private string? currentPersianDate;
 
+    protected override void OnInitialized()
+    {
+        currentPersianDate = PersianDateHelper.GetFormattedPersianDate();
+    }
 }

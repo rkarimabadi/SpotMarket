@@ -1,19 +1,32 @@
-﻿<div class="section-header">
-    <h2 class="section-title">سطح هیجان بازار</h2>
-</div>
-<div class="excitement-widget">
-    <div class="excitement-chart">
-        <svg width="100" height="100" viewBox="0 0 36 36">
-            <circle cx="18" cy="18" r="15.915" fill="none" stroke="var(--gray-200)" stroke-width="4"></circle>
-            <circle cx="18" cy="18" r="15.915" fill="none" stroke="var(--primary-color)" stroke-width="4" stroke-dasharray="70, 100" stroke-linecap="round"></circle>
-        </svg>
-        <div class="excitement-chart-center-text">
-            <div class="value">۷۰٪</div>
-            <div class="label">حراج</div>
+﻿@if (Data != null)
+{
+    <div class="section-header">
+        <h2 class="section-title">@Title</h2>
+    </div>
+    <div class="excitement-widget">
+        <div class="excitement-chart">
+            <svg width="100" height="100" viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="var(--gray-200)" stroke-width="4"></circle>
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="var(--primary-color)" stroke-width="4" stroke-dasharray="@Data.Percentage, 100" stroke-linecap="round"></circle>
+            </svg>
+            <div class="excitement-chart-center-text">
+                <div class="value">@Data.Percentage%</div>
+                <div class="label">@Data.Label</div>
+            </div>
+        </div>
+        <div class="excitement-info">
+            <h4 class="title">@Data.Title</h4>
+            <p class="subtitle">@Data.Description</p>
         </div>
     </div>
-    <div class="excitement-info">
-        <h4 class="title">تقاضای بالا</h4>
-        <p class="subtitle">بخش عمده معاملات امروز به روش حراج باز انجام شده که نشان‌دهنده رقابت شدید و هیجان در بازار است.</p>
-    </div>
-</div>
+}
+
+@code {
+    /// <summary>
+    /// عنوانی که در بالای ویجت نمایش داده می‌شود
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "سطح هیجان بازار";
+    [Parameter]
+    public MarketExcitement? Data { get; set; }
+}

@@ -1,17 +1,32 @@
-﻿<div class="section-header">
-    <h2 class="section-title">بازیگران اصلی</h2>
-</div>
-<div class="players-grid">
-    <div class="player-card">
-        <div class="player-icon"><i class="bi bi-person-workspace"></i></div>
-        <div class="player-title">برترین کارگزار</div>
-        <div class="player-name">کارگزاری مفید</div>
-        <div class="player-share">۱۸.۴٪</div>
+﻿@if (Players?.Any() == true)
+{
+    <div class="section-header">
+        <h2 class="section-title">@Title</h2>
     </div>
-    <div class="player-card">
-        <div class="player-icon"><i class="bi bi-buildings-fill"></i></div>
-        <div class="player-title">برترین عرضه‌کننده</div>
-        <div class="player-name">فولاد مبارکه</div>
-        <div class="player-share">۲۵.۱٪</div>
+
+    <div class="players-grid" style="grid-template-columns: repeat(@Players.Count, 1fr);">
+        @foreach (var player in Players)
+        {
+            <div class="player-card">
+                <div class="player-icon"><i class="@player.IconCssClass"></i></div>
+                <div class="player-title">@player.Type</div>
+                <div class="player-name">@player.Name</div>
+                <div class="player-share">@player.MarketShare.ToString("0.0")%</div>
+            </div>
+        }
     </div>
-</div>
+}
+
+@code {
+    /// <summary>
+    /// عنوانی که در بالای ویجت نمایش داده می‌شود
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "بازیگران اصلی";
+
+    /// <summary>
+    /// لیستی از بازیگران برای نمایش در ویجت
+    /// </summary>
+    [Parameter]
+    public List<MainPlayer>? Players { get; set; }
+}

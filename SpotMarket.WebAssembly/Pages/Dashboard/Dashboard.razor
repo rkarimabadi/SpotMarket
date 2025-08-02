@@ -11,7 +11,7 @@
 
     <MarketMoversWidget />
     
-    <MainPlayersWidget />
+    <MainPlayersWidget Players="mainPlayersData" />
 
     <MarketExcitementWidget />
 
@@ -27,6 +27,36 @@
     protected override void OnInitialized()
     {
         NavState.SetNavState("کالا نما", false);
+        LoadDemoData();
         base.OnInitialized();
+    }
+    private List<MainPlayer> mainPlayersData = new();
+    private MarketExcitement? marketExcitementData;
+    private void LoadDemoData()
+    {
+        mainPlayersData = new List<MainPlayer>
+        {
+            new()
+            {
+                Type = "برترین کارگزار",
+                Name = "کارگزاری مفید",
+                IconCssClass = "bi bi-person-workspace",
+                MarketShare = 18.4m
+            },
+            new()
+            {
+                Type = "برترین عرضه‌کننده",
+                Name = "فولاد مبارکه",
+                IconCssClass = "bi bi-buildings-fill",
+                MarketShare = 25.1m
+            }
+        };
+        marketExcitementData = new MarketExcitement
+        {
+            Title = "تقاضای بالا",
+            Description = "بخش عمده معاملات امروز به روش حراج باز انجام شده که نشان‌دهنده رقابت شدید و هیجان در بازار است.",
+            Percentage = 70,
+            Label = "حراج"
+        };
     }
 }
