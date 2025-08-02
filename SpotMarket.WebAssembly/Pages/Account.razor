@@ -1,7 +1,23 @@
 ﻿@page "/account"
 @inject NavStateService NavState
+
 <PageTitle>حساب کاربری</PageTitle>
-<ComingSoonContainer Title="حساب کاربری" />
+
+<div class="account-container">
+    <h2>داشبورد حساب کاربری</h2>
+    <p>خوش آمدید، تحلیل‌گر بازار!</p>
+    <div class="account-cards">
+        <Layout.Components.AccountCard Title="موارد پیگیری من" Description="لیست کالاها و گروه‌های منتخب شما برای رصد سریع." />
+        <Layout.Components.AccountCard Title="عملکرد معاملات اخیر" Description="خلاصه‌ای از معاملات و عرضه‌های اخیر شما." />
+        <Layout.Components.AccountCard Title="اطلاعیه‌ها و اخبار مرتبط" Description="آخرین اخبار و اطلاعیه‌های مرتبط با کالاهای منتخب شما." />
+        <Layout.Components.AccountCard Title="تحلیل رقبا" Description="مقایسه عملکرد شما با رقبا در گروه‌های کالایی منتخب." />
+    </div>
+    <div class="account-actions">
+        <button class="btn btn-primary">ویرایش اطلاعات کاربری</button>
+        <button class="btn btn-secondary">مدیریت لیست پیگیری</button>
+    </div>
+</div>
+
 @code {
     protected override void OnInitialized()
     {
