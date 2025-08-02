@@ -1,23 +1,52 @@
-﻿<div class="section-header">
-    <h2 class="section-title">پویایی بازار</h2>
-</div>
-<div class="segmented-control">
-    <button class="@(selectedMoverTab == "competition" ? "active" : "")" @onclick='() => selectedMoverTab = "competition"'>داغ‌ترین رقابت‌ها</button>
-    <button class="@(selectedMoverTab == "demand" ? "active" : "")" @onclick='() => selectedMoverTab = "demand"'>بیشترین تقاضا</button>
-</div>
-<div class="data-card">
-    @if (selectedMoverTab == "competition")
-    {
-        <div class="data-list-item"><div class="item-rank">۱</div><div class="item-main-info"><div class="title">ورق گالوانیزه</div><div class="subtitle">فولاد مبارکه</div></div><div class="item-value">+۱۲.۵٪</div></div>
-        <div class="data-list-item"><div class="item-rank">۲</div><div class="item-main-info"><div class="title">مس کاتد</div><div class="subtitle">شرکت ملی مس</div></div><div class="item-value">+۹.۸٪</div></div>
-    }
-    else
-    {
-        <div class="data-list-item"><div class="item-rank">۱</div><div class="item-main-info"><div class="title">سیمان تیپ ۲</div><div class="subtitle">سیمان تهران</div></div><div class="item-value neutral">۳.۵x</div></div>
-        <div class="data-list-item"><div class="item-rank">۲</div><div class="item-main-info"><div class="title">پلی‌پروپیلن</div><div class="subtitle">پتروشیمی مارون</div></div><div class="item-value neutral">۲.۸x</div></div>
-    }
-</div>
+﻿@if (Data != null)
+{
+    <div class="section-header">
+        <h2 class="section-title">@Title</h2>
+    </div>
+    <div class="segmented-control">
+        <button class="@(selectedMoverTab == "competition" ? "active" : "")" @onclick='() => selectedMoverTab = "competition"'>@Data.CompetitionTabTitle</button>
+        <button class="@(selectedMoverTab == "demand" ? "active" : "")" @onclick='() => selectedMoverTab = "demand"'>@Data.DemandTabTitle</button>
+    </div>
+    <div class="data-card">
+        @{
+            var itemsToShow = selectedMoverTab == "competition" ? Data.CompetitionItems : Data.DemandItems;
+        }
+        @if (itemsToShow?.Any() == true)
+        {
+            @foreach (var item in itemsToShow)
+            {
+                <div class="data-list-item">
+                    <div class="item-rank">@item.Rank</div>
+                    <div class="item-main-info">
+                        <div class="title">@item.Title</div>
+                        <div class="subtitle">@item.Subtitle</div>
+                    </div>
+                    <div class="item-value @GetValueCssClass(item.ValueState)">@item.Value</div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="p-4 text-center text-secondary">داده‌ای برای نمایش وجود ندارد.</div>
+        }
+    </div>
+}
 
 @code {
+    [Parameter]
+    public string Title { get; set; } = "پویایی بازار";
+    [Parameter]
+    public MarketMoversData? Data { get; set; }
+
     private string selectedMoverTab = "competition";
+
+    private string GetValueCssClass(ValueState state)
+    {
+        return state switch
+        {
+            ValueState.Positive => "positive",
+            ValueState.Negative => "negative",
+            _ => "neutral"
+        };
+    }
 }

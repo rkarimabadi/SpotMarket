@@ -9,11 +9,11 @@
 
     <TradingHallsWidget />
 
-    <MarketMoversWidget />
+    <MarketMoversWidget Data="marketMoversData" />
     
     <MainPlayersWidget Players="mainPlayersData" />
 
-    <MarketExcitementWidget />
+    <MarketExcitementWidget Data="marketExcitementData" />
 
     <MarketSentimentWidget />
 
@@ -32,6 +32,8 @@
     }
     private List<MainPlayer> mainPlayersData = new();
     private MarketExcitement? marketExcitementData;
+    private MarketMoversData? marketMoversData;
+
     private void LoadDemoData()
     {
         mainPlayersData = new List<MainPlayer>
@@ -57,6 +59,19 @@
             Description = "بخش عمده معاملات امروز به روش حراج باز انجام شده که نشان‌دهنده رقابت شدید و هیجان در بازار است.",
             Percentage = 70,
             Label = "حراج"
+        };
+        marketMoversData = new MarketMoversData
+        {
+            CompetitionItems = new List<MarketMoverItem>
+            {
+                new() { Rank = 1, Title = "ورق گالوانیزه", Subtitle = "فولاد مبارکه", Value = "+۱۲.۵٪", ValueState = ValueState.Positive },
+                new() { Rank = 2, Title = "مس کاتد", Subtitle = "شرکت ملی مس", Value = "+۹.۸٪", ValueState = ValueState.Positive }
+            },
+            DemandItems = new List<MarketMoverItem>
+            {
+                new() { Rank = 1, Title = "سیمان تیپ ۲", Subtitle = "سیمان تهران", Value = "۳.۵x", ValueState = ValueState.Neutral },
+                new() { Rank = 2, Title = "پلی‌پروپیلن", Subtitle = "پتروشیمی مارون", Value = "۲.۸x", ValueState = ValueState.Neutral }
+            }
         };
     }
 }
