@@ -1,4 +1,4 @@
-﻿namespace SpotMarket.WebAssembly.Models.App
+﻿namespace SpotMarket.WebAssembly.Models.Presentation
 {
     /// <summary>
     /// نمایانگر یک کارت در ویجت تالارهای معاملاتی است

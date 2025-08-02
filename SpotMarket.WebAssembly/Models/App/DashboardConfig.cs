@@ -22,5 +22,18 @@
     {
         public DashboardWidgetType Type { get; set; }
         public bool IsVisible { get; set; } = true;
+        public string GetDisplayName() => Type switch
+        {
+            DashboardWidgetType.TradingHalls => "سلامت تالارها",
+            DashboardWidgetType.MarketMovers => "پویایی بازار",
+            DashboardWidgetType.MainPlayers => "بازیگران اصلی",
+            DashboardWidgetType.MarketExcitement => "سطح هیجان بازار",
+            DashboardWidgetType.MarketPulse => "نبض بازار",
+            DashboardWidgetType.MarketSentiment => "احساسات بازار",
+            DashboardWidgetType.SupplyRisk => "ریسک تمرکز عرضه",
+            DashboardWidgetType.News => "آخرین اخبار",
+            _ => "ویجت ناشناس"
+        };
     }
+
 }

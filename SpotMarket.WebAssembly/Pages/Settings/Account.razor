@@ -1,0 +1,82 @@
+﻿@page "/account"
+@inject NavStateService NavState
+
+<PageTitle>حساب کاربری</PageTitle>
+
+<div class="page-container">
+    <div class="page-header">
+        <h1 class="page-title-large">تنظیمات</h1>
+    </div>
+
+    @* بخش ۱: پروفایل کاربر *@
+    <div class="settings-group">
+        <div class="user-profile-card">
+            <div class="avatar">RK</div>
+            <div class="user-info">
+                <div class="name">رضا کریم‌آبادی</div>
+                <div class="subtitle">مشاهده و ویرایش پروفایل</div>
+            </div>
+            <div class="settings-action">
+                <i class="bi bi-chevron-left"></i>
+            </div>
+        </div>
+    </div>
+
+    @* بخش ۲: مدیریت چیدمان داشبورد *@
+    <div class="settings-group">
+        <NavLink href="/settings/dashboard-layout" class="settings-item">
+            <div class="settings-icon" style="background-color: #5856d6;"><i class="bi bi-grid-fill"></i></div>
+            <div class="settings-label">چیدمان داشبورد</div>
+            <div class="settings-action">
+                <i class="bi bi-chevron-left"></i>
+            </div>
+        </NavLink>
+    </div>
+
+    @* بخش ۳: جایگاه برای تنظیمات آینده *@
+    <div class="settings-group">
+        <div class="settings-item">
+            <div class="settings-icon" style="background-color: #007aff;"><i class="bi bi-kanban-fill"></i></div>
+            <div class="settings-label">سفارشی‌سازی بازارها</div>
+            <div class="settings-action">
+                <span class="text-secondary">به زودی</span>
+                <i class="bi bi-chevron-left"></i>
+            </div>
+        </div>
+        <div class="settings-item">
+            <div class="settings-icon" style="background-color: #ff9500;"><i class="bi bi-star-fill"></i></div>
+            <div class="settings-label">مدیریت لیست پیگیری</div>
+            <div class="settings-action">
+                <span class="text-secondary">به زودی</span>
+                <i class="bi bi-chevron-left"></i>
+            </div>
+        </div>
+    </div>
+
+    @* بخش ۴: تنظیمات عمومی *@
+    <div class="settings-group">
+        <div class="settings-item">
+            <div class="settings-icon" style="background-color: #fd2d55;"><i class="bi bi-bell-fill"></i></div>
+            <div class="settings-label">اعلان‌ها</div>
+            <div class="settings-action">
+                <i class="bi bi-chevron-left"></i>
+            </div>
+        </div>
+        <div class="settings-item">
+            <div class="settings-icon" style="background-color: #34c759;"><i class="bi bi-palette-fill"></i></div>
+            <div class="settings-label">پوسته و ظاهر</div>
+            <div class="settings-action">
+                <span class="text-secondary">روشن</span>
+                <i class="bi bi-chevron-left"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavState.SetNavState("حساب کاربری", true);
+        base.OnInitialized();
+    }
+}

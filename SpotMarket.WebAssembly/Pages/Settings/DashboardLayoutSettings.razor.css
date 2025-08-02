@@ -1,0 +1,124 @@
+﻿.page-container {
+    padding-bottom: calc(var(--bottom-nav-height, 70px) + var(--safe-area-inset-bottom, 0) + 1rem);
+}
+
+.page-header {
+    padding: 1rem 1rem 0 1rem;
+}
+
+.page-title-large {
+    font-size: 2.125rem;
+    font-weight: 700;
+}
+::deep .settings-item {
+    display: flex;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    min-height: 54px;
+    text-decoration: none;
+    color: initial;
+}
+
+::deep .settings-group .settings-item:last-child {
+    border-bottom: none;
+}
+
+::deep .settings-icon {
+    font-size: 1rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: white;
+    margin-left: 1rem; /* RTL margin */
+    flex-shrink: 0;
+}
+
+::deep .settings-label {
+    flex-grow: 1;
+    font-weight: 500;
+}
+
+::deep .settings-action {
+    color: var(--text-secondary-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+    ::deep .settings-action .bi-chevron-left { /* RTL chevron */
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+.settings-footer {
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+.draggable-item {
+    cursor: grab;
+}
+
+.form-check-input {
+    width: 3.5em;
+    height: 1.75em;
+}
+.drag-controls {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem; /* RTL */
+}
+/* دستگیره برای دسکتاپ (با ماوس) */
+.drag-handle-desktop {
+    color: var(--gray-400);
+    font-size: 1.5rem;
+}
+
+/* دکمه‌ها برای موبایل (لمسی) */
+.drag-handle-mobile {
+    display: none; /* به صورت پیش‌فرض مخفی است */
+    flex-direction: column;
+}
+
+.move-btn {
+    background: none;
+    border: none;
+    padding: 0.1rem 0.5rem;
+    color: var(--gray-500);
+    cursor: pointer;
+}
+
+    .move-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+@media (pointer: coarse) {
+    .drag-handle-desktop {
+        display: none;
+    }
+
+    .drag-handle-mobile {
+        display: flex;
+    }
+
+    .draggable-item {
+        cursor: default; /* حذف نشانگر grab در موبایل */
+    }
+}
+
+@media (pointer: fine) {
+    .drag-handle-mobile {
+        display: none;
+    }
+
+    .drag-handle-desktop {
+        display: block;
+    }
+}

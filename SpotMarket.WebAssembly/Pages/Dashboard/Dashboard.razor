@@ -1,5 +1,8 @@
 ﻿@page "/"
+@using SpotMarket.WebAssembly.Models.Presentation
 @inject NavStateService NavState
+@inject SettingsService SettingsService
+
 <PageTitle>داشبورد</PageTitle>
 <div class="dashboard-container">
     
@@ -45,11 +48,22 @@
 </div>
 
 @code {
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         NavState.SetNavState("کالا نما", false);
+        var settings = await SettingsService.LoadSettingsAsync();
+        widgetLayout = settings?.DashboardLayout ?? new List<DashboardWidgetConfig>
+        {
+            new() { Type = DashboardWidgetType.TradingHalls },
+            new() { Type = DashboardWidgetType.MarketMovers },
+            new() { Type = DashboardWidgetType.MainPlayers },
+            new() { Type = DashboardWidgetType.MarketExcitement },
+            new() { Type = DashboardWidgetType.MarketPulse },
+            new() { Type = DashboardWidgetType.MarketSentiment },
+            new() { Type = DashboardWidgetType.SupplyRisk },
+            new() { Type = DashboardWidgetType.News, IsVisible = true }
+        };
         LoadDemoData();
-        base.OnInitialized();
     }
     
     private List<DashboardWidgetConfig> widgetLayout = new();
@@ -65,18 +79,6 @@
 
     private void LoadDemoData()
     {
-        widgetLayout = new List<DashboardWidgetConfig>
-        {
-            new() { Type = DashboardWidgetType.TradingHalls },
-            new() { Type = DashboardWidgetType.MarketMovers },
-            new() { Type = DashboardWidgetType.MainPlayers },
-            new() { Type = DashboardWidgetType.MarketExcitement },
-            new() { Type = DashboardWidgetType.MarketPulse },
-            new() { Type = DashboardWidgetType.MarketSentiment },
-            new() { Type = DashboardWidgetType.SupplyRisk },
-            new() { Type = DashboardWidgetType.News, IsVisible = true }
-        };
-
         mainPlayersData = new List<MainPlayer>
         {
             new()

@@ -1,4 +1,4 @@
-﻿namespace SpotMarket.WebAssembly.Models.App
+﻿namespace SpotMarket.WebAssembly.Models.Presentation
 {
     /// <summary>
     /// دسته‌بندی‌های مختلف اخبار را مشخص می‌کند

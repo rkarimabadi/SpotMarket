@@ -20,7 +20,7 @@
 
 .excitement-chart-center-text {
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
@@ -28,6 +28,7 @@
 
     .excitement-chart-center-text .value {
         font-size: 1.5rem;
+        line-height: 1.5rem;
         font-weight: 700;
     }
 
