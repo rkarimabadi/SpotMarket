@@ -1,0 +1,13 @@
+﻿@page "/account"
+@inject NavStateService NavState
+
+<PageTitle>حساب کاربری</PageTitle>
+<ComingSoonContainer Title="ناحیه کاربری"/>
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavState.SetNavState("حساب کاربری", true);
+        base.OnInitialized();
+    }
+}

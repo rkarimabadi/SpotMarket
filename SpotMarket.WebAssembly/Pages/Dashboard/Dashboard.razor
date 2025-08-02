@@ -5,23 +5,42 @@
     
     <DashboardHeader />
 
-@*     <WatchlistWidget/> *@
-
-    <TradingHallsWidget Data="tradingHallsData" />
-
-    <MarketMoversWidget Data="marketMoversData" />
-    
-    <MainPlayersWidget Players="mainPlayersData" />
-
-    <MarketExcitementWidget Data="marketExcitementData" />
-
-    <MarketSentimentWidget Data="marketSentimentData" />
-
-    <SupplyRiskWidget Data="supplyRiskData" />
-
-    <MarketPulseWidget Data="marketPulseData"/>
-
-    <NewsWidget Data="newsData"/>
+    @if (widgetLayout != null)
+    {
+        @foreach (var widgetConfig in widgetLayout)
+        {
+            @if (widgetConfig.IsVisible)
+            {
+                @switch (widgetConfig.Type)
+                {
+                    case DashboardWidgetType.TradingHalls:
+                        <TradingHallsWidget Data="tradingHallsData" />
+                        break;
+                    case DashboardWidgetType.MarketMovers:
+                        <MarketMoversWidget Data="marketMoversData" />
+                        break;
+                    case DashboardWidgetType.MainPlayers:
+                        <MainPlayersWidget Players="mainPlayersData" />
+                        break;
+                    case DashboardWidgetType.MarketExcitement:
+                        <MarketExcitementWidget Data="marketExcitementData" />
+                        break;
+                    case DashboardWidgetType.MarketPulse:
+                        <MarketPulseWidget Data="marketPulseData" />
+                        break;
+                    case DashboardWidgetType.MarketSentiment:
+                        <MarketSentimentWidget Data="marketSentimentData" />
+                        break;
+                    case DashboardWidgetType.SupplyRisk:
+                        <SupplyRiskWidget Data="supplyRiskData" />
+                        break;
+                    case DashboardWidgetType.News:
+                        <NewsWidget Data="newsData" />
+                        break;
+                }
+            }
+        }
+    }
 
 </div>
 
@@ -32,6 +51,9 @@
         LoadDemoData();
         base.OnInitialized();
     }
+    
+    private List<DashboardWidgetConfig> widgetLayout = new();
+
     private List<MainPlayer> mainPlayersData = new();
     private MarketExcitement? marketExcitementData;
     private MarketMoversData? marketMoversData;
@@ -43,6 +65,18 @@
 
     private void LoadDemoData()
     {
+        widgetLayout = new List<DashboardWidgetConfig>
+        {
+            new() { Type = DashboardWidgetType.TradingHalls },
+            new() { Type = DashboardWidgetType.MarketMovers },
+            new() { Type = DashboardWidgetType.MainPlayers },
+            new() { Type = DashboardWidgetType.MarketExcitement },
+            new() { Type = DashboardWidgetType.MarketPulse },
+            new() { Type = DashboardWidgetType.MarketSentiment },
+            new() { Type = DashboardWidgetType.SupplyRisk },
+            new() { Type = DashboardWidgetType.News, IsVisible = true }
+        };
+
         mainPlayersData = new List<MainPlayer>
         {
             new()
