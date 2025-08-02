@@ -1,17 +1,31 @@
-﻿<div class="section-header">
-    <h2 class="section-title">احساسات بازار</h2>
-</div>
-<div class="data-card sentiment-card">
-    <div class="card-body">
-        <div class="sentiment-bar">
-            <div class="sentiment-bar-segment" style="width: 65%; background-color: var(--primary-color);"></div>
-            <div class="sentiment-bar-segment" style="width: 25%; background-color: var(--success-color);"></div>
-            <div class="sentiment-bar-segment" style="width: 10%; background-color: var(--warning-color);"></div>
-        </div>
-        <div class="sentiment-legend">
-            <div class="legend-item"><span class="legend-dot" style="background-color: var(--primary-color);"></span>نقدی</div>
-            <div class="legend-item"><span class="legend-dot" style="background-color: var(--success-color);"></span>سلف</div>
-            <div class="legend-item"><span class="legend-dot" style="background-color: var(--warning-color);"></span>نسیه</div>
+﻿@if (Data != null && Data.Items.Any())
+{
+    <div class="section-header">
+        <h2 class="section-title">@Title</h2>
+    </div>
+    <div class="data-card">
+        <div class="card-body">
+            <div class="sentiment-bar">
+                @foreach (var item in Data.Items)
+                {
+                    <div class="sentiment-bar-segment" style="width: @(item.Percentage)%; background-color: @item.ColorCssVariable;"></div>
+                }
+            </div>
+            <div class="sentiment-legend">
+                @foreach (var item in Data.Items)
+                {
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background-color: @item.ColorCssVariable;"></span>
+                        @item.Name
+                    </div>
+                }
+            </div>
         </div>
     </div>
-</div>
+}
+
+@code {
+    [Parameter] public string Title { get; set; } = "احساسات بازار";
+    [Parameter]
+    public MarketSentimentData? Data { get; set; }
+}

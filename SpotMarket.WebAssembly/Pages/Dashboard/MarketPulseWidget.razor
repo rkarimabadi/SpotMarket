@@ -1,15 +1,33 @@
-﻿<div class="section-header">
-    <h2 class="section-title">نبض بازار</h2>
-</div>
-<div class="market-pulse-grid">
-    <div class="pulse-card">
-        <div class="pulse-title">ارزش معاملات</div>
-        <div class="pulse-value">۱۲.۳ همت</div>
-        <div class="pulse-change ltr">+۱.۵٪</div>
+﻿@if (Data != null && Data.Items.Any())
+{
+    <div class="section-header">
+        <h2 class="section-title">@Title</h2>
     </div>
-    <div class="pulse-card">
-        <div class="pulse-title">شاخص حرارت</div>
-        <div class="pulse-value">۸.۲٪</div>
-        <div class="pulse-change negative ltr">-۰.۳٪</div>
+    <div class="market-pulse-grid">
+        @foreach (var item in Data.Items)
+        {
+            <div class="pulse-card">
+                <div class="pulse-title">@item.Title</div>
+                <div class="pulse-value">@item.Value</div>
+                <div class="pulse-change @GetChangeCssClass(item.ChangeState)">@item.Change</div>
+            </div>
+        }
     </div>
-</div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "نبض بازار";
+    [Parameter]
+    public MarketPulseData? Data { get; set; }
+
+    private string GetChangeCssClass(ValueState state)
+    {
+        return state switch
+        {
+            ValueState.Positive => "", 
+            ValueState.Negative => "negative",
+            _ => "neutral"
+        };
+    }
+}

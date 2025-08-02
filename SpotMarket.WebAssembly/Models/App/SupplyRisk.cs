@@ -1,0 +1,31 @@
+﻿namespace SpotMarket.WebAssembly.Models.App
+{
+    /// <summary>
+    /// سطوح مختلف ریسک را مشخص می‌کند
+    /// </summary>
+    public enum RiskLevel
+    {
+        High,
+        Medium,
+        Low
+    }
+
+    /// <summary>
+    /// نمایانگر یک آیتم در لیست ویجت ریسک عرضه است
+    /// </summary>
+    public class SupplyRiskItem
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Subtitle { get; set; } = string.Empty;
+        public RiskLevel RiskLevel { get; set; }
+        public string Value { get; set; } = string.Empty;
+    }
+
+    /// <summary>
+    /// نگهدارنده کل داده‌های مورد نیاز برای ویجت ریسک عرضه
+    /// </summary>
+    public class SupplyRiskData
+    {
+        public List<SupplyRiskItem> Items { get; set; } = new();
+    }
+}

@@ -1,27 +1,49 @@
-﻿<div class="section-header">
-    <h2 class="section-title">آخرین اخبار</h2>
-    <a href="/markets" class="section-action">بیشتر</a>
-</div>
-<div>
-    <div class="news-item">
-        <div class="news-content">
-            <div class="news-source">گروه داغ • فولاد</div>
-            <div class="news-title">افزایش تقاضا برای ورق سرد، قیمت‌ها را در گروه فولاد بالا برد</div>
-        </div>
-        <img src="https://placehold.co/160x160/5e72e4/ffffff?text=نمودار" class="news-thumbnail" alt="تصویر خبر فولاد" />
+﻿@if (Data != null && Data.Items.Any())
+{
+    <div class="section-header">
+        <h2 class="section-title">@Title</h2>
+        @if (!string.IsNullOrEmpty(Data.ActionLink))
+        {
+            <a href="@Data.ActionLink" class="section-action">@Data.ActionText</a>
+        }
     </div>
-    <div class="news-item">
-        <div class="news-content">
-            <div class="news-source">اطلاعیه عرضه</div>
-            <div class="news-title">عرضه جدید سیمان تیپ ۲ تهران برای هفته آینده تایید شد</div>
-        </div>
-        <img src="https://placehold.co/160x160/6c757d/ffffff?text=سیمان" class="news-thumbnail" alt="تصویر خبر سیمان" />
+    <div class="data-card">
+        @foreach (var item in Data.Items)
+        {
+            <div class="news-item">
+                <div class="news-icon-container @GetIconBgClass(item.MarketGroup)">
+                    <i class="@GetIconClass(item.MarketGroup)"></i>
+                </div>
+                <div class="news-content">
+                    <div class="news-source">@item.Source</div>
+                    <div class="news-title">@item.Title</div>
+                </div>
+            </div>
+        }
     </div>
-    <div class="news-item">
-        <div class="news-content">
-            <div class="news-source">گروه داغ • پتروشیمی</div>
-            <div class="news-title">رقابت سنگین بر سر پلیمرهای مهندسی در تالار پتروشیمی</div>
-        </div>
-        <img src="https://placehold.co/160x160/28a745/ffffff?text=پترو" class="news-thumbnail" alt="تصویر خبر پتروشیمی" />
-    </div>
-</div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "آخرین اخبار و اطلاعیه‌ها";
+    [Parameter]
+    public NewsData? Data { get; set; }
+
+    private string GetIconClass(MarketGroup group) => group switch
+    {
+        MarketGroup.Steel => "bi bi-building",
+        MarketGroup.Petrochemical => "bi bi-droplet-fill",
+        MarketGroup.Cement => "bi bi-cone-striped",
+        MarketGroup.Agriculture => "bi bi-tree-fill",
+        _ => "bi bi-newspaper"
+    };
+
+    private string GetIconBgClass(MarketGroup group) => group switch
+    {
+        MarketGroup.Steel => "industrial",
+        MarketGroup.Petrochemical => "petro",
+        MarketGroup.Cement => "cement",
+        MarketGroup.Agriculture => "agri",
+        _ => "general"
+    };
+}
