@@ -1,45 +1,51 @@
 ﻿@page "/"
 @using SpotMarket.WebAssembly.Models.Presentation
+@using SpotMarket.WebAssembly.Services.Presentation
 @inject NavStateService NavState
 @inject SettingsService SettingsService
+@inject IDashboardService DashboardService
 
 <PageTitle>داشبورد</PageTitle>
 <div class="dashboard-container">
     
     <DashboardHeader />
-
-    @if (widgetLayout != null)
+    @if (_isLoading)
     {
-        @foreach (var widgetConfig in widgetLayout)
+        <p><em>در حال بارگذاری اطلاعات داشبورد...</em></p>
+    } else {
+        if (widgetLayout != null)
         {
-            @if (widgetConfig.IsVisible)
+            @foreach (var widgetConfig in widgetLayout)
             {
-                @switch (widgetConfig.Type)
+                @if (widgetConfig.IsVisible)
                 {
-                    case DashboardWidgetType.TradingHalls:
-                        <TradingHallsWidget Data="tradingHallsData" />
-                        break;
-                    case DashboardWidgetType.MarketMovers:
-                        <MarketMoversWidget Data="marketMoversData" />
-                        break;
-                    case DashboardWidgetType.MainPlayers:
-                        <MainPlayersWidget Players="mainPlayersData" />
-                        break;
-                    case DashboardWidgetType.MarketExcitement:
-                        <MarketExcitementWidget Data="marketExcitementData" />
-                        break;
-                    case DashboardWidgetType.MarketPulse:
-                        <MarketPulseWidget Data="marketPulseData" />
-                        break;
-                    case DashboardWidgetType.MarketSentiment:
-                        <MarketSentimentWidget Data="marketSentimentData" />
-                        break;
-                    case DashboardWidgetType.SupplyRisk:
-                        <SupplyRiskWidget Data="supplyRiskData" />
-                        break;
-                    case DashboardWidgetType.News:
-                        <NewsWidget Data="newsData" />
-                        break;
+                    @switch (widgetConfig.Type)
+                    {
+                        case DashboardWidgetType.TradingHalls:
+                            <TradingHallsWidget Data="tradingHallsData" />
+                            break;
+                        case DashboardWidgetType.MarketMovers:
+                            <MarketMoversWidget Data="marketMoversData" />
+                            break;
+                        case DashboardWidgetType.MainPlayers:
+                            <MainPlayersWidget Players="mainPlayersData" />
+                            break;
+                        case DashboardWidgetType.MarketExcitement:
+                            <MarketExcitementWidget Data="marketExcitementData" />
+                            break;
+                        case DashboardWidgetType.MarketPulse:
+                            <MarketPulseWidget Data="marketPulseData" />
+                            break;
+                        case DashboardWidgetType.MarketSentiment:
+                            <MarketSentimentWidget Data="marketSentimentData" />
+                            break;
+                        case DashboardWidgetType.SupplyRisk:
+                            <SupplyRiskWidget Data="supplyRiskData" />
+                            break;
+                        case DashboardWidgetType.News:
+                            <NewsWidget Data="newsData" />
+                            break;
+                    }
                 }
             }
         }
@@ -63,13 +69,14 @@
             new() { Type = DashboardWidgetType.SupplyRisk },
             new() { Type = DashboardWidgetType.News, IsVisible = true }
         };
-        LoadDemoData();
+        await LoadDemoDataAsync();
     }
     
     private List<DashboardWidgetConfig> widgetLayout = new();
 
-    private List<MainPlayer> mainPlayersData = new();
-    private MarketExcitement? marketExcitementData;
+    private bool _isLoading = true;
+    private IEnumerable<MainPlayer> mainPlayersData = new List<MainPlayer>();
+    private MarketExcitementData? marketExcitementData;
     private MarketMoversData? marketMoversData;
     private MarketPulseData? marketPulseData;
     private MarketSentimentData? marketSentimentData;
@@ -77,117 +84,42 @@
     private SupplyRiskData? supplyRiskData;
     private TradingHallsData? tradingHallsData;
 
-    private void LoadDemoData()
+    private async Task LoadDemoDataAsync()
     {
-        mainPlayersData = new List<MainPlayer>
+        try
         {
-            new()
-            {
-                Type = "برترین کارگزار",
-                Name = "کارگزاری مفید",
-                IconCssClass = "bi bi-person-workspace",
-                MarketShare = 18.4m
-            },
-            new()
-            {
-                Type = "برترین عرضه‌کننده",
-                Name = "فولاد مبارکه",
-                IconCssClass = "bi bi-buildings-fill",
-                MarketShare = 25.1m
-            }
-        };
-        marketExcitementData = new MarketExcitement
+            // فراخوانی همزمان تمام سرویس‌ها برای بهبود پرفورمنس
+            var pulseTask = DashboardService.GetMarketPulse();
+            var sentimentTask = DashboardService.GetMarketSentiment();
+            var excitementTask = DashboardService.GetMarketExcitement();
+            var supplyRiskTask = DashboardService.GetSupplyRisk();
+            var moversTask = DashboardService.GetMarketMovers();
+            var playersTask = DashboardService.GetMainPlayers();
+            var hallsTask = DashboardService.GetTradingHalls();
+            var newsTask = DashboardService.GetNews();
+
+            await Task.WhenAll(
+                pulseTask, sentimentTask, excitementTask, supplyRiskTask,
+                moversTask, playersTask, hallsTask, newsTask
+            );
+
+            marketPulseData = await pulseTask;
+            marketSentimentData = await sentimentTask;
+            marketExcitementData = await excitementTask;
+            supplyRiskData = await supplyRiskTask;
+            marketMoversData = await moversTask;
+            mainPlayersData = await playersTask;
+            tradingHallsData = await hallsTask;
+            newsData = await newsTask;
+        }
+        catch (Exception ex)
         {
-            Title = "تقاضای بالا",
-            Description = "بخش عمده معاملات امروز به روش حراج باز انجام شده که نشان‌دهنده رقابت شدید و هیجان در بازار است.",
-            Percentage = 70,
-            Label = "حراج"
-        };
-        marketMoversData = new MarketMoversData
+            // لاگ کردن خطا
+            Console.WriteLine($"Error loading dashboard data: {ex.Message}");
+        }
+        finally
         {
-            CompetitionItems = new List<MarketMoverItem>
-            {
-                new() { Rank = 1, Title = "ورق گالوانیزه", Subtitle = "فولاد مبارکه", Value = "+۱۲.۵٪", ValueState = ValueState.Positive },
-                new() { Rank = 2, Title = "مس کاتد", Subtitle = "شرکت ملی مس", Value = "+۹.۸٪", ValueState = ValueState.Positive }
-            },
-            DemandItems = new List<MarketMoverItem>
-            {
-                new() { Rank = 1, Title = "سیمان تیپ ۲", Subtitle = "سیمان تهران", Value = "۳.۵x", ValueState = ValueState.Neutral },
-                new() { Rank = 2, Title = "پلی‌پروپیلن", Subtitle = "پتروشیمی مارون", Value = "۲.۸x", ValueState = ValueState.Neutral }
-            }
-        };
-        marketPulseData = new MarketPulseData
-        {
-            Items = new List<PulseCardItem>
-            {
-                new() { Title = "ارزش معاملات", Value = "۱۲.۳ همت", Change = "+۱.۵٪", ChangeState = ValueState.Positive },
-                new() { Title = "شاخص رقابت", Value = "۸.۲٪", Change = "-۰.۳٪", ChangeState = ValueState.Negative }
-            }
-        };
-        marketSentimentData = new MarketSentimentData
-        {
-            Items = new List<SentimentItem>
-            {
-                new() { Name = "نقدی", Percentage = 65, ColorCssVariable = "var(--primary-color)" },
-                new() { Name = "سلف", Percentage = 25, ColorCssVariable = "var(--success-color)" },
-                new() { Name = "نسیه", Percentage = 10, ColorCssVariable = "var(--warning-color)" }
-            }
-        };
-        newsData = new NewsData
-        {
-            Items = new List<NewsItem>
-            {
-                new()
-                {
-                    Category = NewsCategory.HotGroup,
-                    MarketGroup = MarketGroup.Steel,
-                    Source = "گروه داغ • فولاد",
-                    Title = "افزایش تقاضا برای ورق سرد، قیمت‌ها را در گروه فولاد بالا برد"
-                },
-                new()
-                {
-                    Category = NewsCategory.SupplyAnnouncement,
-                    MarketGroup = MarketGroup.Cement,
-                    Source = "اطلاعیه عرضه",
-                    Title = "عرضه جدید سیمان تیپ ۲ تهران برای هفته آینده تایید شد"
-                },
-                new()
-                {
-                    Category = NewsCategory.HotGroup,
-                    MarketGroup = MarketGroup.Petrochemical,
-                    Source = "گروه داغ • پتروشیمی",
-                    Title = "رقابت سنگین بر سر پلیمرهای مهندسی در تالار پتروشیمی"
-                }
-            }
-        };        
-        supplyRiskData = new SupplyRiskData
-        {
-            Items = new List<SupplyRiskItem>
-            {
-                new()
-                {
-                    Title = "مس کاتد",
-                    Subtitle = "ریسک بالا",
-                    RiskLevel = RiskLevel.High,
-                    Value = "۱ عرضه‌کننده"
-                },
-                new()
-                {
-                    Title = "میلگرد",
-                    Subtitle = "ریسک پایین",
-                    RiskLevel = RiskLevel.Low,
-                    Value = "۱۲ عرضه‌کننده"
-                }
-            }
-        };
-        tradingHallsData = new TradingHallsData
-        {
-            Items = new List<TradingHallItem>
-            {
-                new() { Title = "صنعتی", IconCssClass = "bi bi-building", IconBgCssClass = "industrial", Value = "۵.۸ همت", Change = "+۳.۱٪", ChangeState = ValueState.Positive },
-                new() { Title = "پتروشیمی", IconCssClass = "bi bi-droplet-fill", IconBgCssClass = "petro", Value = "۴.۲ همت", Change = "-۱.۲٪", ChangeState = ValueState.Negative },
-                new() { Title = "کشاورزی", IconCssClass = "bi bi-tree-fill", IconBgCssClass = "agri", Value = "۰.۹ همت", Change = "+۵.۴٪", ChangeState = ValueState.Positive }
-            }
-        };
+            _isLoading = false;
+        }
     }
 }

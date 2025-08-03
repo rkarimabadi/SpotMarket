@@ -5,7 +5,7 @@
         <h2 class="section-title">@Title</h2>
     </div>
 
-    <div class="players-grid" style="grid-template-columns: repeat(@Players.Count, 1fr);">
+    <div class="players-grid" style="grid-template-columns: repeat(@Players.Count(), 1fr);">
         @foreach (var player in Players)
         {
             <div class="player-card">
@@ -26,5 +26,5 @@
     /// لیستی از بازیگران برای نمایش در ویجت
     /// </summary>
     [Parameter]
-    public List<MainPlayer>? Players { get; set; }
+    public IEnumerable<MainPlayer>? Players { get; set; }
 }

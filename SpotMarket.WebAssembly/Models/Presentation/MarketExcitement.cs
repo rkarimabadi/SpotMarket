@@ -1,6 +1,6 @@
 ﻿namespace SpotMarket.WebAssembly.Models.Presentation
 {
-    public class MarketExcitement
+    public class MarketExcitementData
     {
         /// <summary>
         /// عنوان اصلی ویجت، مثلا: تقاضای بالا
