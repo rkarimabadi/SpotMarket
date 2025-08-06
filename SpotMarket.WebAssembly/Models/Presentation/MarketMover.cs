@@ -16,7 +16,7 @@
     /// <summary>
     /// وضعیت مقدار را برای تعیین رنگ (مثبت، منفی، خنثی) مشخص می‌کند
     /// </summary>
-    public enum ValueState { Positive, Negative, Neutral }
+    public enum ValueState { Neutral, Positive, Negative  }
 
     /// <summary>
     /// نگهدارنده کل داده‌های مورد نیاز برای ویجت پویایی بازار
