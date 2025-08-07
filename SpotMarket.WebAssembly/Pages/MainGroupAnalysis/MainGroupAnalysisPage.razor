@@ -3,9 +3,24 @@
 
 <div class="page-container">
     <GroupHeaderWidget GroupName="@groupName" />
-    <SubGroupListWidget />
+    
+    <HealthInspiredWidget/>
+    <SubGroupListWidget/>
+    <JournalInspiredWidget/>
+    <CategorizedSubGroupListWidget GroupName="@groupName" />
+    <MarketRingsWidget/>
+    <MarketControlWidget/>
+    <MarketCompassWidget/>
+    <MarketScheduleWidget/>
+    <MarketMetricsWidget/>
+    <MarketContactsWidget/>
+    <MarketSnapshotsWidget/>
+    <MarketAlarmsWidget/>
+    <MarketStatsRowWidget/>
+    <MarketVitalsWidget/>
+    <MarketConditionsWidget/>
+    <MarketShortcutsWidget/>
 </div>
-
 @code {
     [Parameter]
     public string? groupName { get; set; }

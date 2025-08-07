@@ -1,0 +1,77 @@
+﻿/* استایل برای ویجت الهام گرفته از Shortcuts App */
+.shortcuts-widget {
+    background-color: var(--background-color);
+    padding: 1rem;
+}
+
+    .shortcuts-widget .widget-header {
+        margin-bottom: 1rem;
+    }
+
+    .shortcuts-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+.shortcuts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.shortcut-tile {
+    padding: 1rem;
+    border-radius: 1.25rem;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+    .shortcut-tile:hover {
+        transform: scale(1.05);
+    }
+
+.tile-icon {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* رنگ‌بندی میان‌برها */
+.shortcut-tile.industrial {
+    background-color: #54a0ff;
+}
+
+.shortcut-tile.petro {
+    background-color: #50c878;
+}
+
+.shortcut-tile.agri {
+    background-color: #f0932b;
+}
+
+.shortcut-tile.secondary {
+    background-color: #6c757d;
+}
+
+/* حالت تیره */
+[data-bs-theme="dark"] .shortcut-tile.industrial {
+    background-color: #2e86de;
+}
+
+[data-bs-theme="dark"] .shortcut-tile.petro {
+    background-color: #22863a;
+}
+
+[data-bs-theme="dark"] .shortcut-tile.agri {
+    background-color: #c47318;
+}
+
+[data-bs-theme="dark"] .shortcut-tile.secondary {
+    background-color: #5a6268;
+}

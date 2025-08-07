@@ -1,0 +1,90 @@
+﻿/* استایل برای ویجت الهام گرفته از Compass App */
+.compass-widget {
+    background-color: var(--background-color);
+    padding: 1rem;
+}
+
+    .compass-widget .widget-header {
+        margin-bottom: 1rem;
+    }
+
+    .compass-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+.compass-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.compass-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.compass-dial {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+
+    .compass-dial.positive {
+        background-color: rgba(var(--success-color-rgb), 0.1);
+        color: var(--success-color);
+    }
+
+    .compass-dial.negative {
+        background-color: rgba(var(--danger-color-rgb), 0.1);
+        color: var(--danger-color);
+    }
+
+.item-info .title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.item-info .subtitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+}
+
+.item-stat {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+    .item-stat.positive {
+        color: var(--success-color);
+    }
+
+    .item-stat.negative {
+        color: var(--danger-color);
+    }
+
+/* حالت تیره */
+[data-bs-theme="dark"] .compass-item {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .compass-dial.positive {
+    background-color: rgba(34, 134, 58, 0.2);
+}
+
+[data-bs-theme="dark"] .compass-dial.negative {
+    background-color: rgba(194, 54, 77, 0.2);
+}

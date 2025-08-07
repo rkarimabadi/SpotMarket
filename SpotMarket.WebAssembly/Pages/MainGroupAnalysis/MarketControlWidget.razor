@@ -1,0 +1,48 @@
+﻿@* الهام گرفته از ویجت‌های برنامه Home اپل *@
+
+<div class="control-widget">
+    <div class="widget-header">
+        <h3 class="widget-title">کنترل پنل بازار</h3>
+    </div>
+    <div class="control-grid">
+        @* کنترلر اول: ورق گرم *@
+        <div class="control-tile status-hot">
+            <div class="tile-icon"><i class="bi bi-layers-fill"></i></div>
+            <div class="tile-info">
+                <span class="title">ورق گرم</span>
+                <span class="subtitle">رقابت شدید</span>
+            </div>
+        </div>
+
+        @* کنترلر دوم: سیمان *@
+        <div class="control-tile status-neutral">
+            <div class="tile-icon"><i class="bi bi-cone-striped"></i></div>
+            <div class="tile-info">
+                <span class="title">سیمان</span>
+                <span class="subtitle">بازار متعادل</span>
+            </div>
+        </div>
+
+        @* کنترلر سوم: پلیمرها *@
+        <div class="control-tile status-cool">
+            <div class="tile-icon"><i class="bi bi-droplet-fill"></i></div>
+            <div class="tile-info">
+                <span class="title">پلیمرها</span>
+                <span class="subtitle">بازار آرام</span>
+            </div>
+        </div>
+
+        @* کنترلر چهارم: بیشتر *@
+        <div class="control-tile">
+            <div class="tile-icon"><i class="bi bi-grid-fill"></i></div>
+            <div class="tile-info">
+                <span class="title">سایر گروه‌ها</span>
+                <span class="subtitle">مشاهده همه</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // This component is currently using static data for design purposes.
+}

@@ -21,7 +21,7 @@
 }
 
 .heatmap-tile {
-    padding: 1rem;
+    padding: clamp(0.5rem,1vw,1rem);
     border-radius: 1rem;
     color: white;
     font-weight: 600;
@@ -49,6 +49,18 @@
     .heatmap-tile.neutral {
         background-color: var(--gray-600);
     }
+@media (max-width: 400px) {
+    .tile-sm-rotate {
+        writing-mode: vertical-rl; 
+        text-align: center;
+    }
+}
+@media (max-width: 350px) {
+    .tile-xs-rotate {
+        writing-mode: vertical-rl;
+        text-align: center;
+    }
+}
 
 /* Define grid spans for the new layout */
 .tile-steel {

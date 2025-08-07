@@ -1,0 +1,97 @@
+﻿/* استایل برای ویجت الهام گرفته از Journal App */
+.journal-widget {
+    background-color: var(--background-color);
+    padding: 1rem;
+}
+
+    .journal-widget .widget-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+    }
+
+.header-text .date {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+    text-transform: uppercase;
+}
+
+.header-text .widget-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    line-height: 1.2;
+}
+
+.journal-widget .bi-chevron-down {
+    font-size: 1.25rem;
+    color: var(--text-secondary-color);
+    cursor: pointer;
+}
+
+.story-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.story-item {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+}
+
+.story-content {
+    display: flex;
+    flex-direction: column;
+}
+
+    .story-content .category {
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+
+    .story-content .title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .story-content .summary {
+        font-size: 0.9rem;
+        color: var(--text-secondary-color);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+.story-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 0.75rem;
+    background-size: cover;
+    background-position: center;
+}
+
+    .story-image.steel-bg {
+        background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://placehold.co/100x100/c2364d/white?text=Steel');
+    }
+
+    .story-image.agri-bg {
+        background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://placehold.co/100x100/22863a/white?text=Agri');
+    }
+
+/* حالت تیره */
+[data-bs-theme="dark"] .story-item {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}

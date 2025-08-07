@@ -1,0 +1,88 @@
+﻿/* استایل برای ویجت الهام گرفته از Clock App */
+.alarms-widget {
+    background-color: var(--background-color);
+    padding: 1rem;
+}
+
+    .alarms-widget .widget-header {
+        margin-bottom: 1rem;
+    }
+
+    .alarms-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+.alarms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.alarm-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.alarm-info {
+    display: flex;
+    flex-direction: column;
+}
+
+    .alarm-info .value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+        line-height: 1.2;
+    }
+
+    .alarm-info .label {
+        font-size: 0.9rem;
+        color: var(--text-secondary-color);
+    }
+
+.alarm-toggle {
+    width: 52px;
+    height: 32px;
+    border-radius: 16px;
+    background-color: var(--border-color);
+    padding: 2px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.toggle-handle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: white;
+    transition: transform 0.2s ease;
+}
+
+.alarm-toggle.active {
+    background-color: var(--success-color);
+}
+
+    .alarm-toggle.active .toggle-handle {
+        transform: translateX(20px);
+    }
+
+/* حالت تیره */
+[data-bs-theme="dark"] .alarm-item {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .alarm-toggle {
+    background-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .toggle-handle {
+    background-color: var(--gray-400);
+}

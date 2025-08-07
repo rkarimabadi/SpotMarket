@@ -1,0 +1,74 @@
+﻿/* استایل برای ویجت الهام گرفته از Calendar App */
+.schedule-widget {
+    background-color: var(--card-background-color);
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+}
+
+    .schedule-widget .widget-header {
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .schedule-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.schedule-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+}
+
+.time {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+    font-variant-numeric: tabular-nums;
+}
+
+.event-details .title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.event-details .subtitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+    .status-dot.upcoming {
+        background-color: var(--primary-color);
+    }
+
+    .status-dot.completed {
+        background-color: var(--success-color);
+    }
+
+/* حالت تیره */
+[data-bs-theme="dark"] .schedule-widget {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+    [data-bs-theme="dark"] .schedule-widget .widget-header {
+        border-color: var(--gray-700);
+    }

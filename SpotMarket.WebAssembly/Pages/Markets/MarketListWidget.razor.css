@@ -54,6 +54,21 @@
         background-color: var(--warning-color);
     }
 
+    .market-icon.mineral {
+        background-color: #6f42c1;
+    }
+
+    .market-icon.oil-products {
+        background-color: #17a2b8;
+    }
+
+    .market-icon.real-estate {
+        background-color: #007bff;
+    }
+
+    .market-icon.secondary {
+        background-color: #6c757d;
+    }
 
 .market-info .title {
     font-weight: 600;

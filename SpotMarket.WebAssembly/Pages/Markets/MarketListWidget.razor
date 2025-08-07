@@ -1,51 +1,59 @@
-﻿<div class="market-list-container">
+﻿@inject NavigationManager NavigationManager
+<div class="market-list-container">
     <div class="market-list">
-        <div class="market-list-item">
-            <div class="market-icon industrial"><i class="bi bi-building"></i></div>
-            <div class="market-info">
-                <div class="title">صنعتی و معدنی</div>
-                <div class="subtitle">فولاد، مس، آلومینیوم</div>
+        @foreach (var market in MarketItems)
+        {
+            <div class="market-list-item" @onclick="() => GoToGroupAnalysis(market.UrlName)">
+                <div class="market-icon @market.IconContainerClass"><i class="bi @market.IconClass"></i></div>
+                <div class="market-info">
+                    <div class="title">@market.Title</div>
+                    <div class="subtitle">@market.Subtitle</div>
+                </div>
+                <div class="market-heat-indicator">
+                    <div class="heat-bar @market.HeatLevel"></div>
+                    <div class="heat-label">@market.HeatLabel</div>
+                </div>
             </div>
-            <div class="market-heat-indicator">
-                <div class="heat-bar high"></div>
-                <div class="heat-label">داغ</div>
-            </div>
-        </div>
-
-        <div class="market-list-item">
-            <div class="market-icon petro"><i class="bi bi-droplet-fill"></i></div>
-            <div class="market-info">
-                <div class="title">پتروشیمی</div>
-                <div class="subtitle">پلیمرها، مواد شیمیایی</div>
-            </div>
-            <div class="market-heat-indicator">
-                <div class="heat-bar medium"></div>
-                <div class="heat-label">متوسط</div>
-            </div>
-        </div>
-
-        <div class="market-list-item">
-            <div class="market-icon cement"><i class="bi bi-cone-striped"></i></div>
-            <div class="market-info">
-                <div class="title">سیمان</div>
-                <div class="subtitle">سیمان تیپ ۱، تیپ ۲ و سفید</div>
-            </div>
-            <div class="market-heat-indicator">
-                <div class="heat-bar low"></div>
-                <div class="heat-label">آرام</div>
-            </div>
-        </div>
-
-        <div class="market-list-item">
-            <div class="market-icon agri"><i class="bi bi-tree-fill"></i></div>
-            <div class="market-info">
-                <div class="title">کشاورزی</div>
-                <div class="subtitle">زعفران، پسته، جو</div>
-            </div>
-            <div class="market-heat-indicator">
-                <div class="heat-bar low"></div>
-                <div class="heat-label">آرام</div>
-            </div>
-        </div>
+        }
     </div>
 </div>
+
+<div class="market-list-container">
+    <div class="market-list">
+    </div>
+</div>
+
+@code {
+    private void GoToGroupAnalysis(string groupName)
+    {
+        // اطمینان از اینکه نام گروه خالی نیست
+        if (!string.IsNullOrEmpty(groupName))
+        {
+            NavigationManager.NavigateTo($"/markets/{groupName}");
+        }
+    }
+    private List<MarketInfo> MarketItems { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        MarketItems = new List<MarketInfo>
+        {
+            new MarketInfo("صنعتی", "فولاد، مس، آلومینیوم", "Industrial", "bi-building", "industrial", "high", "داغ"),
+            new MarketInfo("کشاورزی", "زعفران، پسته، جو", "Agriculture", "bi-tree-fill", "agri", "low", "آرام"),
+            new MarketInfo("پتروشیمی و فرآورده های نفتی", "پلیمرها، مواد شیمیایی، نفت", "Petrochemical-and-Oil-Products", "bi-droplet-fill", "petro", "medium", "متوسط"),
+            new MarketInfo("معدنی", "سنگ آهن، زغال سنگ", "Mineral", "bi-gem", "mineral", "medium", "متوسط"),
+            new MarketInfo("فرآورده های نفتی", "قیر، روغن، گاز", "Oil-Products", "bi-fuel-pump-fill", "oil-products", "high", "داغ"),
+            new MarketInfo("اموال غیر منقول", "ساختمان، زمین، مستغلات", "Real-Estate", "bi-house-door-fill", "real-estate", "low", "آرام"),
+            new MarketInfo("بازار فرعی", "کالاهای متنوع", "Secondary-Market", "bi-shop", "secondary", "neutral", "خنثی")
+        };
+    }
+    private record MarketInfo(
+        string Title,
+        string Subtitle,
+        string UrlName,
+        string IconClass,
+        string IconContainerClass,
+        string HeatLevel,
+        string HeatLabel
+    );
+}

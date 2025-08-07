@@ -1,0 +1,93 @@
+﻿/* استایل برای ویجت الهام گرفته از Health App */
+.health-widget {
+    background-color: var(--background-color);
+    padding: 1rem;
+}
+
+    .health-widget .widget-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .health-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+    .health-widget .see-all-link {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+.cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.health-card {
+    padding: 1rem;
+    border-radius: 1.25rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    box-shadow: 0 4px 15px -2px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+    .health-card:hover {
+        transform: scale(1.03);
+    }
+
+    /* رنگ‌بندی کارت‌ها */
+    .health-card.steel-card {
+        background: linear-gradient(145deg, #ff6b6b, #d93b3b);
+    }
+
+    .health-card.copper-card {
+        background: linear-gradient(145deg, #54a0ff, #2e86de);
+    }
+
+.card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+}
+
+    .card-info .title {
+        font-size: 1rem;
+        font-weight: 600;
+        opacity: 0.9;
+    }
+
+    .card-info .value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+.card-subtitle {
+    font-size: 0.8rem;
+    font-weight: 500;
+    opacity: 0.8;
+    margin-top: auto; /* برای چسبیدن به پایین کارت */
+}
+
+/* حالت تیره */
+[data-bs-theme="dark"] .health-card.steel-card {
+    background: linear-gradient(145deg, #c2364d, #a22a3f);
+}
+
+[data-bs-theme="dark"] .health-card.copper-card {
+    background: linear-gradient(145deg, #2e86de, #1e6ab7);
+}
