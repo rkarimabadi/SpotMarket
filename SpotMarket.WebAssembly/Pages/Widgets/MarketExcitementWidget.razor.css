@@ -1,0 +1,67 @@
+﻿.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+.section-header {
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+.excitement-widget {
+    padding: 1rem;
+    margin: 0;
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.excitement-chart {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+    .excitement-chart svg {
+        transform: rotate(-90deg);
+    }
+
+.excitement-chart-center-text {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+    .excitement-chart-center-text .value {
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+        font-weight: 700;
+    }
+
+    .excitement-chart-center-text .label {
+        font-size: 0.8rem;
+        color: var(--text-secondary-color);
+    }
+
+.excitement-info .title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.excitement-info .subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    line-height: 1.5;
+}
+
+[data-bs-theme="dark"] .excitement-widget {
+    background-color: var(--gray-800);
+}

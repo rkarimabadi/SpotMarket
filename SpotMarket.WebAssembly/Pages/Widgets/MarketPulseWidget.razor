@@ -1,0 +1,37 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@if (Data != null && Data.Items.Any())
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h2 class="section-title">@Title</h2>
+        </div>
+        <div class="market-pulse-grid">
+            @foreach (var item in Data.Items)
+            {
+                <div class="pulse-card">
+                    <div class="pulse-title">@item.Title</div>
+                    <div class="pulse-value">@item.Value</div>
+                    <div class="pulse-change @GetChangeCssClass(item.ChangeState)">@item.Change</div>
+                </div>
+            }
+        </div>
+    </div>
+
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "نبض بازار";
+    [Parameter]
+    public MarketPulseData? Data { get; set; }
+
+    private string GetChangeCssClass(ValueState state)
+    {
+        return state switch
+        {
+            ValueState.Positive => "", 
+            ValueState.Negative => "negative",
+            _ => "neutral"
+        };
+    }
+}

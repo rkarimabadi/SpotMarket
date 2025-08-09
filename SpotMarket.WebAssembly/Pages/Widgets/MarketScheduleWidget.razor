@@ -1,0 +1,43 @@
+﻿@* الهام گرفته از ویجت‌های برنامه Calendar و Clock اپل *@
+<div class="widget-container">
+<div class="schedule-widget">
+    <div class="widget-header">
+        <h3 class="widget-title">برنامه امروز</h3>
+    </div>
+    <div class="schedule-list">
+        @* رویداد اول: عرضه ورق *@
+        <div class="schedule-item">
+            <div class="time">۱۰:۳۰</div>
+            <div class="event-details">
+                <span class="title">عرضه ورق گرم</span>
+                <span class="subtitle">فولاد مبارکه</span>
+            </div>
+            <div class="status-dot upcoming"></div>
+        </div>
+
+        @* رویداد دوم: معامله میلگرد *@
+        <div class="schedule-item">
+            <div class="time">۱۱:۱۵</div>
+            <div class="event-details">
+                <span class="title">معامله میلگرد</span>
+                <span class="subtitle">ذوب‌آهن اصفهان</span>
+            </div>
+            <div class="status-dot completed"></div>
+        </div>
+
+        @* رویداد سوم: عرضه سیمان *@
+        <div class="schedule-item">
+            <div class="time">۱۴:۰۰</div>
+            <div class="event-details">
+                <span class="title">عرضه سیمان تیپ ۲</span>
+                <span class="subtitle">سیمان تهران</span>
+            </div>
+            <div class="status-dot upcoming"></div>
+        </div>
+    </div>
+</div>
+</div>
+
+@code {
+    // This component is currently using static data for design purposes.
+}

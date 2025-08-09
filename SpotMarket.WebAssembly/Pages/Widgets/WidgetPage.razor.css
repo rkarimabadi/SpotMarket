@@ -1,0 +1,3 @@
+﻿.page-container {
+    padding-bottom: calc(var(--bottom-nav-height, 70px) + var(--safe-area-inset-bottom, 0) + 1rem);
+}

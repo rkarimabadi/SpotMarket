@@ -1,0 +1,96 @@
+﻿/* استایل برای ویجت الهام گرفته از Home App */
+.control-widget {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+    .control-widget .widget-header {
+        margin-bottom: 1rem;
+    }
+
+    .control-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+.control-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.control-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: 1.25rem;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease-in-out;
+}
+
+    .control-tile:hover {
+        transform: scale(1.03);
+        border-color: var(--primary-color);
+    }
+
+.tile-icon {
+    font-size: 1.75rem;
+    color: var(--text-primary-color);
+}
+
+.tile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+    .tile-info .title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary-color);
+    }
+
+    .tile-info .subtitle {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--text-secondary-color);
+    }
+
+/* استایل‌های وضعیت */
+.control-tile.status-hot {
+    background: linear-gradient(145deg, var(--danger-color), #c2364d);
+    border: none;
+}
+
+.control-tile.status-neutral {
+    background: linear-gradient(145deg, #6c757d, #5a6268);
+    border: none;
+}
+
+.control-tile.status-cool {
+    background: linear-gradient(145deg, #28a745, #218838);
+    border: none;
+}
+
+    /* تغییر رنگ متن و آیکون در کارت‌های رنگی */
+    .control-tile.status-hot .tile-icon,
+    .control-tile.status-hot .tile-info .title,
+    .control-tile.status-hot .tile-info .subtitle,
+    .control-tile.status-neutral .tile-icon,
+    .control-tile.status-neutral .tile-info .title,
+    .control-tile.status-neutral .tile-info .subtitle,
+    .control-tile.status-cool .tile-icon,
+    .control-tile.status-cool .tile-info .title,
+    .control-tile.status-cool .tile-info .subtitle {
+        color: white;
+    }
+
+/* حالت تیره */
+[data-bs-theme="dark"] .control-tile {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}

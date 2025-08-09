@@ -3,7 +3,7 @@
     top: calc(60px + var(--safe-area-inset-top, 0));
     background-color: var(--background-color);
     z-index: 5;
-    padding: 1rem;
+    padding: 1rem 0;
     margin: 0;
 }
     .search-container.is-searching {
