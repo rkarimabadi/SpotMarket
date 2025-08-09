@@ -51,6 +51,7 @@ namespace SpotMarket.WebAssembly.Services.App
             {
                 DashboardLayout = new List<DashboardWidgetConfig>
             {
+                new() { Type = DashboardWidgetType.MarketProgress, IsVisible = true },
                 new() { Type = DashboardWidgetType.TradingHalls, IsVisible = true },
                 new() { Type = DashboardWidgetType.MarketMovers, IsVisible = true },
                 new() { Type = DashboardWidgetType.MainPlayers, IsVisible = true },

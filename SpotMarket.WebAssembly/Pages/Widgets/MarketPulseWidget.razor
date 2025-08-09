@@ -11,12 +11,15 @@
                 <div class="pulse-card">
                     <div class="pulse-title">@item.Title</div>
                     <div class="pulse-value">@item.Value</div>
-                    <div class="pulse-change @GetChangeCssClass(item.ChangeState)">@item.Change</div>
+
+                    <div class="pulse-stat">
+                        <div class="pulse-change @GetChangeCssClass(item.ChangeState)">@item.Change</div>
+                        <div class="pulse-label">@item.ChangeLabel</div>
+                    </div>
                 </div>
             }
         </div>
     </div>
-
 }
 
 @code {
@@ -29,7 +32,7 @@
     {
         return state switch
         {
-            ValueState.Positive => "", 
+            ValueState.Positive => "",
             ValueState.Negative => "negative",
             _ => "neutral"
         };

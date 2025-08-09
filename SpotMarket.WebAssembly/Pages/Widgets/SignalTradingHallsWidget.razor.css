@@ -4,7 +4,7 @@
 }
 
 .section-header {
-
+    padding: 0 1rem;
     margin-bottom: 1rem;
 }
 
@@ -17,7 +17,7 @@
     display: flex;
     gap: 0.75rem;
     overflow-x: auto;
-    padding: 0 1rem 0 1rem; /* فضا برای اسکرول و سایه */
+    padding: 0 1rem 1rem 1rem; /* فضا برای اسکرول و سایه */
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     scroll-snap-type: x mandatory;
@@ -135,36 +135,50 @@
     color: var(--text-primary-color);
 }
 
-/* استایل جدید برای نمایشگر نسبت فروش به عرضه (طراحی افقی) */
+/* استایل برای نمایشگر نسبت فروش به عرضه */
 .ratio-indicator {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr; /* سه بخش مساوی */
-    gap: 4px;
-    height: 8px; /* ارتفاع ثابت و کم */
-    width: 100%; /* تمام عرض کارت را اشغال می‌کند */
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 24px; /* ارتفاع کلی برای هم‌ترازی */
 }
 
     .ratio-indicator .bar {
+        width: 6px;
+        border-radius: 2px;
         background-color: var(--border-color);
-        border-radius: 4px;
-        height: 100%; /* ارتفاع کامل والد خود را می‌گیرد */
     }
 
-    /* حالت کم: یک بخش از سه بخش روشن می‌شود */
+    /* حالت کم */
     .ratio-indicator.ratio-low .bar:nth-child(1) {
+        height: 30%;
         background-color: var(--danger-color);
     }
 
-    /* حالت متوسط: دو بخش از سه بخش روشن می‌شود */
-    .ratio-indicator.ratio-medium .bar:nth-child(1),
-    .ratio-indicator.ratio-medium .bar:nth-child(2) {
+    /* حالت متوسط */
+    .ratio-indicator.ratio-medium .bar:nth-child(1) {
+        height: 30%;
         background-color: var(--warning-color);
     }
 
-    /* حالت زیاد: هر سه بخش روشن می‌شود */
-    .ratio-indicator.ratio-high .bar:nth-child(1),
-    .ratio-indicator.ratio-high .bar:nth-child(2),
+    .ratio-indicator.ratio-medium .bar:nth-child(2) {
+        height: 60%;
+        background-color: var(--warning-color);
+    }
+
+    /* حالت زیاد */
+    .ratio-indicator.ratio-high .bar:nth-child(1) {
+        height: 30%;
+        background-color: var(--success-color);
+    }
+
+    .ratio-indicator.ratio-high .bar:nth-child(2) {
+        height: 60%;
+        background-color: var(--success-color);
+    }
+
     .ratio-indicator.ratio-high .bar:nth-child(3) {
+        height: 100%;
         background-color: var(--success-color);
     }
 
@@ -176,5 +190,5 @@
 }
 
 [data-bs-theme="dark"] .ratio-indicator .bar {
-    background-color: var(--gray-700); /* رنگ پس‌زمینه برای بخش‌های خاموش */
+    background-color: var(--gray-700);
 }

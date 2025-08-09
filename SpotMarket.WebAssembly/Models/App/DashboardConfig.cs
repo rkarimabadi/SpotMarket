@@ -5,6 +5,7 @@
     /// </summary>
     public enum DashboardWidgetType
     {
+        MarketProgress,
         TradingHalls,
         MarketMovers,
         MainPlayers,
@@ -24,6 +25,7 @@
         public bool IsVisible { get; set; } = true;
         public string GetDisplayName() => Type switch
         {
+            DashboardWidgetType.MarketProgress => "پیشرفت بازار",
             DashboardWidgetType.TradingHalls => "سلامت تالارها",
             DashboardWidgetType.MarketMovers => "پویایی بازار",
             DashboardWidgetType.MainPlayers => "بازیگران اصلی",

@@ -15,7 +15,7 @@
             }
             @if (itemsToShow?.Any() == true)
             {
-                foreach (var item in itemsToShow)
+                @foreach (var item in itemsToShow)
                 {
                     <div class="data-list-item">
                         <div class="item-rank">@item.Rank</div>
@@ -23,12 +23,7 @@
                             <div class="title">@item.Title</div>
                             <div class="subtitle">@item.Subtitle</div>
                         </div>
-                        <div class="item-stat-container">
-                            <div class="item-value ltr @GetValueCssClass(item.ValueState)">@item.Value</div>
-                            <div class="item-label">
-                                @(selectedMoverTab == "competition" ? "قیمت پایه" : "موجودی")
-                            </div>
-                        </div>
+                        <div class="item-value @GetValueCssClass(item.ValueState)">@item.Value</div>
                     </div>
                 }
             }

@@ -5,6 +5,7 @@ namespace SpotMarket.WebAssembly.Services.Presentation
 {
     public interface IDashboardService
     {
+        Task<MarketProgressData> GetMarketProgressData();
         Task<MarketPulseData> GetMarketPulse();
         Task<MarketSentimentData> GetMarketSentiment();
         Task<MarketExcitementData> GetMarketExcitement();
@@ -63,6 +64,11 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         public async Task<NewsData> GetNews()
         {
             return await _httpClient.GetFromJsonAsync<NewsData>($"{_controllerPath}/news");
+        }
+
+        public async Task<MarketProgressData> GetMarketProgressData()
+        {
+             return await _httpClient.GetFromJsonAsync<MarketProgressData>($"{_controllerPath}/market-progress");
         }
     }
 

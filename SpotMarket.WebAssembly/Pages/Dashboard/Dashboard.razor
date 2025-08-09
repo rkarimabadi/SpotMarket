@@ -8,7 +8,7 @@
 
 <PageTitle>داشبورد</PageTitle>
 <div class="dashboard-container">
-    
+
     <DashboardHeader />
     @if (_isLoading)
     {
@@ -22,6 +22,9 @@
                 {
                     @switch (widgetConfig.Type)
                     {
+                        case DashboardWidgetType.MarketProgress:
+                            <MarketAdvanceProgressBarWidget Data="marketProgressData" />
+                            break;
                         case DashboardWidgetType.TradingHalls:
                             <TradingHallsWidget Data="tradingHallsData" />
                             break;
@@ -61,6 +64,7 @@
         var settings = await SettingsService.LoadSettingsAsync();
         widgetLayout = settings?.DashboardLayout ?? new List<DashboardWidgetConfig>
         {
+            new() { Type = DashboardWidgetType.MarketProgress },
             new() { Type = DashboardWidgetType.TradingHalls },
             new() { Type = DashboardWidgetType.MarketMovers },
             new() { Type = DashboardWidgetType.MainPlayers },
@@ -72,7 +76,7 @@
         };
         await LoadDemoDataAsync();
     }
-    
+
     private List<DashboardWidgetConfig> widgetLayout = new();
 
     private bool _isLoading = true;
@@ -84,6 +88,7 @@
     private NewsData? newsData;
     private SupplyRiskData? supplyRiskData;
     private TradingHallsData? tradingHallsData;
+    private MarketProgressData? marketProgressData;
 
     private async Task LoadDemoDataAsync()
     {
@@ -98,6 +103,7 @@
             var playersTask = DashboardService.GetMainPlayers();
             var hallsTask = DashboardService.GetTradingHalls();
             var newsTask = DashboardService.GetNews();
+            var progressTask = DashboardService.GetMarketProgressData();
 
             await Task.WhenAll(
                 pulseTask, sentimentTask, excitementTask, supplyRiskTask,
@@ -112,6 +118,7 @@
             mainPlayersData = await playersTask;
             tradingHallsData = await hallsTask;
             newsData = await newsTask;
+            marketProgressData = await progressTask;
         }
         catch (Exception ex)
         {

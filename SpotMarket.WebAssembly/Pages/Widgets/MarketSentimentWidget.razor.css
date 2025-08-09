@@ -12,6 +12,14 @@
     font-weight: 700;
     color: var(--text-primary-color);
 }
+
+.section-subtitle {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    margin: 0;
+}
+
 .data-card {
     background-color: var(--card-background-color);
     border-radius: 1.25rem;
