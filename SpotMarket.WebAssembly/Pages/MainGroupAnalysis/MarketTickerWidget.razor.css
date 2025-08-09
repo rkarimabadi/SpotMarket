@@ -1,0 +1,53 @@
+﻿/* استایل برای ویجت الهام گرفته از Ticker در Stocks */
+.ticker-widget {
+    padding: 1rem 0;
+}
+
+.ticker-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    overflow-x: auto;
+    padding: 0 1rem;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+    .ticker-strip::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+
+.ticker-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+    .ticker-item .title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-secondary-color);
+    }
+
+    .ticker-item .value {
+        font-size: 1rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+        .ticker-item .value.positive {
+            color: var(--success-color);
+        }
+
+        .ticker-item .value.negative {
+            color: var(--danger-color);
+        }
+
+        .ticker-item .value .bi {
+            font-size: 0.9rem;
+        }

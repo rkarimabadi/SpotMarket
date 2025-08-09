@@ -1,0 +1,91 @@
+﻿/* استایل برای ویجت الهام گرفته از Fitness Awards */
+.awards-widget {
+    background-color: var(--background-color);
+    padding: 1rem;
+}
+
+    .awards-widget .widget-header {
+        margin-bottom: 1rem;
+    }
+
+    .awards-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+.awards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.award-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+}
+
+.award-badge {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 0.75rem;
+    position: relative;
+    overflow: hidden;
+}
+    /* ایجاد حس فلزی و براق */
+    .award-badge::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%);
+        transform: rotate(45deg);
+    }
+
+    /* رنگ‌بندی مدال‌ها */
+    .award-badge.competition {
+        background: linear-gradient(145deg, #ff6b6b, #d93b3b);
+    }
+
+    .award-badge.volume {
+        background: linear-gradient(145deg, #54a0ff, #2e86de);
+    }
+
+    .award-badge.absorption {
+        background: linear-gradient(145deg, #50c878, #22863a);
+    }
+
+    .award-badge.trend {
+        background: linear-gradient(145deg, #f0932b, #c47318);
+    }
+
+.award-card .title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.award-card .subtitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+}
+
+/* حالت تیره */
+[data-bs-theme="dark"] .award-card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}

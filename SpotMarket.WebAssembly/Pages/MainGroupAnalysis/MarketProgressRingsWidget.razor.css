@@ -1,0 +1,138 @@
+﻿/* استایل بازطراحی شده با پایبندی کامل به طراحی Apple Watch */
+.rings-progress-widget {
+    background-color: var(--card-background-color);
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+}
+
+.widget-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+    .widget-header .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+        margin: 0;
+    }
+
+.rings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.rings-chart {
+    position: relative;
+    width: 100%;
+    max-width: 180px;
+    margin: 0 auto;
+}
+
+    .rings-chart svg {
+        width: 100%;
+        transform: rotate(-90deg);
+    }
+
+/* ۱. کمان پس‌زمینه (حلقه ناتمام) */
+.ring-track {
+    fill: none;
+    stroke-width: 9;
+    opacity: 0.2; /* نیمه‌شفاف برای حس عمق */
+}
+
+/* ۲. کمان پیشرفت (با لبه‌های گرد) */
+.ring-progress {
+    fill: none;
+    stroke-width: 9;
+    stroke-linecap: round; /* مهم‌ترین تغییر: گرد کردن لبه‌ها */
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+    filter: drop-shadow(0 0px 2px rgba(0,0,0,0.2)); /* افزودن سایه برای حس بهتر */
+    transform: rotate(90deg);
+    transform-origin: 50% 50%;
+}
+/* ۳. تعریف رنگ‌ها و محیط هر حلقه برای ایجاد فاصله */
+.industrial {
+    stroke: #007bff;
+}
+
+.petro {
+    stroke: #28a745;
+}
+
+.agri {
+    stroke: #fd7e14;
+}
+
+/* r=43, c=270.1 */
+.ring-progress.industrial {
+    stroke-dasharray: 270.1;
+}
+/* r=32, c=201 */
+.ring-progress.petro {
+    stroke-dasharray: 201;
+}
+/* r=21, c=131.9 */
+.ring-progress.agri {
+    stroke-dasharray: 131.9;
+}
+
+
+.rings-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* افزایش فاصله برای خوانایی */
+    width: 100%;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+
+.detail-info {
+    display: flex;
+    flex-direction: column;
+}
+    /* استفاده از رنگ برای عنوان به جای نوار کناری */
+    .detail-info .title {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .detail-info .primary-metric {
+        font-size: 0.9rem;
+        color: var(--text-secondary-color);
+    }
+
+.secondary-metric {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* حالت تیره */
+[data-bs-theme="dark"] .rings-progress-widget {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .ring-track {
+    stroke: var(--gray-600);
+}
+
+[data-bs-theme="dark"] .detail-item {
+    border-color: var(--gray-700);
+}

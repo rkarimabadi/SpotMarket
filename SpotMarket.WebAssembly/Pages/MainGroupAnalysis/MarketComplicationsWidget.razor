@@ -1,0 +1,40 @@
+﻿@* الهام گرفته از کامپلیکیشن‌های واچ‌فیس‌های Apple Watch *@
+
+<div class="complications-widget">
+    <div class="complications-strip">
+        @* کامپلیکیشن اول: گیج رقابت *@
+        <div class="complication-box">
+            <div class="gauge-chart">
+                <svg viewBox="0 0 36 18">
+                    <path class="gauge-bg" d="M 2 16 A 14 14 0 0 1 34 16" />
+                    <path class="gauge-fg" stroke-dasharray="28, 44" d="M 2 16 A 14 14 0 0 1 34 16" />
+                </svg>
+                <div class="gauge-value">+۱۲.۵٪</div>
+            </div>
+            <div class="complication-label">رقابت فولاد</div>
+        </div>
+
+        @* کامپلیکیشن دوم: ارزش معاملات *@
+        <div class="complication-box">
+            <div class="text-content">
+                <i class="bi bi-cash-stack"></i>
+                <span>۵.۸ همت</span>
+            </div>
+            <div class="complication-label">ارزش معاملات</div>
+        </div>
+
+        @* کامپلیکیشن سوم: نمودار میله‌ای حجم *@
+        <div class="complication-box">
+            <div class="bar-chart">
+                <div class="bar" style="height: 60%;"></div>
+                <div class="bar" style="height: 80%;"></div>
+                <div class="bar" style="height: 40%;"></div>
+            </div>
+            <div class="complication-label">حجم معاملات</div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // This component is currently using static data for design purposes.
+}

@@ -1,0 +1,40 @@
+﻿@* الهام گرفته از ویجت‌های برنامه Stocks اپل *@
+
+<div class="watchlist-widget">
+    <div class="widget-header">
+        <h3 class="widget-title">واچ‌لیست</h3>
+    </div>
+    <div class="watchlist-grid">
+        @* آیتم اول: فولاد *@
+        <div class="stock-item">
+            <div class="item-info">
+                <span class="title">فولاد</span>
+                <span class="subtitle">ارزش معاملات</span>
+            </div>
+            <div class="sparkline-chart">
+                <svg viewBox="0 0 100 30">
+                    <path d="M 0 25 L 20 15 L 40 20 L 60 10 L 80 15 L 100 5" fill="none" class="positive-stroke" stroke-width="2" />
+                </svg>
+            </div>
+            <div class="item-value positive">+۵.۸٪</div>
+        </div>
+
+        @* آیتم دوم: سیمان *@
+        <div class="stock-item">
+            <div class="item-info">
+                <span class="title">سیمان</span>
+                <span class="subtitle">حجم تقاضا</span>
+            </div>
+            <div class="sparkline-chart">
+                <svg viewBox="0 0 100 30">
+                    <path d="M 0 10 L 20 15 L 40 5 L 60 12 L 80 20 L 100 25" fill="none" class="negative-stroke" stroke-width="2" />
+                </svg>
+            </div>
+            <div class="item-value negative">-۱.۲٪</div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // This component is currently using static data for design purposes.
+}

@@ -1,0 +1,73 @@
+﻿/* استایل برای ویجت الهام گرفته از پیش‌بینی ساعتی Weather */
+.forecast-widget {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+    margin: auto -1rem;
+}
+
+    .forecast-widget .widget-header {
+        margin-bottom: 1rem;
+        padding: 0 1rem;
+    }
+
+    .forecast-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+.forecast-container {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 1rem;
+    background-color: var(--card-background-color);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+    .forecast-container::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+
+.forecast-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 0.75rem;
+    min-width: 80px;
+}
+
+    .forecast-item .label {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--text-secondary-color);
+    }
+
+    .forecast-item .bi {
+        font-size: 1.75rem;
+        color: var(--text-primary-color);
+    }
+
+    .forecast-item .value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+    }
+
+        .forecast-item .value.positive {
+            color: var(--success-color);
+        }
+
+        .forecast-item .value.negative {
+            color: var(--danger-color);
+        }
+
+/* حالت تیره */
+[data-bs-theme="dark"] .forecast-container {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
