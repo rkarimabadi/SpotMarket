@@ -1,0 +1,72 @@
+﻿/* استایل برای ویجت الهام گرفته از Photos App */
+.snapshots-widget {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+    .snapshots-widget .widget-header {
+        margin-bottom: 1rem;
+    }
+
+    .snapshots-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+.snapshots-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.snapshot-card {
+    aspect-ratio: 1 / 1.2;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    position: relative;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1rem;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+
+    .snapshot-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 50%);
+    }
+
+.card-content {
+    position: relative;
+    z-index: 1;
+}
+
+    .card-content .title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        display: block;
+    }
+
+    .card-content .subtitle {
+        font-size: 0.8rem;
+        font-weight: 500;
+        opacity: 0.9;
+    }
+
+/* پس‌زمینه‌ها */
+.snapshot-card.steel-bg {
+    background-image: url('https://placehold.co/300x400/5a6268/white?text=Steel');
+}
+
+.snapshot-card.petro-bg {
+    background-image: url('https://placehold.co/300x400/28a745/white?text=Petro');
+}

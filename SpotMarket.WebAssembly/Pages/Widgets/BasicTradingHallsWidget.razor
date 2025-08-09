@@ -1,0 +1,41 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@if (Data != null && Data.Items.Any())
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h3 class="section-title">@Title</h3>
+        </div>
+        <div class="horizontal-scroll-container">
+            @foreach (var hall in Data.Items)
+            {
+                <div class="hall-card">
+                    <div class="hall-header">
+                        <div class="hall-icon @hall.IconBgCssClass"><i class="@hall.IconCssClass"></i></div>
+                        <h3 class="hall-title">@hall.Title</h3>
+                    </div>
+                    <div class="hall-stats">
+                        <div class="stat-label">@hall.ValueLabel</div>
+                        <span class="stat-value">@hall.Value</span>
+                        <span class="stat-change float-end @GetChangeCssClass(hall.ChangeState)">@hall.Change</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+}
+
+@code {
+    [Parameter] public string Title { get; set; } = "سلامت تالارها";
+    [Parameter]
+    public TradingHallsData? Data { get; set; }
+
+    private string GetChangeCssClass(ValueState state)
+    {
+        return state switch
+        {
+            ValueState.Negative => "negative",
+            _ => ""
+        };
+    }
+}

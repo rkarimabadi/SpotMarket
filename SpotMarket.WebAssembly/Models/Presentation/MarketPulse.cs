@@ -8,6 +8,8 @@
         public string Title { get; set; } = string.Empty;
         public string Value { get; set; } = string.Empty;
         public string Change { get; set; } = string.Empty;
+        public string ChangeLabel { get; set; } = string.Empty; 
+
         public ValueState ChangeState { get; set; } = ValueState.Neutral;
     }
 

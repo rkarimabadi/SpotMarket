@@ -1,0 +1,42 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@if (Data != null && Data.Items.Any())
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h3 class="section-title">@Title</h3>
+        </div>
+        <div class="data-card">
+            @foreach (var item in Data.Items)
+            {
+                <div class="data-list-item">
+                    <div class="item-rank">
+                        <i class="@GetIconClass(item.RiskLevel)"></i>
+                    </div>
+                    <div class="item-main-info">
+                        <div class="title">@item.Title</div>
+                        <div class="subtitle">@item.Subtitle</div>
+                    </div>
+                    <div class="item-value neutral">@item.Value</div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "ریسک تمرکز عرضه";
+    [Parameter]
+    public SupplyRiskData? Data { get; set; }
+
+    private string GetIconClass(RiskLevel risk)
+    {
+        return risk switch
+        {
+            RiskLevel.High => "bi bi-exclamation-triangle-fill text-danger",
+            RiskLevel.Medium => "bi bi-exclamation-diamond-fill text-warning",
+            RiskLevel.Low => "bi bi-check-circle-fill text-success",
+            _ => "bi bi-question-circle-fill"
+        };
+    }
+}

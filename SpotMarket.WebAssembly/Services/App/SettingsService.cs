@@ -51,6 +51,7 @@ namespace SpotMarket.WebAssembly.Services.App
             {
                 DashboardLayout = new List<DashboardWidgetConfig>
             {
+                new() { Type = DashboardWidgetType.MarketProgress, IsVisible = true },
                 new() { Type = DashboardWidgetType.TradingHalls, IsVisible = true },
                 new() { Type = DashboardWidgetType.MarketMovers, IsVisible = true },
                 new() { Type = DashboardWidgetType.MainPlayers, IsVisible = true },
@@ -58,7 +59,7 @@ namespace SpotMarket.WebAssembly.Services.App
                 new() { Type = DashboardWidgetType.MarketPulse, IsVisible = true },
                 new() { Type = DashboardWidgetType.MarketSentiment, IsVisible = true },
                 new() { Type = DashboardWidgetType.SupplyRisk, IsVisible = true },
-                new() { Type = DashboardWidgetType.News, IsVisible = true }
+                new() { Type = DashboardWidgetType.SpotNotifictions, IsVisible = true }
             }
             };
         }

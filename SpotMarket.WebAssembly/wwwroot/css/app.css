@@ -45,6 +45,8 @@
     --day-cell-size: 14px;
     --day-cell-gap: 3px;
 }
+.ltr { direction: ltr;}
+.rtl { direction: rtl;}
 h1:focus {
     outline: none;
 }

@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using SpotMarket.WebAssembly.Models.Presentation
+@using SpotMarket.WebAssembly.Pages.Widgets
 @using SpotMarket.WebAssembly.Services.Presentation
 @inject NavStateService NavState
 @inject SettingsService SettingsService
@@ -7,7 +8,7 @@
 
 <PageTitle>داشبورد</PageTitle>
 <div class="dashboard-container">
-    
+
     <DashboardHeader />
     @if (_isLoading)
     {
@@ -21,6 +22,9 @@
                 {
                     @switch (widgetConfig.Type)
                     {
+                        case DashboardWidgetType.MarketProgress:
+                            <MarketAdvanceProgressBarWidget Data="marketProgressData" />
+                            break;
                         case DashboardWidgetType.TradingHalls:
                             <TradingHallsWidget Data="tradingHallsData" />
                             break;
@@ -42,8 +46,8 @@
                         case DashboardWidgetType.SupplyRisk:
                             <SupplyRiskWidget Data="supplyRiskData" />
                             break;
-                        case DashboardWidgetType.News:
-                            <NewsWidget Data="newsData" />
+                        case DashboardWidgetType.SpotNotifictions:
+                            <SpotNotifictionsWidget Data="spotNotificationData" />
                             break;
                     }
                 }
@@ -60,6 +64,7 @@
         var settings = await SettingsService.LoadSettingsAsync();
         widgetLayout = settings?.DashboardLayout ?? new List<DashboardWidgetConfig>
         {
+            new() { Type = DashboardWidgetType.MarketProgress },
             new() { Type = DashboardWidgetType.TradingHalls },
             new() { Type = DashboardWidgetType.MarketMovers },
             new() { Type = DashboardWidgetType.MainPlayers },
@@ -67,11 +72,11 @@
             new() { Type = DashboardWidgetType.MarketPulse },
             new() { Type = DashboardWidgetType.MarketSentiment },
             new() { Type = DashboardWidgetType.SupplyRisk },
-            new() { Type = DashboardWidgetType.News, IsVisible = true }
+            new() { Type = DashboardWidgetType.SpotNotifictions, IsVisible = true }
         };
         await LoadDemoDataAsync();
     }
-    
+
     private List<DashboardWidgetConfig> widgetLayout = new();
 
     private bool _isLoading = true;
@@ -80,9 +85,10 @@
     private MarketMoversData? marketMoversData;
     private MarketPulseData? marketPulseData;
     private MarketSentimentData? marketSentimentData;
-    private NewsData? newsData;
+    private SpotNotificationData? spotNotificationData;
     private SupplyRiskData? supplyRiskData;
     private TradingHallsData? tradingHallsData;
+    private MarketProgressData? marketProgressData;
 
     private async Task LoadDemoDataAsync()
     {
@@ -96,11 +102,12 @@
             var moversTask = DashboardService.GetMarketMovers();
             var playersTask = DashboardService.GetMainPlayers();
             var hallsTask = DashboardService.GetTradingHalls();
-            var newsTask = DashboardService.GetNews();
+            var spotNotificationTask = DashboardService.GetspotNotifications();
+            var progressTask = DashboardService.GetMarketProgressData();
 
             await Task.WhenAll(
                 pulseTask, sentimentTask, excitementTask, supplyRiskTask,
-                moversTask, playersTask, hallsTask, newsTask
+                moversTask, playersTask, hallsTask, spotNotificationTask
             );
 
             marketPulseData = await pulseTask;
@@ -110,7 +117,8 @@
             marketMoversData = await moversTask;
             mainPlayersData = await playersTask;
             tradingHallsData = await hallsTask;
-            newsData = await newsTask;
+            spotNotificationData = await spotNotificationTask;
+            marketProgressData = await progressTask;
         }
         catch (Exception ex)
         {

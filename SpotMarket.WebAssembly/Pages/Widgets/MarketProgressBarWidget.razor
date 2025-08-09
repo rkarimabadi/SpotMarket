@@ -1,0 +1,25 @@
+﻿@* ویجت نوار پیشرفت با الهام از طراحی اپل *@
+
+<div class="progress-card-widget">
+    <div class="widget-header">
+        <div class="header-info">
+            <h3 class="widget-title">پیشرفت معاملات امروز</h3>
+            <span class="widget-subtitle">بر اساس تعداد عرضه</span>
+        </div>
+        <div class="header-stat">@($"{ProgressPercentage:F0}%")</div>
+    </div>
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" style="width: @($"{ProgressPercentage}%");"></div>
+    </div>
+    <div class="widget-footer">
+        <span>@TradedOffers از @TotalOffers عرضه معامله شد</span>
+    </div>
+</div>
+
+@code {
+    private int TotalOffers { get; set; } = 210;
+    private int TradedOffers { get; set; } = 128;
+    private double ProgressPercentage => TotalOffers > 0 ? ((double)TradedOffers / TotalOffers) * 100 : 0;
+
+    // This component is currently using static data for design purposes.
+}

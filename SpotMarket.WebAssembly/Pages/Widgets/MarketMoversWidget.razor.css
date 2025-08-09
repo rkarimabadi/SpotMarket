@@ -1,0 +1,125 @@
+﻿.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+.section-header {
+    margin-bottom: 1rem;
+
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+.segmented-control {
+    display: flex;
+    padding: 3px;
+    background-color: var(--gray-200);
+    border-radius: 0.625rem;
+    margin: 0 0 1rem 0;
+}
+
+    .segmented-control button {
+        flex: 1;
+        padding: 0.5rem;
+        border: none;
+        background-color: transparent;
+        border-radius: 0.5rem;
+        color: var(--text-secondary-color);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .segmented-control button.active {
+            background-color: var(--card-background-color);
+            color: var(--text-primary-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+.data-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+
+    overflow: hidden;
+}
+
+.data-list-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+    .data-list-item:last-child {
+        border-bottom: none;
+    }
+
+.item-rank {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+    width: 20px;
+    text-align: center;
+}
+
+.item-main-info .title {
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.item-main-info .subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+/* === بخش جدید: استایل برای کانتینر مقدار و لیبل === */
+.item-stat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* راست‌چین کردن محتوا */
+    gap: 0.1rem;
+}
+
+.item-value {
+    font-size: 1.1rem; /* کمی بزرگتر برای تاکید */
+    font-weight: 700;
+}
+
+.item-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+.item-value.positive {
+    color: var(--success-color);
+}
+
+.item-value.negative {
+    color: var(--danger-color);
+}
+
+.item-value.neutral {
+    color: var(--text-primary-color);
+}
+
+/* Dark Theme Adjustments */
+[data-bs-theme="dark"] .segmented-control {
+    background-color: var(--gray-900);
+}
+
+[data-bs-theme="dark"] .data-card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .data-list-item {
+    border-color: var(--gray-700);
+}

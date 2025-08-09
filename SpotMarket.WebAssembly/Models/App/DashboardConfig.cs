@@ -5,6 +5,7 @@
     /// </summary>
     public enum DashboardWidgetType
     {
+        MarketProgress,
         TradingHalls,
         MarketMovers,
         MainPlayers,
@@ -12,7 +13,7 @@
         MarketPulse,
         MarketSentiment,
         SupplyRisk,
-        News
+        SpotNotifictions
     }
 
     /// <summary>
@@ -24,6 +25,7 @@
         public bool IsVisible { get; set; } = true;
         public string GetDisplayName() => Type switch
         {
+            DashboardWidgetType.MarketProgress => "پیشرفت بازار",
             DashboardWidgetType.TradingHalls => "سلامت تالارها",
             DashboardWidgetType.MarketMovers => "پویایی بازار",
             DashboardWidgetType.MainPlayers => "بازیگران اصلی",
@@ -31,7 +33,7 @@
             DashboardWidgetType.MarketPulse => "نبض بازار",
             DashboardWidgetType.MarketSentiment => "احساسات بازار",
             DashboardWidgetType.SupplyRisk => "ریسک تمرکز عرضه",
-            DashboardWidgetType.News => "آخرین اخبار",
+            DashboardWidgetType.SpotNotifictions => "آخرین اخبار",
             _ => "ویجت ناشناس"
         };
     }

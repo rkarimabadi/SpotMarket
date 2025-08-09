@@ -1,0 +1,34 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@if (Players?.Any() == true)
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h3 class="section-title">@Title</h3>
+            <h4 class="section-subtitle">@Subtitle</h4>
+        </div>
+        <div class="players-grid" style="grid-template-columns: repeat(@Players.Count(), 1fr);">
+            @foreach (var player in Players)
+            {
+                <div class="player-card">
+                    <div class="player-icon"><i class="@player.IconCssClass"></i></div>
+                    <div class="player-title">@player.Type</div>
+                    <div class="player-name">@player.Name</div>
+                    <div class="player-stat-container">
+                        <div class="player-share">@player.MarketShare.ToString("0.0")%</div>
+@*                         <div class="player-share-label">از ارزش کل معاملات</div> *@
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "بازیگران اصلی";
+    [Parameter]
+    public string Subtitle { get; set; } = "بر اساس ارزش کل عرضه‌ها";
+
+    [Parameter]
+    public IEnumerable<MainPlayer>? Players { get; set; }
+}

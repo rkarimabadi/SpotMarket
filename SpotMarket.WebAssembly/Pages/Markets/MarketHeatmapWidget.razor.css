@@ -1,23 +1,23 @@
-﻿/* Market Heatmap Widget - Redesigned Layout */
+﻿.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
 .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 1rem;
-    padding: 2rem 1rem 0 1rem;
 }
 
 .section-title {
     font-size: 1.375rem;
     font-weight: 700;
+    color: var(--text-primary-color);
 }
-
 .heatmap-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 columns */
     grid-auto-rows: minmax(80px, auto); /* Set a minimum row height */
     gap: 0.75rem;
-    padding: 0 1rem;
+    /*padding: 0 1rem;*/
 }
 
 .heatmap-tile {
