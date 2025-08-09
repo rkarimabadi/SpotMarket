@@ -46,8 +46,8 @@
                         case DashboardWidgetType.SupplyRisk:
                             <SupplyRiskWidget Data="supplyRiskData" />
                             break;
-                        case DashboardWidgetType.News:
-                            <NewsWidget Data="newsData" />
+                        case DashboardWidgetType.SpotNotifictions:
+                            <SpotNotifictionsWidget Data="spotNotificationData" />
                             break;
                     }
                 }
@@ -72,7 +72,7 @@
             new() { Type = DashboardWidgetType.MarketPulse },
             new() { Type = DashboardWidgetType.MarketSentiment },
             new() { Type = DashboardWidgetType.SupplyRisk },
-            new() { Type = DashboardWidgetType.News, IsVisible = true }
+            new() { Type = DashboardWidgetType.SpotNotifictions, IsVisible = true }
         };
         await LoadDemoDataAsync();
     }
@@ -85,7 +85,7 @@
     private MarketMoversData? marketMoversData;
     private MarketPulseData? marketPulseData;
     private MarketSentimentData? marketSentimentData;
-    private NewsData? newsData;
+    private SpotNotificationData? spotNotificationData;
     private SupplyRiskData? supplyRiskData;
     private TradingHallsData? tradingHallsData;
     private MarketProgressData? marketProgressData;
@@ -102,12 +102,12 @@
             var moversTask = DashboardService.GetMarketMovers();
             var playersTask = DashboardService.GetMainPlayers();
             var hallsTask = DashboardService.GetTradingHalls();
-            var newsTask = DashboardService.GetNews();
+            var spotNotificationTask = DashboardService.GetspotNotifications();
             var progressTask = DashboardService.GetMarketProgressData();
 
             await Task.WhenAll(
                 pulseTask, sentimentTask, excitementTask, supplyRiskTask,
-                moversTask, playersTask, hallsTask, newsTask
+                moversTask, playersTask, hallsTask, spotNotificationTask
             );
 
             marketPulseData = await pulseTask;
@@ -117,7 +117,7 @@
             marketMoversData = await moversTask;
             mainPlayersData = await playersTask;
             tradingHallsData = await hallsTask;
-            newsData = await newsTask;
+            spotNotificationData = await spotNotificationTask;
             marketProgressData = await progressTask;
         }
         catch (Exception ex)

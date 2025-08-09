@@ -14,6 +14,7 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         Task<IEnumerable<MainPlayer>> GetMainPlayers();
         Task<TradingHallsData> GetTradingHalls();
         Task<NewsData> GetNews();
+        Task<SpotNotificationData> GetspotNotifications();
     }
 
     public class DashboardService : IDashboardService
@@ -64,6 +65,10 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         public async Task<NewsData> GetNews()
         {
             return await _httpClient.GetFromJsonAsync<NewsData>($"{_controllerPath}/news");
+        }
+        public async Task<SpotNotificationData> GetspotNotifications()
+        {
+            return await _httpClient.GetFromJsonAsync<SpotNotificationData>($"{_controllerPath}/Spot-notifications");
         }
 
         public async Task<MarketProgressData> GetMarketProgressData()

@@ -1,0 +1,113 @@
+﻿.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+}
+
+.section-action {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.data-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+/* استایل جدید برای لینک شدن هر آیتم */
+.news-item-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: background-color 0.2s ease;
+}
+
+    .news-item-link:hover {
+        background-color: rgba(var(--primary-color-rgb), 0.05);
+    }
+
+.news-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.news-item-link:last-child .news-item {
+    border-bottom: none;
+}
+
+.news-icon-container {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.5rem;
+}
+
+    .news-icon-container.cat-announcement {
+        background-color: #17a2b8;
+    }
+    /* Info Blue */
+    .news-icon-container.cat-amendment {
+        background-color: var(--warning-color);
+    }
+
+    .news-icon-container.cat-acceptance {
+        background-color: #6f42c1;
+    }
+    /* Purple */
+    .news-icon-container.cat-license {
+        background-color: #007bff;
+    }
+
+    .news-icon-container.cat-general {
+        background-color: var(--gray-600);
+    }
+
+
+.news-content {
+    flex-grow: 1;
+}
+
+.news-source {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+    margin-bottom: 0.25rem;
+}
+
+.news-title {
+    font-weight: 600;
+    font-size: 1.0625rem;
+    line-height: 1.4;
+}
+
+[data-bs-theme="dark"] .data-card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .news-item-link:hover {
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+}

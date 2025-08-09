@@ -13,7 +13,7 @@
         MarketPulse,
         MarketSentiment,
         SupplyRisk,
-        News
+        SpotNotifictions
     }
 
     /// <summary>
@@ -33,7 +33,7 @@
             DashboardWidgetType.MarketPulse => "نبض بازار",
             DashboardWidgetType.MarketSentiment => "احساسات بازار",
             DashboardWidgetType.SupplyRisk => "ریسک تمرکز عرضه",
-            DashboardWidgetType.News => "آخرین اخبار",
+            DashboardWidgetType.SpotNotifictions => "آخرین اخبار",
             _ => "ویجت ناشناس"
         };
     }
