@@ -1,0 +1,167 @@
+﻿.page-container {
+    padding-bottom: calc(var(--bottom-nav-height, 70px) + var(--safe-area-inset-bottom, 0) + 1rem);
+}
+
+.page-header {
+    padding: 1rem 0 0 0;
+}
+
+.page-title-large {
+    font-size: 2.125rem;
+    font-weight: 700;
+}
+
+.settings-group {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    margin: 1.5rem 0 0 0;
+    overflow: hidden;
+
+}
+
+.settings-group-header {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    background-color: var(--background-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    min-height: 54px;
+    text-decoration: none;
+    color: initial;
+}
+
+    .settings-item:last-child {
+        border-bottom: none;
+    }
+
+::deep .settings-label {
+    flex-grow: 1;
+    font-weight: 500;
+}
+
+.settings-action {
+    flex-shrink: 0;
+}
+
+/* استایل آیکون‌های رنگی */
+.settings-icon {
+    font-size: 1rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: white;
+    margin-left: 1rem; /* RTL margin */
+    flex-shrink: 0;
+}
+/* رنگ‌های موجود */
+.icon-bg-orange {
+    background-color: #fd7e14;
+}
+
+.icon-bg-blue {
+    background-color: #007bff;
+}
+
+.icon-bg-red {
+    background-color: #dc3545;
+}
+
+.icon-bg-green {
+    background-color: #28a745;
+}
+
+.icon-bg-gray {
+    background-color: #6c757d;
+}
+/* رنگ‌های جدید */
+.icon-bg-purple {
+    background-color: #6f42c1;
+}
+
+.icon-bg-teal {
+    background-color: #20c997;
+}
+
+.icon-bg-indigo {
+    background-color: #6610f2;
+}
+
+
+/* استایل برای آیتم‌های انتخابی (جایگزین رادیو باتن) */
+.selection-item {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .selection-item:hover {
+        background-color: rgba(var(--primary-color-rgb), 0.05);
+    }
+
+.checkmark-icon {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* استایل جدید برای سوئیچ‌های شبیه به iOS */
+.form-switch .form-check-input {
+    width: 51px;
+    height: 31px;
+    background-color: var(--gray-300);
+    border-color: var(--gray-300);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='white'/%3e%3c/svg%3e");
+    background-position: left center;
+    border-radius: 31px;
+    transition: background-position .15s ease-in-out;
+}
+
+    .form-switch .form-check-input:focus {
+        box-shadow: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='white'/%3e%3c/svg%3e");
+    }
+
+    .form-switch .form-check-input:checked {
+        background-color: var(--success-color);
+        border-color: var(--success-color);
+        background-position: right center;
+    }
+
+.settings-footer {
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+/* حالت تیره */
+[data-bs-theme="dark"] .settings-group {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .settings-item {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .selection-item:hover {
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+}
+
+[data-bs-theme="dark"] .form-switch .form-check-input {
+    background-color: var(--gray-600);
+    border-color: var(--gray-600);
+}

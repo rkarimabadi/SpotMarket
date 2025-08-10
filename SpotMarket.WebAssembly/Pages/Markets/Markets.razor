@@ -1,37 +1,71 @@
 ﻿@page "/markets"
+@using SpotMarket.WebAssembly.Models.App
 @using SpotMarket.WebAssembly.Pages.Widgets
+@using SpotMarket.WebAssembly.Services.App
 @inject NavStateService NavState
+@inject SettingsService SettingsService
+
 <PageTitle>بازارها</PageTitle>
+
 <div class="page-container">
     <div class="page-header">
         <h1 class="page-title-large">بازارها</h1>
     </div>
 
-    <MarketSearch OnSearchStateChanged="HandleSearchStateChange" />
-
-    @if (!isSearching)
+    @if (settingsLoaded)
     {
-        <MarketListWidget/>
-        <MarketHeatmapWidget />
-        <IndustryComparisonWidget />
-        <MarketSignalsWidget />
+        <!-- نمایش نمای اصلی بر اساس تنظیمات -->
+        @switch (marketSettings?.MainView)
+        {
+            case MarketMainViewType.List:
+                <MarketListWidget />
+                break;
+            case MarketMainViewType.Heatmap:
+                <MarketHeatmapWidget />
+                break;
+            case MarketMainViewType.Shortcuts:
+                <MarketShortcutsWidget />
+                break;
+        }
+
+        <!-- نمایش ویجت‌های اطلاعاتی بر اساس تنظیمات -->
+        @if (marketSettings != null)
+        {
+            foreach (var widgetType in marketSettings.VisibleInfoWidgets)
+            {
+                @switch (widgetType)
+                {
+                    case MarketInfoWidgetType.Vitals:
+                        {
+                            var shareByValue = new MarketSentimentData();
+                            <MarketSentimentWidget Data="shareByValue" Title="سهم از بازار" />
+                        }
+                        break;
+                    case MarketInfoWidgetType.Contacts:
+                        <MarketSentimentWidget />
+                        break;
+                    case MarketInfoWidgetType.StatsRow:
+                        <MarketSentimentWidget />
+                        break;
+                }
+            }
+        }
+    }
+    else
+    {
+        <p><em>در حال بارگذاری چیدمان...</em></p>
     }
 </div>
 
 @code {
-    private bool isSearching;
+    private MarketSettings? marketSettings;
+    private bool settingsLoaded = false;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         NavState.SetNavState("بازارها", true);
-        base.OnInitialized();
-    }
-
-    private void HandleSearchStateChange(bool searching)
-    {
-        isSearching = searching;
-        StateHasChanged();
+        var settings = await SettingsService.LoadSettingsAsync() ?? SettingsService.GetDefaultSettings();
+        marketSettings = settings.MarketPageLayout;
+        settingsLoaded = true;
     }
 }
-
-

@@ -50,17 +50,25 @@ namespace SpotMarket.WebAssembly.Services.App
             return new UserSettings
             {
                 DashboardLayout = new List<DashboardWidgetConfig>
-            {
-                new() { Type = DashboardWidgetType.MarketProgress, IsVisible = true },
-                new() { Type = DashboardWidgetType.TradingHalls, IsVisible = true },
-                new() { Type = DashboardWidgetType.MarketMovers, IsVisible = true },
-                new() { Type = DashboardWidgetType.MainPlayers, IsVisible = true },
-                new() { Type = DashboardWidgetType.MarketExcitement, IsVisible = true },
-                new() { Type = DashboardWidgetType.MarketPulse, IsVisible = true },
-                new() { Type = DashboardWidgetType.MarketSentiment, IsVisible = true },
-                new() { Type = DashboardWidgetType.SupplyRisk, IsVisible = true },
-                new() { Type = DashboardWidgetType.SpotNotifictions, IsVisible = true }
-            }
+                {
+                    new() { Type = DashboardWidgetType.MarketProgress, IsVisible = true },
+                    new() { Type = DashboardWidgetType.TradingHalls, IsVisible = true },
+                    new() { Type = DashboardWidgetType.MarketMovers, IsVisible = true },
+                    new() { Type = DashboardWidgetType.MainPlayers, IsVisible = true },
+                    new() { Type = DashboardWidgetType.MarketExcitement, IsVisible = true },
+                    new() { Type = DashboardWidgetType.MarketPulse, IsVisible = true },
+                    new() { Type = DashboardWidgetType.MarketSentiment, IsVisible = true },
+                    new() { Type = DashboardWidgetType.SupplyRisk, IsVisible = true },
+                    new() { Type = DashboardWidgetType.SpotNotifictions, IsVisible = true }
+                },
+                MarketPageLayout = new MarketSettings
+                {
+                    MainView = MarketMainViewType.List,
+                    VisibleInfoWidgets = new List<MarketInfoWidgetType>
+                    {
+                        MarketInfoWidgetType.Vitals
+                    }
+                }
             };
         }
     }

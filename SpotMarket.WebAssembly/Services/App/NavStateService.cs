@@ -7,15 +7,17 @@
 
 
         public bool ShowBackButton { get; private set; }
+        public string BackUrl { get; private set; } = "/";
 
 
         public event Action? OnStateChange;
 
 
-        public void SetNavState(string title, bool showBackButton)
+        public void SetNavState(string title, bool showBackButton, string backUrl = "/")
         {
             CurrentTitle = title;
             ShowBackButton = showBackButton;
+            BackUrl = backUrl;
             NotifyStateChanged();
         }
 

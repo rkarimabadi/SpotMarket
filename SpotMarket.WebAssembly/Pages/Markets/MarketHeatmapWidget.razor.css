@@ -22,7 +22,7 @@
 
 .heatmap-tile {
     padding: clamp(0.5rem,1vw,1rem);
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     color: white;
     font-weight: 600;
     text-align: center;
@@ -35,19 +35,23 @@
 
     /* Define colors */
     .heatmap-tile.high {
-        background-color: var(--danger-color);
+        background: linear-gradient(145deg, var(--danger-color), #c2364d);
+        border: 1px solid #913e4b;
     }
 
     .heatmap-tile.medium {
-        background-color: var(--primary-color);
+        background: linear-gradient(145deg, var(--primary-semi-light), var(--primary-dark));
+        border: 1px solid var(--primary-color);
     }
 
     .heatmap-tile.low {
-        background-color: var(--success-color);
+        background: linear-gradient(145deg, #28a745, #218838);
+        border: 1px solid var(--success-color);
     }
 
     .heatmap-tile.neutral {
-        background-color: var(--gray-600);
+        background: linear-gradient(145deg, var(--gray-600), var(--gray-700));
+        border: 1px solid var(--gray-500);
     }
 @media (max-width: 400px) {
     .tile-sm-rotate {

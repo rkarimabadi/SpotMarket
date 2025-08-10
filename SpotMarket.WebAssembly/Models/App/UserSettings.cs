@@ -6,6 +6,7 @@
     public class UserSettings
     {
         public List<DashboardWidgetConfig> DashboardLayout { get; set; } = new();
+        public MarketSettings MarketPageLayout { get; set; } = new();
     }
 
 }

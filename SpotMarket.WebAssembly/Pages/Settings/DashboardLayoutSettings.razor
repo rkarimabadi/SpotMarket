@@ -57,7 +57,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        NavState.SetNavState("چیدمان داشبورد", true);
+        NavState.SetNavState("چیدمان داشبورد", true, "/account");
         var settings = await SettingsService.LoadSettingsAsync();
         widgetLayout = settings?.DashboardLayout;
     }

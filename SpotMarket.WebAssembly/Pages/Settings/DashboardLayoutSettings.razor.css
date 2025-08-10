@@ -3,7 +3,7 @@
 }
 
 .page-header {
-    padding: 1rem 1rem 0 1rem;
+    padding: 1rem 0 0 0;
 }
 
 .page-title-large {
@@ -21,6 +21,12 @@
     color: initial;
 }
 
+.settings-group {
+    background-color: var(--card-background-color);
+    border-radius: 0.75rem;
+    margin: 1.5rem 0 0 0;
+    overflow: hidden;
+}
 ::deep .settings-group .settings-item:last-child {
     border-bottom: none;
 }
