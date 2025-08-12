@@ -1,0 +1,78 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+
+<div class="widget-container">
+    <div class="section-header">
+        <h3 class="section-title">@Title</h3>
+        <h4 class="section-subtitle">@Subtitle</h4>
+    </div>
+    @if (Data != null && Data.Items.Any())
+    {
+        <div class="horizontal-scroll-container">
+            @foreach (var item in Data.Items)
+            {
+                <div class="wallet-card @GetThemeClass(item.MainGroupName)">
+                    <div class="card-header px-1">
+                        @* آیکون درون یک کانتینر دایره‌ای قرار گرفته است *@
+                        <div class="card-icon-wrapper">
+                            <i class="@GetIconForMainGroup(item.MainGroupName)"></i>
+                        </div>
+                        <span class="group-name">@item.MainGroupName</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="title">@item.Name</div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stat-item">
+                            <span class="value">@item.OfferCount</span>
+                            <span class="label">اطلاعیه</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="value">@GetDemandStatusText(item.DemandStatus)</span>
+                            <span class="label">وضعیت تقاضا</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="p-4 text-center text-secondary">داده‌ای برای نمایش وجود ندارد.</div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "وضعیت گروه‌های کالایی";
+    [Parameter]
+    public string Subtitle { get; set; } = "براساس تعداد اطلاعیه عرضه";
+    [Parameter]
+    public CommodityStatusData? Data { get; set; }
+
+    private string GetThemeClass(string mainGroupName) => mainGroupName switch
+    {
+        "صنعتی" => "theme-industrial",
+        "معدنی" => "theme-mineral",
+        "کشاورزی" => "theme-agri",
+        "پتروشیمی" => "theme-petro",
+        "فرآورده های نفتی" => "theme-oil",
+        _ => "theme-general"
+    };
+
+    private string GetIconForMainGroup(string mainGroupName) => mainGroupName switch
+    {
+        "صنعتی" => "bi bi-building",
+        "معدنی" => "bi bi-gem",
+        "کشاورزی" => "bi bi-tree-fill",
+        "پتروشیمی" => "bi bi-droplet-fill",
+        "فرآورده های نفتی" => "bi bi-fuel-pump-fill",
+        _ => "bi bi-grid-fill"
+    };
+
+    private string GetDemandStatusText(DemandStatus status) => status switch
+    {
+        DemandStatus.High => "بالا",
+        DemandStatus.Low => "پایین",
+        _ => "متوسط"
+    };
+}

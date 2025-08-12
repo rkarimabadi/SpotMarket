@@ -122,17 +122,17 @@
 
     private string GetIconForWidget(MarketInfoWidgetType widgetType) => widgetType switch
     {
-        MarketInfoWidgetType.Vitals => "bi bi-heart-pulse-fill",
-        MarketInfoWidgetType.Contacts => "bi bi-person-circle",
-        MarketInfoWidgetType.StatsRow => "bi bi-bar-chart-steps",
+        MarketInfoWidgetType.ProgressRings => "bi bi-heart-pulse-fill",
+        MarketInfoWidgetType.SelectedCommodity => "bi bi-person-circle",
+        MarketInfoWidgetType.TodayGroups => "bi bi-bar-chart-steps",
         _ => "bi bi-info-circle"
     };
 
     private string GetIconClassForWidget(MarketInfoWidgetType widgetType) => widgetType switch
     {
-        MarketInfoWidgetType.Vitals => "icon-bg-red",
-        MarketInfoWidgetType.Contacts => "icon-bg-teal",
-        MarketInfoWidgetType.StatsRow => "icon-bg-indigo",
+        MarketInfoWidgetType.ProgressRings => "icon-bg-red",
+        MarketInfoWidgetType.SelectedCommodity => "icon-bg-teal",
+        MarketInfoWidgetType.TodayGroups => "icon-bg-indigo",
         _ => "icon-bg-gray"
     };
 }

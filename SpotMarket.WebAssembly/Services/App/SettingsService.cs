@@ -66,7 +66,7 @@ namespace SpotMarket.WebAssembly.Services.App
                     MainView = MarketMainViewType.List,
                     VisibleInfoWidgets = new List<MarketInfoWidgetType>
                     {
-                        MarketInfoWidgetType.Vitals
+                        MarketInfoWidgetType.ProgressRings
                     }
                 }
             };

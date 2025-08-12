@@ -1,0 +1,193 @@
+﻿.widget-container {
+    padding: 1rem 0;
+}
+
+.section-header {
+    margin-bottom: 1rem;
+}
+.card-header {
+    color: white;
+}
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+}
+.section-subtitle {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    margin: 0;
+}
+
+.horizontal-scroll-container {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding: 0 1rem 1rem 1rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+}
+
+    .horizontal-scroll-container::-webkit-scrollbar {
+        display: none;
+    }
+
+.wallet-card {
+    flex: 0 0 180px;
+    padding: 1rem;
+    border-radius: 1rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    scroll-snap-align: start;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+    .wallet-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .wallet-card::before, .wallet-card::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: var(--background-color);
+    }
+
+    .wallet-card::before {
+        top: 38%;
+        left: -10px;
+    }
+
+    .wallet-card::after {
+        top: 38%;
+        right: -10px;
+    }
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* افزایش فاصله */
+    opacity: 0.9;
+}
+
+/* === استایل جدید برای آیکون === */
+.card-icon-wrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+    .card-icon-wrapper i {
+        font-size: 1.25rem;
+    }
+
+.group-name {
+    font-size: 0.8rem; /* کمی بزرگتر */
+    font-weight: 600;
+}
+
+.card-body {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 0;
+    justify-content: center;
+}
+
+    .card-body .title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* === استایل جدید برای آمار === */
+.stat-item {
+    display: flex;
+    flex-direction: column; /* مقدار بالا، لیبل پایین */
+    align-items: center;
+    text-align: center;
+}
+
+    .stat-item .value {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .stat-item .label {
+        font-size: 0.75rem;
+        opacity: 0.8;
+    }
+
+/* تم‌های رنگی */
+.theme-industrial {
+    background: linear-gradient(145deg, #007bff, #0056b3);
+}
+
+.theme-petro {
+    background: linear-gradient(145deg, #28a745, #1e7e34);
+}
+
+.theme-agri {
+    background: linear-gradient(145deg, #fd7e14, #d96d0a);
+}
+
+.theme-mineral {
+    background: linear-gradient(145deg, #6f42c1, #58339b);
+}
+
+.theme-oil {
+    background: linear-gradient(145deg, #343a40, #1d2124);
+}
+
+.theme-general {
+    background: linear-gradient(145deg, #6c757d, #5a6268);
+}
+
+/* رنگ آیکون‌ها بر اساس تم */
+.theme-industrial .card-icon-wrapper i {
+    color: #007bff;
+}
+
+.theme-petro .card-icon-wrapper i {
+    color: #28a745;
+}
+
+.theme-agri .card-icon-wrapper i {
+    color: #fd7e14;
+}
+
+.theme-mineral .card-icon-wrapper i {
+    color: #6f42c1;
+}
+
+.theme-oil .card-icon-wrapper i {
+    color: #343a40;
+}
+
+.theme-general .card-icon-wrapper i {
+    color: #6c757d;
+}
+
+/* Dark Theme */
+[data-bs-theme="dark"] .wallet-card::before,
+[data-bs-theme="dark"] .wallet-card::after {
+    background-color: var(--gray-900);
+}

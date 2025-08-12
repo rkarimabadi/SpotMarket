@@ -1,7 +1,7 @@
 ﻿/* استایل برای ویجت الهام گرفته از Journal App */
 .journal-widget {
     background-color: var(--background-color);
-    padding: 1rem;
+    padding: 1rem 0;
 }
 
     .journal-widget .widget-header {

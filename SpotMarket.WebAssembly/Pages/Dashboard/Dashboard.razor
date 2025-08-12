@@ -62,19 +62,8 @@
     {
         NavState.SetNavState("کالا نما", false);
         var settings = await SettingsService.LoadSettingsAsync();
-        widgetLayout = settings?.DashboardLayout ?? new List<DashboardWidgetConfig>
-        {
-            new() { Type = DashboardWidgetType.MarketProgress },
-            new() { Type = DashboardWidgetType.TradingHalls },
-            new() { Type = DashboardWidgetType.MarketMovers },
-            new() { Type = DashboardWidgetType.MainPlayers },
-            new() { Type = DashboardWidgetType.MarketExcitement },
-            new() { Type = DashboardWidgetType.MarketPulse },
-            new() { Type = DashboardWidgetType.MarketSentiment },
-            new() { Type = DashboardWidgetType.SupplyRisk },
-            new() { Type = DashboardWidgetType.SpotNotifictions, IsVisible = true }
-        };
-        await LoadDemoDataAsync();
+        widgetLayout = settings?.DashboardLayout;
+        await LoadDataAsync();
     }
 
     private List<DashboardWidgetConfig> widgetLayout = new();
@@ -90,7 +79,7 @@
     private TradingHallsData? tradingHallsData;
     private MarketProgressData? marketProgressData;
 
-    private async Task LoadDemoDataAsync()
+    private async Task LoadDataAsync()
     {
         try
         {

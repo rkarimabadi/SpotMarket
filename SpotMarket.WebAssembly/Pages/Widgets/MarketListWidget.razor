@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager NavigationManager
 <div class="market-list-container">
     <div class="market-list">
-        @foreach (var market in MarketItems)
+        @foreach (var market in Data)
         {
             <div class="market-list-item" @onclick="() => GoToGroupAnalysis(market.UrlName)">
                 <div class="market-icon @market.IconContainerClass"><i class="bi @market.IconClass"></i></div>
@@ -19,6 +19,8 @@
 </div>
 
 @code {
+    [Parameter] public List<MarketInfo> Data { get; set; }
+
     private void GoToGroupAnalysis(string groupName)
     {
         // اطمینان از اینکه نام گروه خالی نیست
@@ -31,24 +33,7 @@
 
     protected override void OnInitialized()
     {
-        MarketItems = new List<MarketInfo>
-        {
-            new MarketInfo("صنعتی", "فولاد، مس، آلومینیوم", "Industrial", "bi-building", "industrial", "high", "داغ"),
-            new MarketInfo("کشاورزی", "زعفران، پسته، جو", "Agriculture", "bi-tree-fill", "agri", "low", "آرام"),
-            new MarketInfo("پتروشیمی و فرآورده های نفتی", "پلیمرها، مواد شیمیایی، نفت", "Petrochemical-and-Oil-Products", "bi-droplet-fill", "petro", "medium", "متوسط"),
-            new MarketInfo("معدنی", "سنگ آهن، زغال سنگ", "Mineral", "bi-gem", "mineral", "medium", "متوسط"),
-            new MarketInfo("فرآورده های نفتی", "قیر، روغن، گاز", "Oil-Products", "bi-fuel-pump-fill", "oil-products", "high", "داغ"),
-            new MarketInfo("اموال غیر منقول", "ساختمان، زمین، مستغلات", "Real-Estate", "bi-house-door-fill", "real-estate", "low", "آرام"),
-            new MarketInfo("بازار فرعی", "کالاهای متنوع", "Secondary-Market", "bi-shop", "secondary", "neutral", "خنثی")
-        };
+
     }
-    private record MarketInfo(
-        string Title,
-        string Subtitle,
-        string UrlName,
-        string IconClass,
-        string IconContainerClass,
-        string HeatLevel,
-        string HeatLabel
-    );
+
 }

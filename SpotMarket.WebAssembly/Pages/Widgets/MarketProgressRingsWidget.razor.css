@@ -1,5 +1,9 @@
-﻿/* استایل بازطراحی شده با پایبندی کامل به طراحی Apple Watch */
-.rings-progress-widget {
+﻿
+/* استایل بازطراحی شده با پایبندی کامل به طراحی Apple Watch */
+.widget-container {
+    margin: 1rem 0;
+}
+    .rings-progress-widget {
     background-color: var(--card-background-color);
     padding: 1.25rem;
     border-radius: 1.25rem;

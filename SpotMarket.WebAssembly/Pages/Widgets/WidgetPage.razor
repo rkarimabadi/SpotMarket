@@ -4,32 +4,41 @@
 <MarketSearch OnSearchStateChanged="HandleSearchStateChange" />
 @if (!isSearching)
 {
-<MarketAdvanceProgressBarWidget/>
-<MarketProgressBarWidget/>
-<MarketAlarmsWidget/>
-<MarketCompassWidget/>
-<MarketConditionsWidget/>
-<MarketContactsWidget/>
-<MarketControlWidget/>
-<MarketExcitementWidget Data="marketExcitementData" />
-<MarketListWidget/>
-<MarketMetricsWidget/>
-<MarketMoversWidget Data="marketMoversData" />
-<NewsWidget Data="newsData" />
-<MarketPulseWidget Data="marketPulseData" />
-<MainPlayersWidget Players="mainPlayersData" />
-<IndustryComparisonWidget/>
-<MarketRingsWidget/>
-<MarketScheduleWidget/>
-<MarketSignalsWidget/>
-<MarketSentimentWidget Data="marketSentimentData" />
-<MarketShortcutsWidget/>
-<MarketSnapshotsWidget/>
-<MarketStatsRowWidget/>
-<TradingHallsWidget Data="tradingHallsData" />
-<SupplyRiskWidget Data="supplyRiskData" />
-<MarketVitalsWidget/>
-<WatchlistWidget/>
+    <CommodityStatusHorizontalWidget Data="commodityStatusData" />
+    <CommodityStatusWidget/>
+    <MarketWatchlistWidget/>
+    <MarketTickerWidget/>
+    <JournalInspiredWidget/>
+    <MarketForecastWidget/>
+    <MarketProgressRingsWidget Data="marketActivityItems" />
+    <MarketComplicationsWidget/>
+    <MarketAwardsWidget/>
+    <MarketAdvanceProgressBarWidget/>
+    <MarketProgressBarWidget/>
+    <MarketAlarmsWidget/>
+    <MarketCompassWidget/>
+    <MarketConditionsWidget/>
+    <MarketContactsWidget Data="marketContactsData" />
+    <MarketControlWidget/>
+    <MarketExcitementWidget Data="marketExcitementData" />
+    <MarketListWidget Data="marketInfoItems" />
+    <MarketMetricsWidget/>
+    <MarketMoversWidget Data="marketMoversData" />
+    <NewsWidget Data="newsData" />
+    <MarketPulseWidget Data="marketPulseData" />
+    <MainPlayersWidget Players="mainPlayersData" />
+    <IndustryComparisonWidget/>
+    <MarketRingsWidget/>
+    <MarketScheduleWidget/>
+    <MarketSignalsWidget/>
+    <MarketSentimentWidget Data="marketSentimentData" />
+    <MarketShortcutsWidget/>
+    <MarketSnapshotsWidget/>
+    <MarketStatsRowWidget/>
+    <TradingHallsWidget Data="tradingHallsData" />
+    <SupplyRiskWidget Data="supplyRiskData" />
+    <MarketVitalsWidget/>
+    <WatchlistWidget/>
 }
 @code {
     private bool isSearching;
@@ -42,6 +51,10 @@
     private SupplyRiskData? supplyRiskData;
     private TradingHallsData? tradingHallsData;
     private NewsData? newsData;
+    private CommodityStatusData? commodityStatusData;
+    private List<MarketInfo>? marketInfoItems;
+    private List<MarketActivity>? marketActivityItems;
+    private MarketContactsData? marketContactsData;
 
     protected override void OnInitialized()
     {
@@ -164,6 +177,43 @@
                     Title = "رقابت سنگین بر سر پلیمرهای مهندسی در تالار پتروشیمی"
                 }
             }
+        };
+        commodityStatusData = new CommodityStatusData
+            {
+                Items = new List<CommodityStatusItem>
+                {
+                    new() { Name = "ضایعات فولاد", MainGroupName = "صنعتی", OfferCount = 5, DemandStatus = DemandStatus.High },
+                    new() { Name = "زعفران", MainGroupName = "کشاورزی", OfferCount = 12, DemandStatus = DemandStatus.Low },
+                    new() { Name = "سنگ آهن", MainGroupName = "معدنی", OfferCount = 8, DemandStatus = DemandStatus.High },
+                    new() { Name = "پلیمر", MainGroupName = "پتروشیمی", OfferCount = 31, DemandStatus = DemandStatus.High },
+                    new() { Name = "قیر خالص", MainGroupName = "فرآورده های نفتی", OfferCount = 7, DemandStatus = DemandStatus.Medium },
+                }
+            };
+        marketInfoItems = new List<MarketInfo>
+        {
+            new MarketInfo("صنعتی", "فولاد، مس، آلومینیوم", "Industrial", "bi-building", "industrial", "high", "داغ"),
+            new MarketInfo("کشاورزی", "زعفران، پسته، جو", "Agriculture", "bi-tree-fill", "agri", "low", "آرام"),
+            new MarketInfo("پتروشیمی و فرآورده های نفتی", "پلیمرها، مواد شیمیایی، نفت", "Petrochemical-and-Oil-Products", "bi-droplet-fill", "petro", "medium", "متوسط"),
+            new MarketInfo("معدنی", "سنگ آهن، زغال سنگ", "Mineral", "bi-gem", "mineral", "medium", "متوسط"),
+            new MarketInfo("فرآورده های نفتی", "قیر، روغن، گاز", "Oil-Products", "bi-fuel-pump-fill", "oil-products", "high", "داغ"),
+            new MarketInfo("اموال غیر منقول", "ساختمان، زمین، مستغلات", "Real-Estate", "bi-house-door-fill", "real-estate", "low", "آرام"),
+            new MarketInfo("بازار فرعی", "کالاهای متنوع", "Secondary-Market", "bi-shop", "secondary", "neutral", "خنثی")
+        };
+        marketContactsData = new MarketContactsData
+            {
+                Items = new List<MarketContactItem>
+                {
+                    new() { Title = "فولاد", Subtitle = "بازار داغ", IconCssClass = "bi bi-building", AvatarCssClass = "steel" },
+                    new() { Title = "پتروشیمی", Subtitle = "روند مثبت", IconCssClass = "bi bi-droplet-fill", AvatarCssClass = "petro" },
+                    new() { Title = "سیمان", Subtitle = "متعادل", IconCssClass = "bi bi-cone-striped", AvatarCssClass = "cement" },
+                    new() { Title = "کشاورزی", Subtitle = "روند منفی", IconCssClass = "bi bi-tree-fill", AvatarCssClass = "agri" }
+                }
+            };
+        marketActivityItems = new List<MarketActivity>
+        {
+            new MarketActivity("صنعتی", "industrial", 0.92, "۹۲٪ انجام شده", "۵.۸ همت"),
+            new MarketActivity("پتروشیمی", "petro", 0.78, "۷۸٪ انجام شده", "۴.۲ همت"),
+            new MarketActivity("کشاورزی", "agri", 0.65, "۶۵٪ انجام شده", "۱.۱ همت")
         };
     }
 }

@@ -1,48 +1,31 @@
 ﻿@* الهام گرفته از ویجت‌های برنامه Contacts و FaceTime اپل *@
+@using SpotMarket.WebAssembly.Models.Presentation
 
 <div class="contacts-widget">
     <div class="widget-header">
-        <h3 class="widget-title">بازارهای منتخب</h3>
+        <h3 class="widget-title">@Title</h3>
+        <h4 class="widget-subtitle">@Subtitle</h4>
     </div>
-    <div class="contacts-grid">
-        @* مخاطب اول: فولاد *@
-        <div class="contact-card">
-            <div class="contact-avatar steel">
-                <i class="bi bi-building"></i>
-            </div>
-            <span class="title">فولاد</span>
-            <span class="subtitle">بازار داغ</span>
+    @if (Data != null && Data.Items.Any())
+    {
+        <div class="contacts-grid" style="grid-template-columns: repeat(@Data.Items.Count, 1fr);">
+            @foreach (var item in Data.Items)
+            {
+                <div class="contact-card">
+                    <div class="contact-avatar @item.AvatarCssClass">
+                        <i class="@item.IconCssClass"></i>
+                    </div>
+                    <span class="title">@item.Title</span>
+                    <span class="subtitle">@item.Subtitle</span>
+                </div>
+            }
         </div>
-
-        @* مخاطب دوم: پتروشیمی *@
-        <div class="contact-card">
-            <div class="contact-avatar petro">
-                <i class="bi bi-droplet-fill"></i>
-            </div>
-            <span class="title">پتروشیمی</span>
-            <span class="subtitle">روند مثبت</span>
-        </div>
-
-        @* مخاطب سوم: سیمان *@
-        <div class="contact-card">
-            <div class="contact-avatar cement">
-                <i class="bi bi-cone-striped"></i>
-            </div>
-            <span class="title">سیمان</span>
-            <span class="subtitle">متعادل</span>
-        </div>
-
-        @* مخاطب چهارم: کشاورزی *@
-        <div class="contact-card">
-            <div class="contact-avatar agri">
-                <i class="bi bi-tree-fill"></i>
-            </div>
-            <span class="title">کشاورزی</span>
-            <span class="subtitle">روند منفی</span>
-        </div>
-    </div>
+    }
 </div>
 
 @code {
-    // This component is currently using static data for design purposes.
+    [Parameter] public string Title { get; set; } = "بازارهای منتخب";
+    [Parameter] public string Subtitle { get; set; } = "بر اساس ارزش کل عرضه‌ها";
+    [Parameter]
+    public MarketContactsData? Data { get; set; }
 }

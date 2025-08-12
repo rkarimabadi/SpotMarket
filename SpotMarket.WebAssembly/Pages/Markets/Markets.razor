@@ -2,23 +2,27 @@
 @using SpotMarket.WebAssembly.Models.App
 @using SpotMarket.WebAssembly.Pages.Widgets
 @using SpotMarket.WebAssembly.Services.App
+@using SpotMarket.WebAssembly.Services.Presentation
 @inject NavStateService NavState
 @inject SettingsService SettingsService
-
+@inject IMarketsService MarketService
 <PageTitle>بازارها</PageTitle>
 
 <div class="page-container">
     <div class="page-header">
         <h1 class="page-title-large">بازارها</h1>
     </div>
-
+    @if (marketSettings != null && marketSettings.VisibleInfoWidgets.Exists( x => x == MarketInfoWidgetType.ProgressRings))
+    {
+        <MarketProgressRingsWidget Data="marketActivityItems" />
+    }
     @if (settingsLoaded)
     {
         <!-- نمایش نمای اصلی بر اساس تنظیمات -->
         @switch (marketSettings?.MainView)
         {
             case MarketMainViewType.List:
-                <MarketListWidget />
+                <MarketListWidget Data="marketInfoItems" />
                 break;
             case MarketMainViewType.Heatmap:
                 <MarketHeatmapWidget />
@@ -35,17 +39,11 @@
             {
                 @switch (widgetType)
                 {
-                    case MarketInfoWidgetType.Vitals:
-                        {
-                            var shareByValue = new MarketSentimentData();
-                            <MarketSentimentWidget Data="shareByValue" Title="سهم از بازار" />
-                        }
+                    case MarketInfoWidgetType.SelectedCommodity:
+                        <MarketContactsWidget Data="marketContactsData" Title="کالاهای پرطرفدار" Subtitle="براساس سابقه بازار" />
                         break;
-                    case MarketInfoWidgetType.Contacts:
-                        <MarketSentimentWidget />
-                        break;
-                    case MarketInfoWidgetType.StatsRow:
-                        <MarketSentimentWidget />
+                    case MarketInfoWidgetType.TodayGroups:
+                        <CommodityStatusHorizontalWidget Data="commodityStatusData" Title="گروه‌های منتخب" Subtitle="براساس تعداد اطلاعیه عرضه" />
                         break;
                 }
             }
@@ -60,6 +58,12 @@
 @code {
     private MarketSettings? marketSettings;
     private bool settingsLoaded = false;
+    private bool _isLoading = true;
+
+    private CommodityStatusData? commodityStatusData;
+    private MarketContactsData? marketContactsData;
+    private List<MarketInfo>? marketInfoItems;
+    private List<MarketActivity>? marketActivityItems;
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,5 +71,35 @@
         var settings = await SettingsService.LoadSettingsAsync() ?? SettingsService.GetDefaultSettings();
         marketSettings = settings.MarketPageLayout;
         settingsLoaded = true;
+        await LoadDataAsync();
     }
+    private async Task LoadDataAsync()
+    {
+        try
+        {
+            var commodityStatusTask = MarketService.GetIndexGroups();
+            var marketInfoTask = MarketService.GetMainGroupsData();
+            var marketActivityTask = MarketService.GetMarketActivities();
+            var marketContactsTask = MarketService.GetMarketContacts();
+
+            await Task.WhenAll(
+                commodityStatusTask, marketInfoTask, marketActivityTask, marketContactsTask
+            );
+
+            commodityStatusData = await commodityStatusTask;
+            marketInfoItems = await marketInfoTask;
+            marketActivityItems = await marketActivityTask;
+            marketContactsData = await marketContactsTask;
+        }
+        catch (Exception ex)
+        {
+            // لاگ کردن خطا
+            Console.WriteLine($"Error loading markets data: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
 }

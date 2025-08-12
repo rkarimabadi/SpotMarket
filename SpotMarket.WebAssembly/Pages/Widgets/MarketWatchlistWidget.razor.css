@@ -1,7 +1,7 @@
 ﻿/* استایل برای ویجت الهام گرفته از Stocks App */
 .watchlist-widget {
     background-color: var(--background-color);
-    padding: 1rem;
+    padding: 1rem 0;
 }
 
     .watchlist-widget .widget-header {

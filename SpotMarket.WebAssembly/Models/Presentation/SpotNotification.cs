@@ -8,6 +8,7 @@
         Announcement, // ابلاغیه
         Amendment, // اصلاحیه
         ProductAcceptance, // پذیرش کالا
+        CarAcceptance, // پذیرش خودرو
         LicenseRenewal, // تمدید مجوز
         Other // سایر
     }

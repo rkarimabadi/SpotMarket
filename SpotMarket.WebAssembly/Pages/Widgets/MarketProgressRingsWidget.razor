@@ -1,0 +1,42 @@
+﻿@* بازطراحی دقیق با الهام از صفحه Daily Activity در Apple Watch *@
+<div class="widget-container">
+    <div class="rings-progress-widget">
+        <div class="widget-header">
+            <h3 class="widget-title">فعالیت روزانه بازار</h3>
+        </div>
+        <div class="rings-container">
+            <div class="rings-chart">
+                <svg viewBox="0 0 100 100">
+                    <!-- Ring 1: صنعتی (بیرونی‌ترین) -->
+                    <path class="ring-track industrial" d="M 50,7 A 43,43 0 1 1 49.9,7" />
+                    <path class="ring-progress industrial" d="M 50,7 A 43,43 0 1 1 49.9,7" style="stroke-dashoffset: @(270.1 * (1 - Data[0].Percentage));" />
+
+                    <!-- Ring 2: پتروشیمی (میانی) -->
+                    <path class="ring-track petro" d="M 50,18 A 32,32 0 1 1 49.9,18" />
+                    <path class="ring-progress petro" d="M 50,18 A 32,32 0 1 1 49.9,18" style="stroke-dashoffset: @(201 * (1 - (Data[1].Percentage)));" />
+
+                    <!-- Ring 3: کشاورزی (داخلی‌ترین) -->
+                    <path class="ring-track agri" d="M 50,29 A 21,21 0 1 1 49.9,29" />
+                    <path class="ring-progress agri" d="M 50,29 A 21,21 0 1 1 49.9,29" style="stroke-dashoffset: @(131.9 * (1 - (Data[2].Percentage)));" />
+                </svg>
+            </div>
+
+            <div class="rings-details">
+                @foreach (var item in Data)
+                {
+                    <div class="detail-item">
+                        <div class="detail-info">
+                            <span class="title @item.CssClass">@item.Title</span>
+                            <span class="primary-metric">@item.PrimaryMetric</span>
+                        </div>
+                        <div class="secondary-metric">@item.SecondaryMetric</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public List<MarketActivity> Data { get; set; }
+}

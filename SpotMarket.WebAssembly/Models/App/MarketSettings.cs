@@ -15,9 +15,9 @@
     /// </summary>
     public enum MarketInfoWidgetType
     {
-        Vitals,
-        Contacts,
-        StatsRow
+        ProgressRings,
+        SelectedCommodity,
+        TodayGroups
     }
 
     /// <summary>
@@ -38,9 +38,9 @@
 
         public string GetDisplayName(MarketInfoWidgetType type) => type switch
         {
-            MarketInfoWidgetType.Vitals => "علائم حیاتی بازار",
-            MarketInfoWidgetType.Contacts => "اطلاعات تماس",
-            MarketInfoWidgetType.StatsRow => "آمار کلیدی",
+            MarketInfoWidgetType.ProgressRings => "علائم حیاتی بازار",
+            MarketInfoWidgetType.SelectedCommodity => "کالاهای پرطرفدار",
+            MarketInfoWidgetType.TodayGroups => "گروه‌های منتخب",
             _ => "ویجت ناشناس"
         };
     }

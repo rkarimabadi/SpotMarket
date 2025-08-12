@@ -13,7 +13,12 @@
         font-weight: 700;
         color: var(--text-primary-color);
     }
-
+    .contacts-widget .widget-subtitle {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-secondary-color);
+        margin: 0;
+    }
 .contacts-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
