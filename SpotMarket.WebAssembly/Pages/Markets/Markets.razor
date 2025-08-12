@@ -25,10 +25,10 @@
                 <MarketListWidget Data="marketInfoItems" />
                 break;
             case MarketMainViewType.Heatmap:
-                <MarketHeatmapWidget />
+                <MarketHeatmapWidget Data="marketHeatmapData" Subtitle="براساس میانگین وزنی قیمت" />
                 break;
             case MarketMainViewType.Shortcuts:
-                <MarketShortcutsWidget />
+                <MarketShortcutsWidget Data="marketShortcutsData" Subtitle="براساس گروه‌های اصلی" />
                 break;
         }
 
@@ -62,6 +62,8 @@
 
     private CommodityStatusData? commodityStatusData;
     private MarketContactsData? marketContactsData;
+    private MarketHeatmapData? marketHeatmapData;
+    private MarketShortcutsData? marketShortcutsData;
     private List<MarketInfo>? marketInfoItems;
     private List<MarketActivity>? marketActivityItems;
 
@@ -81,15 +83,19 @@
             var marketInfoTask = MarketService.GetMainGroupsData();
             var marketActivityTask = MarketService.GetMarketActivities();
             var marketContactsTask = MarketService.GetMarketContacts();
+            var marketHeatmapTask = MarketService.GetMarketHeatmapData();
+            var marketShortcutsTask = MarketService.GetMarketShortcutsData();
 
             await Task.WhenAll(
-                commodityStatusTask, marketInfoTask, marketActivityTask, marketContactsTask
+                commodityStatusTask, marketInfoTask, marketActivityTask, marketContactsTask, marketHeatmapTask, marketShortcutsTask
             );
 
             commodityStatusData = await commodityStatusTask;
             marketInfoItems = await marketInfoTask;
             marketActivityItems = await marketActivityTask;
             marketContactsData = await marketContactsTask;
+            marketHeatmapData = await marketHeatmapTask;
+            marketShortcutsData = await marketShortcutsTask;
         }
         catch (Exception ex)
         {

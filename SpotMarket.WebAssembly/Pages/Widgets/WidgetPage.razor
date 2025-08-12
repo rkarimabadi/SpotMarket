@@ -32,7 +32,7 @@
     <MarketScheduleWidget/>
     <MarketSignalsWidget/>
     <MarketSentimentWidget Data="marketSentimentData" />
-    <MarketShortcutsWidget/>
+    <MarketShortcutsWidget Data="marketShortcutsData"/>
     <MarketSnapshotsWidget/>
     <MarketStatsRowWidget/>
     <TradingHallsWidget Data="tradingHallsData" />
@@ -55,6 +55,8 @@
     private List<MarketInfo>? marketInfoItems;
     private List<MarketActivity>? marketActivityItems;
     private MarketContactsData? marketContactsData;
+    private MarketHeatmapData? marketHeatmapData;
+    private MarketShortcutsData? marketShortcutsData;
 
     protected override void OnInitialized()
     {
@@ -215,6 +217,33 @@
             new MarketActivity("پتروشیمی", "petro", 0.78, "۷۸٪ انجام شده", "۴.۲ همت"),
             new MarketActivity("کشاورزی", "agri", 0.65, "۶۵٪ انجام شده", "۱.۱ همت")
         };
+        marketHeatmapData  = new MarketHeatmapData
+        {
+            Items = new List<MarketHeatmapItem>
+            {
+                new() { Title = "فولاد", Rank = MarketHeatRank.High, Subtitle = "بیشترین ارزش معاملات", Value = "+۱۲.۵٪" },
+                new() { Title = "پتروشیمی", Rank = MarketHeatRank.High, Value = "۲.۵x" },
+                new() { Title = "سیمان", Rank = MarketHeatRank.Medium, Subtitle = "نرخ تحقق", Value = "۹۸٪" },
+                new() { Title = "مس", Rank = MarketHeatRank.Medium },
+                new() { Title = "آلومینیوم", Rank = MarketHeatRank.Low },
+                new() { Title = "کشاورزی", Rank = MarketHeatRank.Low },
+                new() { Title = "قیر", Rank = MarketHeatRank.Neutral },
+            }
+        };
+
+        marketShortcutsData = new MarketShortcutsData
+            {
+                Items = new List<MarketShortcutItem>
+                {
+                    new() { Title = "اموال غیر منقول", IconCssClass = "bi bi-house-door-fill", ThemeCssClass = "real-estate" },
+                    new() { Title = "بازار فرعی", IconCssClass = "bi bi-shop", ThemeCssClass = "secondary" },
+                    new() { Title = "صنعتی", IconCssClass = "bi bi-building", ThemeCssClass = "industrial" },
+                    new() { Title = "فرآورده های نفتی", IconCssClass = "bi bi-fuel-pump-fill", ThemeCssClass = "oil-products" },
+                    new() { Title = "معدنی", IconCssClass = "bi bi-gem", ThemeCssClass = "mineral" },
+                    new() { Title = "پتروشیمی", IconCssClass = "bi bi-droplet-fill", ThemeCssClass = "petro" },
+                    new() { Title = "کشاورزی", IconCssClass = "bi bi-tree-fill", ThemeCssClass = "agri" }
+                }
+            };
     }
 }
 

@@ -13,7 +13,12 @@
         font-weight: 700;
         color: var(--text-primary-color);
     }
-
+    .shortcuts-widget .widget-subtitle {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-secondary-color);
+        margin: 0;
+    }
 .shortcuts-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -59,6 +64,19 @@
     background-color: #6c757d;
 }
 
+.shortcut-tile.real-estate {
+    background-color: #007bff;
+}
+
+.shortcut-tile.oil-products {
+    background-color: #17a2b8;
+}
+
+.shortcut-tile.mineral {
+    background-color: #6f42c1;
+}
+
+
 /* حالت تیره */
 [data-bs-theme="dark"] .shortcut-tile.industrial {
     background-color: #2e86de;
@@ -74,4 +92,16 @@
 
 [data-bs-theme="dark"] .shortcut-tile.secondary {
     background-color: #5a6268;
+}
+
+[data-bs-theme="dark"] .shortcut-tile.real-estate {
+    background-color: #0056b3;
+}
+
+[data-bs-theme="dark"] .shortcut-tile.oil-products {
+    background-color: #117a8b;
+}
+
+[data-bs-theme="dark"] .shortcut-tile.mineral {
+    background-color: #58339b;
 }

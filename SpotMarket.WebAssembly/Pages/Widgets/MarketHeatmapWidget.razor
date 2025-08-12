@@ -1,0 +1,90 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavigationManager
+@if (Data != null && Data.Items.Any())
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h3 class="section-title">@Title</h3>
+            <h4 class="section-subtitle">@Subtitle</h4>
+        </div>
+        <div class="heatmap-grid">
+            @{
+                var highItems = Data.Items.Where(i => i.Rank == MarketHeatRank.High).ToList();
+                var mediumItems = Data.Items.Where(i => i.Rank == MarketHeatRank.Medium).ToList();
+                var lowItems = Data.Items.Where(i => i.Rank == MarketHeatRank.Low).ToList();
+                var neutralItems = Data.Items.Where(i => i.Rank == MarketHeatRank.Neutral).ToList();
+            }
+
+            <!-- جایگاه‌های رتبه High -->
+            @if (highItems.Count > 0)
+            {
+                <div class="heatmap-tile high tile-steel" @onclick="() => GoTo(highItems[0].Title)">
+                    <div class="large-tile-content">
+                        <span class="title">@highItems[0].Title</span>
+                        <span class="value ltr">@highItems[0].Value</span>
+                        <span class="subtitle">@highItems[0].Subtitle</span>
+                    </div>
+                </div>
+            }
+            @if (highItems.Count > 1)
+            {
+                <div class="heatmap-tile high tile-petro tile-sm-rotate" @onclick="() => GoTo(highItems[1].Title)">
+                    @* محتوای داخلی برای کارت عمودی بهینه شده است *@
+                    <div class="vertical-tile-content">
+                        <span class="title">@highItems[1].Title</span>
+                        <span class="value">@highItems[1].Value</span>
+                    </div>
+                </div>
+            }
+
+            <!-- جایگاه‌های رتبه Medium -->
+            @if (mediumItems.Count > 0)
+            {
+                <div class="heatmap-tile medium tile-cement" @onclick="() => GoTo(mediumItems[0].Title)">
+                    @* محتوای داخلی برای کارت افقی بهینه شده است *@
+                    <div class="horizontal-bar-content">
+                        <div class="info">
+                            <span class="title">@mediumItems[0].Title</span>
+                            <span class="ms-2 subtitle">@mediumItems[0].Subtitle</span>
+                        </div>
+                        <div class="value">@mediumItems[0].Value</div>
+                    </div>
+                </div>
+            }
+            @if (mediumItems.Count > 1)
+            {
+                <div class="heatmap-tile medium tile-xs-rotate" @onclick="() => GoTo(mediumItems[1].Title)">@mediumItems[1].Title</div>
+            }
+
+            <!-- جایگاه‌های باقی‌مانده -->
+            @if (lowItems.Count > 0)
+            {
+                <div class="heatmap-tile low tile-xs-rotate" @onclick="() => GoTo(lowItems[0].Title)">@lowItems[0].Title</div>
+            }
+            @if (neutralItems.Count > 0)
+            {
+                <div class="heatmap-tile neutral tile-xs-rotate" @onclick="() => GoTo(neutralItems[0].Title)">@neutralItems[0].Title</div>
+            }
+            @if (lowItems.Count > 1)
+            {
+                <div class="heatmap-tile low tile-sm-rotate" @onclick="() => GoTo(lowItems[1].Title)">@lowItems[1].Title</div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string Title { get; set; } = "نقشه حرارتی بازار";
+    [Parameter] public string Subtitle { get; set; } = "برحسب داده‌های عرضه";
+    [Parameter]
+    public MarketHeatmapData? Data { get; set; }
+
+    private void GoTo(string name)
+    {
+        // اطمینان از اینکه نام خالی نیست
+        if (!string.IsNullOrEmpty(name))
+        {
+            NavigationManager.NavigateTo($"/markets/{name}");
+        }
+    }
+}

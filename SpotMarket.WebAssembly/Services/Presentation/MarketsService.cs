@@ -9,6 +9,8 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         Task<CommodityStatusData> GetIndexGroups();
         Task<List<MarketActivity>> GetMarketActivities();
         Task<MarketContactsData> GetMarketContacts();
+        Task<MarketHeatmapData> GetMarketHeatmapData();
+        Task<MarketShortcutsData> GetMarketShortcutsData();
     }
 
     public class MarketsService : IMarketsService
@@ -77,6 +79,42 @@ namespace SpotMarket.WebAssembly.Services.Presentation
                     }
                 };
             return await Task.FromResult(data);
+        }
+        public async Task<MarketHeatmapData> GetMarketHeatmapData()
+        {
+            return await _httpClient.GetFromJsonAsync<MarketHeatmapData>($"{_controllerPath}/market-heatmap") ?? new MarketHeatmapData();
+            //var data = new MarketHeatmapData
+            //{
+            //    Items = new List<MarketHeatmapItem>
+            //    {
+            //        new() { Title = "فولاد", Rank = MarketHeatRank.High, Subtitle = "بیشترین ارزش معاملات", Value = "+۱۲.۵٪" },
+            //        new() { Title = "پتروشیمی", Rank = MarketHeatRank.High, Value = "۲.۵x" },
+            //        new() { Title = "سیمان", Rank = MarketHeatRank.Medium, Subtitle = "نرخ تحقق", Value = "۹۸٪" },
+            //        new() { Title = "مس", Rank = MarketHeatRank.Medium },
+            //        new() { Title = "آلومینیوم", Rank = MarketHeatRank.Low },
+            //        new() { Title = "کشاورزی", Rank = MarketHeatRank.Low },
+            //        new() { Title = "قیر", Rank = MarketHeatRank.Neutral },
+            //    }
+            //};
+            //return await Task.FromResult(data);
+        }
+        public async Task<MarketShortcutsData> GetMarketShortcutsData()
+        {
+            return await _httpClient.GetFromJsonAsync<MarketShortcutsData>($"{_controllerPath}/market-shortcuts") ?? new MarketShortcutsData();
+            //var data = new MarketShortcutsData
+            //{
+            //    Items = new List<MarketShortcutItem>
+            //    {
+            //        new() { Title = "اموال غیر منقول", IconCssClass = "bi bi-house-door-fill", ThemeCssClass = "real-estate" },
+            //        new() { Title = "بازار فرعی", IconCssClass = "bi bi-shop", ThemeCssClass = "secondary" },
+            //        new() { Title = "صنعتی", IconCssClass = "bi bi-building", ThemeCssClass = "industrial" },
+            //        new() { Title = "فرآورده های نفتی", IconCssClass = "bi bi-fuel-pump-fill", ThemeCssClass = "oil-products" },
+            //        new() { Title = "معدنی", IconCssClass = "bi bi-gem", ThemeCssClass = "mineral" },
+            //        new() { Title = "پتروشیمی", IconCssClass = "bi bi-droplet-fill", ThemeCssClass = "petro" },
+            //        new() { Title = "کشاورزی", IconCssClass = "bi bi-tree-fill", ThemeCssClass = "agri" }
+            //    }
+            //};
+            //return await Task.FromResult(data);
         }
     }
 

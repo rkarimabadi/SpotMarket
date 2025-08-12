@@ -13,7 +13,7 @@
     {
         // عنوان TopNav را بر اساس نام گروه تنظیم می‌کند
         var pageTitle = !string.IsNullOrEmpty(groupName) ? groupName : "تحلیل گروه";
-        NavState.SetNavState(pageTitle, true);
+        NavState.SetNavState(pageTitle, true, "/markets");
         base.OnInitialized();
     }
 }
