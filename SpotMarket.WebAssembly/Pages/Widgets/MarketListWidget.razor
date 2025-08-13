@@ -3,7 +3,7 @@
     <div class="market-list">
         @foreach (var market in Data)
         {
-            <div class="market-list-item" @onclick="() => GoToGroupAnalysis(market.UrlName)">
+            <div class="market-list-item" @onclick="() => GoTo(market.Code)">
                 <div class="market-icon @market.IconContainerClass"><i class="bi @market.IconClass"></i></div>
                 <div class="market-info">
                     <div class="title">@market.Title</div>
@@ -21,13 +21,9 @@
 @code {
     [Parameter] public List<MarketInfo> Data { get; set; }
 
-    private void GoToGroupAnalysis(string groupName)
+    private void GoTo(int id)
     {
-        // اطمینان از اینکه نام گروه خالی نیست
-        if (!string.IsNullOrEmpty(groupName))
-        {
-            NavigationManager.NavigateTo($"/markets/{groupName}");
-        }
+        NavigationManager.NavigateTo($"/markets/{id}");
     }
     private List<MarketInfo> MarketItems { get; set; } = new();
 

@@ -1,0 +1,17 @@
+﻿@inject NavigationManager NavigationManager
+
+<div class="no-activity-widget">
+    <div class="icon-container">
+        <i class="bi bi-moon-stars-fill"></i>
+    </div>
+    <h3 class="title">این گروه فعالیتی نداشته است</h3>
+    <p class="subtitle">در حال حاضر هیچ عرضه فعال یا برنامه‌ریزی شده‌ای برای این گروه وجود ندارد.</p>
+    <button class="action-button" @onclick="GoToMarkets">مشاهده سایر گروه‌ها</button>
+</div>
+
+@code {
+    private void GoToMarkets()
+    {
+        NavigationManager.NavigateTo("/markets");
+    }
+}

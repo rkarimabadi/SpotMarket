@@ -23,6 +23,10 @@ builder.Services.AddHttpClient<IMarketsService, MarketsService>(client =>
 {
     client.BaseAddress = new Uri(apiBaseUrl);
 });
+builder.Services.AddHttpClient<IMainGroupService, MainGroupService>(client =>
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
+});
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 await builder.Build().RunAsync();

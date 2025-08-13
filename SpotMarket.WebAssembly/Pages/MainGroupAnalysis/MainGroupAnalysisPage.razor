@@ -1,19 +1,75 @@
-﻿@page "/markets/{groupName}"
+﻿@page "/markets/{groupId:int}"
+@using SpotMarket.WebAssembly.Services.Presentation
 @inject NavStateService NavState
-
+@inject IMarketsService MarketService
+@inject IMainGroupService MainGroupService
 <div class="page-container">
-    <GroupHeaderWidget GroupName="@groupName" />
-    <SubGroupListWidget/>
+    <GroupHeaderWidget Data="@groupName" />
+    @if (_isLoading)
+    {
+        <p><em>در حال بارگذاری اطلاعات گروه اصلی...</em></p>
+    }  else {
+        @switch (groupActivityStatus)
+        {
+            case GroupActivityStatus.HasOfferToday:
+                <MarketConditionsWidget Data="groupActivitiesData" />
+                break;
+            case GroupActivityStatus.HasUpcomingOffer:
+                <UpcomingOffersWidget Data="upcomingOffersData" />
+                break;
+            case GroupActivityStatus.Inactive:
+                <NoActivityWidget />
+                break;
+            default:
+                break;
+        }
+        <ExpandableSubGroupListWidget Data="groupListData" />
+    }
+
 </div>
 @code {
     [Parameter]
-    public string? groupName { get; set; }
+    public int groupId { get; set; }
+    private MarketShortcutItem? groupName;
+    private MarketShortcutsData groupList = new();
+    private GroupListData? groupListData;
+    private GroupActivityStatus groupActivityStatus;
+    private GroupActivityData? activeGroupData;
+    private UpcomingOffersData? upcomingOffersData;
+    private MarketConditionsData? groupActivitiesData;
 
-    protected override void OnInitialized()
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
     {
-        // عنوان TopNav را بر اساس نام گروه تنظیم می‌کند
-        var pageTitle = !string.IsNullOrEmpty(groupName) ? groupName : "تحلیل گروه";
-        NavState.SetNavState(pageTitle, true, "/markets");
+        await LoadDate();
         base.OnInitialized();
+
+    }
+
+    private async Task LoadDate()
+    {
+        try
+        {
+            groupList = await MarketService.GetMarketShortcutsData();
+            groupName = groupList.Items.FirstOrDefault(g => g.Code == groupId);
+            var pageTitle = $"تحلیل گروه اصلی {groupName?.Title}";
+            NavState.SetNavState(pageTitle, true, "/markets");
+            groupListData = await MainGroupService.GetActiveGroupsAsync(groupName.Code);
+
+            groupActivityStatus = groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
+
+            upcomingOffersData = await MainGroupService.GetUpcomingOffersAsync(groupName.Code);
+            groupActivitiesData = await MainGroupService.GetGroupActivitiesAsync(groupName.Code);
+        }
+        catch (Exception ex)
+        {
+            // لاگ کردن خطا
+            Console.WriteLine($"Error loading main group data: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
+        }
     }
 }

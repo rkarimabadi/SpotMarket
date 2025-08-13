@@ -79,6 +79,7 @@
     {
         try
         {
+            _isLoading = true;
             var commodityStatusTask = MarketService.GetIndexGroups();
             var marketInfoTask = MarketService.GetMainGroupsData();
             var marketActivityTask = MarketService.GetMarketActivities();

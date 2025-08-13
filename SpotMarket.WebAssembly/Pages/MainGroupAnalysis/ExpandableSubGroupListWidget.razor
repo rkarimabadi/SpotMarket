@@ -1,0 +1,132 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavigationManager
+
+<div class="subgroup-list-widget">
+    @if (Data != null && Data.Items.Any())
+    {
+        var activeItems = Data.Items.Where(i => i.Status != GroupActivityStatus.Inactive).ToList();
+        var inactiveItems = Data.Items.Where(i => i.Status == GroupActivityStatus.Inactive).ToList();
+        if (activeItems.Count == 0)
+        {
+            activeItems = inactiveItems.Take(3).ToList();
+            inactiveItems = inactiveItems.Skip(3).ToList();
+        }
+        <!-- بخش گروه‌های فعال -->
+        <div class="subgroup-section">
+            <div class="section-header">
+                <h3 class="section-title">@Title</h3>
+                <h4 class="section-subtitle">@Subtitle</h4>
+            </div>
+            <div class="data-card">
+                @foreach (var item in activeItems)
+                {
+                    <div class="subgroup-item" @onclick="() => GoToGroupPage(item.UrlName)">
+                        <div class="item-main">
+                            <div class="item-dial @GetStatusCssClass(item.Status)">
+                                <i class="@GetStatusIconClass(item.Status)"></i>
+                            </div>
+                            <div class="item-info">
+                                <span class="title">@item.Title</span>
+                                <div class="subtitle text-truncate">@item.Subtitle</div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="value">@item.OfferCount</span>
+                                <span class="label">@(item.OfferCount > 0 ? "اطلاعیه" : "")</span>
+                            </div>
+                        </div>
+                        <i class="bi bi-chevron-left item-chevron"></i>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- بخش سایر گروه‌ها (قابل گسترش) -->
+        @if (inactiveItems.Any())
+        {
+            <div class="subgroup-section">
+                @if (_showAll)
+                {
+                    <div class="section-header">
+                        <h4 class="section-title">سایر گروه‌ها</h4>
+                    </div>
+                    <div class="data-card">
+                        @foreach (var item in inactiveItems)
+                        {
+                            <div class="subgroup-item inactive-item" @onclick="() => GoToGroupPage(item.UrlName)">
+                                <div class="item-main">
+                                    <div class="item-dial @GetStatusCssClass(item.Status)">
+                                        <i class="@GetStatusIconClass(item.Status)"></i>
+                                    </div>
+                                    <div class="item-info">
+                                        <div class="title">@item.Title</div>
+                                        <div class="subtitle text-truncate">@item.Subtitle</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <!-- آمار برای آیتم‌های غیرفعال نمایش داده نمی‌شود -->
+                                    </div>
+                                </div>
+                                <i class="bi bi-chevron-left item-chevron"></i>
+                            </div>
+                        }
+                    </div>
+                }
+                <div class="expand-button-container">
+                    <button class="expand-button" @onclick="ToggleShowAll">
+                        @(_showAll ? "نمایش کمتر" : $"نمایش همه {inactiveItems.Count} گروه")
+                    </button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "گروه‌های فعال";
+    [Parameter] public string Subtitle { get; set; } = "براساس وجود عرضه";
+    [Parameter]
+    public GroupListData? Data { get; set; }
+
+    private bool _showAll = false;
+
+    protected override void OnInitialized()
+    {
+        // اگر تعداد کل آیتم‌ها کم باشد، از ابتدا همه را نمایش بده
+        if (Data?.Items.Count <= 6)
+        {
+            _showAll = true;
+        }
+    }
+
+    private void ToggleShowAll()
+    {
+        _showAll = !_showAll;
+    }
+
+    private void GoToGroupPage(string urlName)
+    {
+        if (!string.IsNullOrEmpty(urlName))
+        {
+            // NavigationManager.NavigateTo($"/subgroup/{urlName}");
+        }
+    }
+
+    private string GetStatusCssClass(GroupActivityStatus status) => status switch
+    {
+        GroupActivityStatus.HasOfferToday => "status-today",
+        GroupActivityStatus.HasUpcomingOffer => "status-future",
+        _ => "status-inactive"
+    };
+
+    private string GetStatusDisplayName(GroupActivityStatus status) => status switch
+    {
+        GroupActivityStatus.HasOfferToday => "عرضه امروز",
+        GroupActivityStatus.HasUpcomingOffer => "عرضه آینده",
+        _ => ""
+    };
+    private string GetStatusIconClass(GroupActivityStatus status) => status switch
+    {
+        GroupActivityStatus.HasOfferToday => "bi bi-calendar-check-fill",
+        GroupActivityStatus.HasUpcomingOffer => "bi bi-calendar-event-fill",
+        _ => "bi bi-circle-fill"
+    };
+}

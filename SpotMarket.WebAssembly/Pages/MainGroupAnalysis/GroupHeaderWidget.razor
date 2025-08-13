@@ -1,25 +1,14 @@
-﻿<div class="group-header-container">
-    <div class="group-title-section">
-        <div class="group-icon industrial"><i class="bi bi-building"></i></div>
-        <h1 class="group-title">@GroupName</h1>
-    </div>
-    <div class="kpi-grid">
-        <div class="kpi-card">
-            <div class="kpi-label">ارزش معاملات</div>
-            <div class="kpi-value">۵.۸ T</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-label">حجم معاملات</div>
-            <div class="kpi-value">۸۴,۵۰۰ تن</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-label">شاخص رقابت</div>
-            <div class="kpi-value text-danger">+۱۲.۵٪</div>
+﻿@if(Data is not null)
+{
+    <div class="group-header-container">
+        <div class="group-title-section">
+            <div class="group-icon @Data.ThemeCssClass"><i class="@Data.IconCssClass"></i></div>
+            <h1 class="group-title">@Data.Title</h1>
         </div>
     </div>
-</div>
+}
 
 @code {
     [Parameter]
-    public string? GroupName { get; set; }
+    public MarketShortcutItem? Data { get; set; }
 }

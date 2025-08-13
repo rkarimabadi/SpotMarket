@@ -1,0 +1,135 @@
+﻿.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+.activity-widget {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+}
+
+.rings-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 1.5rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.rings-chart {
+    position: relative;
+    width: 100%;
+    max-width: 120px;
+    margin: 0 auto;
+}
+
+    .rings-chart svg {
+        width: 100%;
+        transform: rotate(-90deg);
+    }
+
+.ring-track, .ring-progress {
+    fill: none;
+    stroke-linecap: round;
+}
+
+.ring-track {
+    stroke: var(--border-color);
+    stroke-width: 8;
+    opacity: 0.5;
+}
+
+.ring-progress {
+    stroke-width: 8;
+}
+
+    .ring-progress.competition {
+        stroke: #fd7e14;
+        stroke-dasharray: 282.7;
+    }
+
+    .ring-progress.demand {
+        stroke: #007bff;
+        stroke-dasharray: 219.9;
+    }
+
+.rings-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+    .legend-dot.competition {
+        background-color: #fd7e14;
+    }
+
+    .legend-dot.demand {
+        background-color: #007bff;
+    }
+
+.legend-item span {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.stats-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.stat-card {
+    text-align: center;
+    display:flex;
+    flex-direction:column-reverse;
+}
+
+    .stat-card .label {
+        font-size: 0.8rem;
+        color: var(--text-secondary-color);
+    }
+
+    .stat-card .value {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+@media (max-width: 420px) {
+    .rings-section {
+        grid-template-columns: 1fr; /* ۱. چیدمان را به تک‌ستونی تغییر می‌دهد */
+        justify-items: center; /* ۲. نمودار را در مرکز قرار می‌دهد */
+    }
+
+    .rings-legend {
+        margin-top: 1rem; /* ۳. کمی فاصله در بالای لجند ایجاد می‌کند */
+        align-items: center; /* ۴. آیتم‌های لجند را وسط‌چین می‌کند */
+    }
+}
+
+[data-bs-theme="dark"] .activity-widget {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .rings-section {
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .ring-track {
+    stroke: var(--gray-700);
+}

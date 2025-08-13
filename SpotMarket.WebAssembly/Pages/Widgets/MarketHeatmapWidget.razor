@@ -18,7 +18,7 @@
             <!-- جایگاه‌های رتبه High -->
             @if (highItems.Count > 0)
             {
-                <div class="heatmap-tile high tile-steel" @onclick="() => GoTo(highItems[0].Title)">
+                        <div class="heatmap-tile high tile-steel" @onclick="() => GoTo(highItems[0].Code)">
                     <div class="large-tile-content">
                         <span class="title">@highItems[0].Title</span>
                         <span class="value ltr">@highItems[0].Value</span>
@@ -28,7 +28,7 @@
             }
             @if (highItems.Count > 1)
             {
-                <div class="heatmap-tile high tile-petro tile-sm-rotate" @onclick="() => GoTo(highItems[1].Title)">
+                <div class="heatmap-tile high tile-petro tile-sm-rotate" @onclick="() => GoTo(highItems[1].Code)">
                     @* محتوای داخلی برای کارت عمودی بهینه شده است *@
                     <div class="vertical-tile-content">
                         <span class="title">@highItems[1].Title</span>
@@ -40,7 +40,7 @@
             <!-- جایگاه‌های رتبه Medium -->
             @if (mediumItems.Count > 0)
             {
-                <div class="heatmap-tile medium tile-cement" @onclick="() => GoTo(mediumItems[0].Title)">
+                        <div class="heatmap-tile medium tile-cement" @onclick="() => GoTo(mediumItems[0].Code)">
                     @* محتوای داخلی برای کارت افقی بهینه شده است *@
                     <div class="horizontal-bar-content">
                         <div class="info">
@@ -53,21 +53,21 @@
             }
             @if (mediumItems.Count > 1)
             {
-                <div class="heatmap-tile medium tile-xs-rotate" @onclick="() => GoTo(mediumItems[1].Title)">@mediumItems[1].Title</div>
+                        <div class="heatmap-tile medium tile-xs-rotate" @onclick="() => GoTo(mediumItems[1].Code)">@mediumItems[1].Title</div>
             }
 
             <!-- جایگاه‌های باقی‌مانده -->
             @if (lowItems.Count > 0)
             {
-                <div class="heatmap-tile low tile-xs-rotate" @onclick="() => GoTo(lowItems[0].Title)">@lowItems[0].Title</div>
+                        <div class="heatmap-tile low tile-xs-rotate" @onclick="() => GoTo(lowItems[0].Code)">@lowItems[0].Title</div>
             }
             @if (neutralItems.Count > 0)
             {
-                <div class="heatmap-tile neutral tile-xs-rotate" @onclick="() => GoTo(neutralItems[0].Title)">@neutralItems[0].Title</div>
+                <div class="heatmap-tile neutral tile-xs-rotate" @onclick="() => GoTo(neutralItems[0].Code)">@neutralItems[0].Title</div>
             }
             @if (lowItems.Count > 1)
             {
-                <div class="heatmap-tile low tile-sm-rotate" @onclick="() => GoTo(lowItems[1].Title)">@lowItems[1].Title</div>
+                <div class="heatmap-tile low tile-sm-rotate" @onclick="() => GoTo(lowItems[1].Code)">@lowItems[1].Title</div>
             }
         </div>
     </div>
@@ -79,12 +79,8 @@
     [Parameter]
     public MarketHeatmapData? Data { get; set; }
 
-    private void GoTo(string name)
+    private void GoTo(int name)
     {
-        // اطمینان از اینکه نام خالی نیست
-        if (!string.IsNullOrEmpty(name))
-        {
-            NavigationManager.NavigateTo($"/markets/{name}");
-        }
+        NavigationManager.NavigateTo($"/markets/{name}");
     }
 }

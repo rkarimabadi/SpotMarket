@@ -1,0 +1,32 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+
+@if (Data != null && Data.Items.Any())
+{
+    <div class="widget-container">
+    <div class="widget-header">
+        <h3 class="widget-title">برنامه عرضه‌های آینده</h3>
+    </div>
+    <div class="upcoming-widget">
+        <div class="schedule-list">
+            @foreach (var item in Data.Items)
+            {
+                <div class="schedule-item">
+                    <div class="date-marker">
+                        <span class="day">@item.DayOfWeek</span>
+                        <span class="date">@item.DayOfMonth</span>
+                    </div>
+                        <div class="info d-flex flex-column">
+                        <span class="title">@item.Title</span>
+                        <span class="subtitle">@item.Subtitle</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public UpcomingOffersData? Data { get; set; }
+}

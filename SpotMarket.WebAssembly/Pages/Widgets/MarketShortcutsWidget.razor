@@ -13,7 +13,7 @@
         <div class="shortcuts-grid">
             @foreach (var item in Data.Items)
             {
-                <div class="shortcut-tile @item.ThemeCssClass" @onclick="() => GoTo(item.Title)">
+                        <div class="shortcut-tile @item.ThemeCssClass" @onclick="() => GoTo(item.Code)">
                     <div class="tile-icon"><i class="@item.IconCssClass"></i></div>
                     <span class="title">@item.Title</span>
                 </div>
@@ -30,12 +30,8 @@
     [Parameter]
     public MarketShortcutsData? Data { get; set; }
 
-    private void GoTo(string name)
+    private void GoTo(int id)
     {
-        // اطمینان از اینکه نام خالی نیست
-        if (!string.IsNullOrEmpty(name))
-        {
-            NavigationManager.NavigateTo($"/markets/{name}");
-        }
+        NavigationManager.NavigateTo($"/markets/{id}");
     }
 }

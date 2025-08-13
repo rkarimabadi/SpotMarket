@@ -1,0 +1,29 @@
+﻿.kpi-container {
+    padding: 1rem;
+}
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.kpi-card {
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.kpi-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+    margin-bottom: 0.25rem;
+}
+
+.kpi-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+[data-bs-theme="dark"] .kpi-card {
+    background-color: var(--gray-800);
+}

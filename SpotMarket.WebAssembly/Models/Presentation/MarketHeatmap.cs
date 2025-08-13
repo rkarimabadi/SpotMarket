@@ -19,6 +19,7 @@ namespace SpotMarket.WebAssembly.Models.Presentation
     public class MarketHeatmapItem
     {
         public string Title { get; set; } = string.Empty;
+        public int Code { get; set; }
         public string? Subtitle { get; set; } // برای نمایش در کارت‌های بزرگ
         public string? Value { get; set; } // برای نمایش در کارت‌های بزرگ
         public MarketHeatRank Rank { get; set; }

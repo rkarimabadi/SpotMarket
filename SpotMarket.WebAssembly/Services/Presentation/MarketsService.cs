@@ -11,6 +11,7 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         Task<MarketContactsData> GetMarketContacts();
         Task<MarketHeatmapData> GetMarketHeatmapData();
         Task<MarketShortcutsData> GetMarketShortcutsData();
+        Task<List<ItemInfo>> GetMarketListAsync();
     }
 
     public class MarketsService : IMarketsService
@@ -115,6 +116,10 @@ namespace SpotMarket.WebAssembly.Services.Presentation
             //    }
             //};
             //return await Task.FromResult(data);
+        }
+        public async Task<List<ItemInfo>> GetMarketListAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<List<ItemInfo>>($"{_controllerPath}/market-list") ?? new List<ItemInfo>();
         }
     }
 

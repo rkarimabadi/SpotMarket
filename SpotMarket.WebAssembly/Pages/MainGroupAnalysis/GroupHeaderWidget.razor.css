@@ -1,5 +1,5 @@
 ﻿.group-header-container {
-    padding: 1rem;
+    padding: 1rem 0;
 }
 
 .group-title-section {
@@ -19,39 +19,34 @@
     border-radius: 50%;
     color: white;
 }
-
     .group-icon.industrial {
-        background-color: var(--gray-600);
+        background-color: #54a0ff;
     }
 
+    .group-icon.petro {
+        background-color: #50c878;
+    }
+
+    .group-icon.agri {
+        background-color: #f0932b;
+    }
+
+    .group-icon.secondary {
+        background-color: #6c757d;
+    }
+
+    .group-icon.real-estate {
+        background-color: #007bff;
+    }
+
+    .group-icon.oil-products {
+        background-color: #17a2b8;
+    }
+
+    .group-icon.mineral {
+        background-color: #6f42c1;
+    }
 .group-title {
     font-size: 2.125rem;
     font-weight: 700;
-}
-
-.kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-}
-
-.kpi-card {
-    background-color: var(--card-background-color);
-    border-radius: 1rem;
-    padding: 1rem;
-}
-
-.kpi-label {
-    font-size: 0.875rem;
-    color: var(--text-secondary-color);
-    margin-bottom: 0.25rem;
-}
-
-.kpi-value {
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-[data-bs-theme="dark"] .kpi-card {
-    background-color: var(--gray-800);
 }

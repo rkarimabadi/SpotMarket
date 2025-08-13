@@ -1,0 +1,172 @@
+﻿.subgroup-list-widget {
+    padding: 1rem 0;
+}
+
+.subgroup-section {
+    margin-bottom: 1.5rem;
+}
+
+.section-header {
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+.section-subtitle {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    margin: 0;
+}
+.data-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.subgroup-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .subgroup-item:hover {
+        background-color: rgba(var(--primary-color-rgb), 0.05);
+    }
+
+    .subgroup-item:last-child {
+        border-bottom: none;
+    }
+
+.item-main {
+    flex-grow: 1;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 1rem;
+    min-width:0;
+}
+.item-dial {
+    width: 50px;
+    min-width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+
+    .item-dial.status-today {
+        background-color: rgba(var(--primary-color-rgb), 0.1);
+        color: var(--danger-color);
+    }
+
+    .item-dial.status-future {
+        background-color: rgba(var(--primary-color-rgb), 0.1);
+        color: var(--primary-color);
+    }
+
+    .item-dial.status-inactive {
+        background-color: rgba(var(--primary-color-rgb), 0.1);
+        color: var(--gray-500);
+    }
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex-grow: 1;
+    min-width:0;
+}
+
+    .item-info .title {
+        font-size: 1.0625rem;
+        font-weight: 600;
+        color: var(--text-primary-color);
+    }
+    .item-info .subtitle {
+        font-size: 0.875rem;
+        color: var(--text-secondary-color);
+    }
+
+.status-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.25rem;
+    color: white;
+}
+
+    .status-tag.status-today {
+        background-color: var(--danger-color);
+    }
+
+    .status-tag.status-future {
+        background-color: var(--primary-color);
+    }
+
+.stat-item {
+    display: flex;
+    flex-direction: column; /* مقدار بالا، لیبل پایین */
+    align-items: center;
+    flex-grow: 0;
+    text-align: center;
+}
+
+    .stat-item .value {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .stat-item .label {
+        font-size: 0.75rem;
+        opacity: 0.8;
+    }
+
+.item-chevron {
+    color: var(--gray-400);
+}
+
+/* استایل برای آیتم‌های غیرفعال */
+.inactive-item .item-info .title {
+    color: var(--text-secondary-color);
+}
+
+.expand-button-container {
+    padding: 0.5rem 0 0 0;
+}
+
+.expand-button {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* حالت تیره */
+[data-bs-theme="dark"] .data-card,
+[data-bs-theme="dark"] .expand-button {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .subgroup-item {
+    border-color: var(--gray-700);
+}
+
+    [data-bs-theme="dark"] .subgroup-item:hover {
+        background-color: rgba(var(--primary-color-rgb), 0.1);
+    }

@@ -8,6 +8,7 @@ namespace SpotMarket.WebAssembly.Models.Presentation
     public class MarketShortcutItem
     {
         public string Title { get; set; } = string.Empty;
+        public int Code { get; set; } = 0;
         public string IconCssClass { get; set; } = string.Empty;
         public string ThemeCssClass { get; set; } = string.Empty;
     }
