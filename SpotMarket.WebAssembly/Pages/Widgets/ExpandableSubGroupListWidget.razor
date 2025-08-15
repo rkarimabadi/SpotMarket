@@ -47,7 +47,7 @@
                 @if (_showAll)
                 {
                     <div class="section-header">
-                        <h4 class="section-title">سایر گروه‌ها</h4>
+                        <h4 class="section-title">سایر @Unit ‌ها</h4>
                     </div>
                     <div class="data-card">
                         @foreach (var item in inactiveItems)
@@ -72,7 +72,7 @@
                 }
                 <div class="expand-button-container">
                     <button class="expand-button" @onclick="ToggleShowAll">
-                        @(_showAll ? "نمایش کمتر" : $"نمایش همه {inactiveItems.Count} گروه")
+                        @(_showAll ? "نمایش کمتر" : $"نمایش همه {inactiveItems.Count} {Unit}")
                     </button>
                 </div>
             </div>
@@ -83,6 +83,8 @@
 @code {
     [Parameter] public string Title { get; set; } = "گروه‌های فعال";
     [Parameter] public string Subtitle { get; set; } = "براساس وجود عرضه";
+    [Parameter] public string Unit { get; set; } = "گروه";
+    [Parameter] public string UrlPrefix { get; set; } = "";
     [Parameter]
     public GroupListData? Data { get; set; }
 
@@ -106,7 +108,7 @@
     {
         if (!string.IsNullOrEmpty(urlName))
         {
-            // NavigationManager.NavigateTo($"/subgroup/{urlName}");
+            NavigationManager.NavigateTo($"/markets/{UrlPrefix}{urlName}");
         }
     }
 

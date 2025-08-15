@@ -1,0 +1,29 @@
+﻿<div class="breadcrumb-hierarchy">
+    @foreach (var item in HierarchyItems)
+    {
+        <span class="breadcrumb-item @(item.IsActive ? "active" : "")">@item.Name</span>
+        @if (item.IsLast)
+        {
+            <span class="breadcrumb-separator">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.707 17.707L14.293 19.121L8.172 13L14.293 6.879L15.707 8.293L11.001 13L15.707 17.707Z"></path></svg>
+            </span>
+        }
+    }
+</div>
+
+@code {
+    public class HierarchyItem
+    {
+        public string Name { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsLast => !IsActive; // Simple logic for this example
+    }
+
+    [Parameter]
+    public List<HierarchyItem> HierarchyItems { get; set; } = new List<HierarchyItem>
+    {
+        new HierarchyItem { Name = "صنعتی" },
+        new HierarchyItem { Name = "فولاد" },
+        new HierarchyItem { Name = "میلگرد", IsActive = true }
+    };
+}

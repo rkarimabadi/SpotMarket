@@ -1,0 +1,19 @@
+﻿.header-container {
+    padding: 24px 8px 0 8px; /* Remove bottom padding to integrate with next component */
+}
+
+    .header-container h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.2;
+        color: var(--text-primary-color);
+    }
+
+    .header-container .symbol {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--text-secondary-color);
+        margin-top: 8px;
+        letter-spacing: 0.5px;
+    }

@@ -1,0 +1,141 @@
+﻿@using System.Globalization
+@using System.Text
+
+<div class="widget-container">
+    <div class="trend-chart-card">
+        <div class="widget-header">
+            <div class="price-info">
+                <div class="current-price">@PriceData.CurrentPrice.ToString("N0", new CultureInfo("fa-IR"))</div>
+            </div>
+
+            <div class="date-info @(PriceData.IsOutdated ? "outdated" : "")">
+                @if (PriceData.IsOutdated)
+                {
+                    <i class="bi bi-clock-history"></i>
+                }
+                <span>@PriceData.DateLabel</span>
+            </div>
+        </div>
+        <div class="price-info d-flex mb-2">
+            <div class="price-change @(PriceData.ChangeAmount >= 0 ? "positive" : "negative")">
+                @($"{(PriceData.ChangeAmount >= 0 ? "+" : "")}{PriceData.ChangeAmount:N0} ({PriceData.ChangePercentage:F2}%)")
+            </div>
+            <div class="ms-1 price-change-context">@PriceData.ChangeContext</div>
+        </div>
+        <div class="bar-chart-container">
+            @if (PriceData.PriceHistory.Any())
+            {
+                <svg width="100%" height="100%" viewBox="0 0 350 110">
+                    @{
+                        var maxPrice = PriceData.PriceHistory.Max(d => d.Price);
+                        var minPrice = PriceData.PriceHistory.Min(d => d.Price);
+                        var priceRange = maxPrice - minPrice;
+                        if (priceRange == 0) priceRange = 1;
+
+                        var barWidthPercentage = (100.0 / PriceData.PriceHistory.Count) * 0.5; // 50% of available space
+
+                        for (int i = 0; i < PriceData.PriceHistory.Count; i++)
+                        {
+                            var item = PriceData.PriceHistory[i];
+                            var barHeight = ((double)(item.Price - minPrice) / (double)priceRange) * 80 + 20; // % height (20% min)
+                            var x = (100.0 / PriceData.PriceHistory.Count) * (i + 0.5);
+                            var y = 90 - barHeight;
+
+                            <rect x="@((x - barWidthPercentage / 2).ToString(CultureInfo.InvariantCulture))%" y="90" width="@(barWidthPercentage.ToString(CultureInfo.InvariantCulture))%" height="0" class="@(i == PriceData.PriceHistory.Count - 1 ? "latest" : "historical")" rx="4" ry="4">
+                                <animate attributeName="height" from="0" to="@(barHeight.ToString(CultureInfo.InvariantCulture))" dur="0.5s" begin="@($"{i * 0.1}s")" fill="freeze" />
+                                <animate attributeName="y" from="90" to="@(y.ToString(CultureInfo.InvariantCulture))" dur="0.5s" begin="@($"{i * 0.1}s")" fill="freeze" />
+                            </rect>
+
+                            @GenerateSvgTextLabel(item, x)
+                        }
+                    }
+                </svg>
+            }
+        </div>
+    </div>
+
+    <div class="highlights-container">
+        @foreach (var highlight in PriceData.Highlights)
+        {
+            <div class="highlight-card">
+                <div class="item-header">
+                    <div class="icon-wrapper @highlight.IconColorClass">
+                        <i class="@highlight.IconSvg"></i>
+                    </div>
+                    <span>@highlight.Title</span>
+                </div>
+                <div class="item-value">
+                    @highlight.Value <span class="item-unit">@highlight.Unit</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    public class PriceViewModel
+    {
+        public decimal CurrentPrice { get; set; }
+        public decimal ChangeAmount { get; set; }
+        public double ChangePercentage { get; set; }
+        public string ChangeContext { get; set; } = "";
+        public string DateLabel { get; set; } = "";
+        public bool IsOutdated { get; set; }
+        public List<PriceHistoryPoint> PriceHistory { get; set; } = new();
+        public List<HighlightViewModel> Highlights { get; set; } = new();
+    }
+
+    public class PriceHistoryPoint
+    {
+        public string DateLabel { get; set; } = "";
+        public decimal Price { get; set; }
+    }
+
+    public class HighlightViewModel
+    {
+        public string Title { get; set; } = "";
+        public string Value { get; set; } = "";
+        public string Unit { get; set; } = "";
+        public string IconSvg { get; set; } = "";
+        public string IconColorClass { get; set; } = "";
+    }
+
+    [Parameter]
+    public PriceViewModel PriceData { get; set; } = new PriceViewModel
+    {
+        CurrentPrice = 24500,
+        ChangeAmount = 250,
+        ChangePercentage = 1.03,
+        ChangeContext = "نسبت به عرضه ۷ روز قبل",
+        DateLabel = "آخرین عرضه (۱۵ روز پیش)",
+        IsOutdated = true,
+        PriceHistory = new List<PriceHistoryPoint>
+        {
+            new PriceHistoryPoint { DateLabel = "۵/۱", Price = 24050 },
+            new PriceHistoryPoint { DateLabel = "۵/۸", Price = 24100 },
+            new PriceHistoryPoint { DateLabel = "۵/۱۵", Price = 23950 },
+            new PriceHistoryPoint { DateLabel = "۵/۱", Price = 24050 },
+            new PriceHistoryPoint { DateLabel = "۵/۸", Price = 24100 },
+            new PriceHistoryPoint { DateLabel = "۵/۱۵", Price = 23950 },
+            new PriceHistoryPoint { DateLabel = "۵/۱", Price = 24050 },
+            new PriceHistoryPoint { DateLabel = "۵/۸", Price = 24100 },
+            new PriceHistoryPoint { DateLabel = "۵/۱۵", Price = 23950 },
+            new PriceHistoryPoint { DateLabel = "۵/۲۳", Price = 24500 }
+        },
+        Highlights = new List<HighlightViewModel>
+        {
+            new HighlightViewModel { Title = "قیمت پایه", Value = "23,900", IconSvg = "bi bi-tag-fill" },
+            new HighlightViewModel { Title = "رقابت", Value = "1.2", Unit = "برابر", IconColorClass = "green", IconSvg = "bi bi-fire" },
+            new HighlightViewModel { Title = "متوسط خرید", Value = "24,850", IconColorClass = "red", IconSvg = "bi bi-arrows-expand" },
+            new HighlightViewModel { Title = "متوسط ۳ عرضه", Value = "24,150", IconSvg = "bi bi-graph-up" }
+        }
+    };
+
+    private MarkupString GenerateSvgTextLabel(PriceHistoryPoint item, double x)
+    {
+        var xFormatted = x.ToString(CultureInfo.InvariantCulture);
+        var textElement = $"<text x=\"{xFormatted}%\" y=\"105\" text-anchor=\"middle\" font-size=\"10px\" fill=\"var(--text-secondary-color)\">{item.DateLabel}</text>";
+        return new MarkupString(textElement);
+    }
+}

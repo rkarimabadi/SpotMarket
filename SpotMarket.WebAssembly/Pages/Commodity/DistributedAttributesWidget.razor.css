@@ -1,0 +1,142 @@
+﻿.dist-attributes-widget {
+    padding: 1rem 0;
+}
+
+.attributes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.attribute-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.icon-wrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.card-header .title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.stacked-bar {
+    display: flex;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+    .stacked-bar .bar-segment {
+        height: 100%;
+    }
+
+.legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.legend-name {
+    font-size: 0.9rem;
+    flex-grow: 1;
+}
+
+.legend-percentage {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+.card-body .interpretation {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-secondary-color);
+    margin: 0;
+}
+
+/* استایل برای حالت هشدار */
+.attribute-card.alert-state {
+    border-color: var(--warning-color);
+}
+
+.alert-details {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--warning-color);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* رنگ‌بندی */
+.icon-bg-blue, .color-blue {
+    background-color: #007bff;
+}
+
+.icon-bg-green, .color-green {
+    background-color: #28a745;
+}
+
+.icon-bg-orange, .color-orange {
+    background-color: #fd7e14;
+}
+
+.icon-bg-purple, .color-purple {
+    background-color: #6f42c1;
+}
+
+.icon-bg-red, .color-red {
+    background-color: #dc3545;
+}
+
+.icon-bg-teal, .color-teal {
+    background-color: #20c997;
+}
+
+/* حالت تیره */
+[data-bs-theme="dark"] .attribute-card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .alert-details {
+    border-color: var(--gray-700);
+}

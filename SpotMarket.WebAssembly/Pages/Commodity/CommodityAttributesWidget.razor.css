@@ -1,0 +1,156 @@
+﻿.attributes-widget {
+    padding: 1rem 0;
+}
+
+/* کانتینر اصلی لیست که آیتم‌ها را به هم پیوسته نشان می‌دهد */
+.attributes-list {
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.attribute-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .attribute-item:last-child {
+        border-bottom: none;
+    }
+
+    .attribute-item:hover {
+        background-color: rgba(var(--primary-color-rgb), 0.05);
+    }
+
+.item-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.icon-wrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.item-info {
+    flex-grow: 1;
+}
+
+    .item-info .title {
+        font-size: 0.875rem;
+        color: var(--text-secondary-color);
+        min-width: 5rem;
+        margin-left:0.25rem;
+        display: inline-block;
+    }
+
+    .item-info .value {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-primary-color);
+    }
+
+.item-action {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-secondary-color);
+}
+
+.alert-icon {
+    color: var(--warning-color);
+}
+
+.expand-chevron {
+    transition: transform 0.3s ease;
+}
+
+.attribute-item.expanded .expand-chevron {
+    transform: rotate(180deg);
+}
+
+
+/* پنل جزئیات که به صورت بازشو نمایش داده می‌شود */
+.details-panel {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+    .details-panel .interpretation {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: var(--text-primary-color);
+        margin: 0;
+    }
+
+.alert-details {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background-color: rgba(var(--warning-color-rgb), 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+    .alert-details .detail-item {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .alert-details strong {
+        font-weight: 600;
+        color: var(--warning-color);
+    }
+
+/* رنگ‌بندی آیکون‌ها */
+.icon-bg-blue {
+    background-color: #007bff;
+}
+
+.icon-bg-green {
+    background-color: #28a745;
+}
+.icon-bg-red {
+    background-color: #ff0000;
+}
+
+.icon-bg-orange {
+    background-color: #fd7e14;
+}
+
+.icon-bg-purple {
+    background-color: #6f42c1;
+}
+
+/* حالت تیره */
+[data-bs-theme="dark"] .attributes-list {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .attribute-item,
+[data-bs-theme="dark"] .details-panel {
+    border-color: var(--gray-700);
+}
+
+    [data-bs-theme="dark"] .attribute-item:hover {
+        background-color: rgba(var(--primary-color-rgb), 0.1);
+    }
+
+[data-bs-theme="dark"] .alert-details {
+    background-color: rgba(var(--warning-color-rgb), 0.15);
+}

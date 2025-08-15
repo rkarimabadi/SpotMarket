@@ -1,0 +1,36 @@
+﻿.breadcrumb-hierarchy {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 1rem 0;
+}
+    .breadcrumb-item + .breadcrumb-item::before {
+        float: inherit !important;
+        padding-left: inherit !important;
+        color: inherit !important;
+        content: inherit !important;
+    }
+.breadcrumb-item {
+    background-color: var(--gray-200);
+    color: var(--text-secondary-color);
+    padding: 6px 12px !important;
+    border-radius: 20px !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    transition: background-color 0.2s !important;
+}
+
+    .breadcrumb-item.active {
+        background-color: var(--primary-color);
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+.breadcrumb-separator {
+    color: var(--text-secondary-color);
+    opacity: 0.4;
+    transform: rotate(180deg); /* Flip for RTL */
+    display: flex; /* Helps with alignment */
+    align-items: center;
+}

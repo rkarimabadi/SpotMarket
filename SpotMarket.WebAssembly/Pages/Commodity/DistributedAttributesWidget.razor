@@ -1,0 +1,110 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+
+<div class="dist-attributes-widget">
+    @if (Data != null && Data.Items.Any())
+    {
+        <div class="attributes-grid">
+            @foreach (var item in Data.Items)
+            {
+                <div class="attribute-card @(item.IsAlert ? "alert-state" : "")">
+                    <div class="card-header">
+                        <div class="icon-wrapper @item.IconBgCssClass">
+                            <i class="@item.IconCssClass"></i>
+                        </div>
+                        <span class="title">@item.Title</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="stacked-bar">
+                            @foreach (var share in item.ValueDistribution)
+                            {
+                                <div class="bar-segment @share.ColorCssClass" style="width: @(share.Percentage)%"></div>
+                            }
+                        </div>
+                        <div class="legend">
+                            @foreach (var share in item.ValueDistribution)
+                            {
+                                <div class="legend-item">
+                                    <span class="legend-dot @share.ColorCssClass"></span>
+                                    <span class="legend-name">@share.Name</span>
+                                    <span class="legend-percentage">@(share.Percentage)%</span>
+                                </div>
+                            }
+                        </div>
+                        <p class="interpretation">@item.Interpretation</p>
+                        @if (item.IsAlert)
+                        {
+                            <div class="alert-details">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                <span>مقدار غالب (@item.DominantValue) با رویه بازار (@item.MarketMostCommonValue) متفاوت است.</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public DistributedAttributesData? Data { get; set; }
+    protected override void OnInitialized()
+    {
+        Data = new DistributedAttributesData
+        {
+            Items = new List<DistributedAttributeItem>
+            {
+                // ۱. نوع قرارداد - با هشدار تسلط یک مقدار
+                new() {
+                    Title = "نوع قرارداد",
+                    IconCssClass = "bi bi-file-text-fill",
+                    IconBgCssClass = "icon-bg-blue",
+                    ValueDistribution = new List<AttributeValueShare>
+                    {
+                        new() { Name = "نقدی", Percentage = 92, ColorCssClass = "color-blue" },
+                        new() { Name = "سلف", Percentage = 8, ColorCssClass = "color-green" },
+                    },
+                    Interpretation = "تسلط کامل قراردادهای نقدی (۹۲٪) نشان‌دهنده نیاز فوری و نقدینگی بالا در این بازار است. (هشدار ضعیف: عدم وجود معاملات سلف می‌تواند به معنی نبود دیدگاه صعودی در بازار باشد)."
+                },
+                // ۲. نوع تسویه - با هشدار تفاوت با رویه بازار
+                new() {
+                    Title = "نوع تسویه",
+                    IconCssClass = "bi bi-credit-card-fill",
+                    IconBgCssClass = "icon-bg-orange",
+                    ValueDistribution = new List<AttributeValueShare>
+                    {
+                        new() { Name = "اعتباری", Percentage = 75, ColorCssClass = "color-orange" },
+                        new() { Name = "نقدی", Percentage = 25, ColorCssClass = "color-teal" },
+                    },
+                    Interpretation = "تسویه اعتباری در این کالا غالب است که می‌تواند نشان‌دهنده کمبود نقدینگی در سمت خریداران باشد.",
+                    IsAlert = true,
+                    DominantValue = "اعتباری",
+                    MarketMostCommonValue = "نقدی"
+                },
+                // ۳. نوع بسته‌بندی
+                new() {
+                    Title = "نوع بسته‌بندی",
+                    IconCssClass = "bi bi-box-seam",
+                    IconBgCssClass = "icon-bg-purple",
+                    ValueDistribution = new List<AttributeValueShare>
+                    {
+                        new() { Name = "فله", Percentage = 70, ColorCssClass = "color-purple" },
+                        new() { Name = "کیسه", Percentage = 30, ColorCssClass = "color-blue" },
+                    },
+                    Interpretation = "غالب بودن بسته‌بندی فله نشان می‌دهد که خریداران اصلی، مصرف‌کنندگان صنعتی بزرگ هستند."
+                },
+                // ۴. نوع تضمین
+                new() {
+                    Title = "نوع تضمین",
+                    IconCssClass = "bi bi-shield-lock-fill",
+                    IconBgCssClass = "icon-bg-red",
+                    ValueDistribution = new List<AttributeValueShare>
+                    {
+                        new() { Name = "عادی", Percentage = 100, ColorCssClass = "color-red" },
+                    },
+                    Interpretation = "تضمین مورد نیاز برای شرکت در معامله از نوع عادی و مطابق با رویه‌های استاندارد بورس است."
+                }
+            }
+        };
+    }
+}

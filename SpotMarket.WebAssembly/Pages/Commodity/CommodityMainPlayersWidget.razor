@@ -1,0 +1,48 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@if (Players?.Any() == true)
+{
+    <div class="widget-container">
+        <div class="players-grid" style="grid-template-columns: repeat(@Players.Count(), 1fr);">
+            @foreach (var player in Players)
+            {
+                <div class="player-card">
+                    <div class="player-icon"><i class="@player.IconCssClass"></i></div>
+                    <div class="player-title">@player.Type</div>
+                    <div class="player-name">@player.Name</div>
+                    <div class="player-stat-container">
+                        <div class="player-share">@player.MarketShare.ToString("0.0")%</div>
+@*                         <div class="player-share-label">از ارزش کل معاملات</div> *@
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public IEnumerable<MainPlayer>? Players { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Players = new List<MainPlayer>
+        {
+           new()
+           {
+               Type = "برترین کارگزار",
+               Name = "کارگزاری مفید",
+               IconCssClass = "bi bi-person-workspace",
+               MarketShare = 18.4m
+           },
+           new()
+           {
+               Type = "برترین عرضه‌کننده",
+               Name = "فولاد مبارکه",
+               IconCssClass = "bi bi-buildings-fill",
+               MarketShare = 25.1m
+           }
+        };
+        base.OnInitialized();
+    }
+}

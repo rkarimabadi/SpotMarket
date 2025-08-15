@@ -1,0 +1,83 @@
+﻿.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+.excitement-widget {
+    padding: 1rem;
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.excitement-chart {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+    .excitement-chart svg {
+        transform: rotate(-90deg);
+    }
+
+.chart-bg {
+    stroke: var(--border-color);
+}
+
+/* رنگ‌بندی جدید برای نمودار */
+.chart-fg.high-absorption {
+    stroke: var(--success-color);
+}
+
+.chart-fg.medium-absorption {
+    stroke: var(--primary-color);
+}
+
+.chart-fg.low-absorption {
+    stroke: var(--danger-color);
+}
+
+
+.excitement-chart-center-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+    .excitement-chart-center-text .value {
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+        font-weight: 700;
+    }
+
+    .excitement-chart-center-text .label {
+        font-size: 0.8rem;
+        color: var(--text-secondary-color);
+        line-height: 0.8rem;
+    }
+
+.excitement-info .title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.excitement-info .subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    line-height: 1.5;
+}
+
+[data-bs-theme="dark"] .excitement-widget {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .chart-bg {
+    stroke: var(--gray-700);
+}

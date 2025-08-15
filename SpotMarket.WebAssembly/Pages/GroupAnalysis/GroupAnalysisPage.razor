@@ -1,8 +1,9 @@
-﻿@page "/markets/{mainGroupId:int}"
+﻿@page "/markets/{mainGroupId:int}/{groupId:int}"
 @using SpotMarket.WebAssembly.Services.Presentation
 @inject NavStateService NavState
 @inject IMarketsService MarketService
 @inject IMainGroupService MainGroupService
+@inject IGroupService GroupService
 <div class="page-container">
     <GroupHeaderWidget Data="@groupName" />
     @if (_isLoading)
@@ -23,20 +24,21 @@
             default:
                 break;
         }
-        <ExpandableSubGroupListWidget Data="groupListData" UrlPrefix="@urlprefix" />
+        <ExpandableSubGroupListWidget Data="groupListData" Unit="زیرگروه" Title="زیرگرو‌ه های فعال" UrlPrefix="@urlprefix" />
     }
 
 </div>
 @code {
-    [Parameter]
-    public int mainGroupId { get; set; }
+    [Parameter] public int mainGroupId { get; set; }
+    [Parameter] public int groupId { get; set; }
     private MarketShortcutItem? groupName;
-    private MarketShortcutsData groupList = new();
+    private GroupListData groupList = new();
     private GroupListData? groupListData;
     private GroupActivityStatus groupActivityStatus;
     private GroupActivityData? activeGroupData;
     private UpcomingOffersData? upcomingOffersData;
     private MarketConditionsData? groupActivitiesData;
+
     private string urlprefix => $"{mainGroupId}/";
     private bool _isLoading = true;
 
@@ -51,16 +53,20 @@
     {
         try
         {
-            groupList = await MarketService.GetMarketShortcutsData();
-            groupName = groupList.Items.FirstOrDefault(g => g.Code == mainGroupId);
-            var pageTitle = $"تحلیل گروه اصلی {groupName?.Title}";
-            NavState.SetNavState(pageTitle, true, "/markets");
-            groupListData = await MainGroupService.GetActiveGroupsAsync(groupName.Code);
+            var mainGroupList = await MarketService.GetMarketShortcutsData();
+            groupName = mainGroupList.Items.FirstOrDefault(g => g.Code == mainGroupId);
+            groupList = await MainGroupService.GetActiveGroupsAsync(mainGroupId);
+            var _groupName = groupList.Items.FirstOrDefault(g => g.UrlName == groupId.ToString());
+            groupName.Title = _groupName.Title;
+            groupName.Code = int.Parse(_groupName.UrlName);
+            var pageTitle = $"تحلیل گروه {groupName?.Title}";
+            NavState.SetNavState(pageTitle, true, $"/markets/{mainGroupId}");
+            groupListData = await GroupService.GetActiveSubGroupsAsync(groupName.Code);
 
             groupActivityStatus = groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
 
-            upcomingOffersData = await MainGroupService.GetUpcomingOffersAsync(groupName.Code);
-            groupActivitiesData = await MainGroupService.GetGroupActivitiesAsync(groupName.Code);
+            upcomingOffersData = await GroupService.GetUpcomingOffersAsync(groupName.Code);
+            groupActivitiesData = await GroupService.GetSubGroupActivitiesAsync(groupName.Code);
         }
         catch (Exception ex)
         {

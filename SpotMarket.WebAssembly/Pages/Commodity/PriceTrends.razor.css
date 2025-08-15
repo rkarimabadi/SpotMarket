@@ -1,0 +1,149 @@
+﻿.widget-container {
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.trend-chart-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.price-info {
+    flex-grow:1;
+}
+.price-info .current-price {
+    font-size: 2.25rem;
+    font-weight: 700;
+}
+
+.price-info .price-change {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+    .price-info .price-change.positive {
+        color: var(--success-color);
+    }
+
+    .price-info .price-change.negative {
+        color: var(--danger-color);
+    }
+
+.price-info .price-change-context {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    margin-top: 4px;
+}
+
+.date-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    font-weight: 300;
+    color: var(--text-secondary-color);
+}
+
+    .date-info.outdated {
+        color: var(--warning-color);
+        margin-right:5px;
+    }
+
+    .date-info .bi {
+        font-size: 1rem;
+    }
+
+.bar-chart-container {
+    width: 100%;
+    aspect-ratio: 2.5 / 1; /* 1. نسبت عرض به ارتفاع برای واکنش‌گرایی */
+    min-height: 120px; /* 2. حداقل ارتفاع برای جلوگیری از کوچک شدن بیش از حد */
+}
+
+    .bar-chart-container rect.historical {
+        fill: var(--gray-300);
+    }
+
+    .bar-chart-container rect.latest {
+        fill: var(--primary-color);
+    }
+
+/* Highlights Grid */
+.highlights-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.highlight-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+    .highlight-card .item-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-secondary-color);
+    }
+
+        .highlight-card .item-header .icon-wrapper {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+            .highlight-card .item-header .icon-wrapper.red {
+                background-color: var(--danger-color);
+            }
+
+            .highlight-card .item-header .icon-wrapper.green {
+                background-color: var(--success-color);
+            }
+
+        .highlight-card .item-header .bi {
+            font-size: 1rem;
+        }
+
+    .highlight-card .item-value {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary-color);
+        margin-top: 12px;
+        text-align: right;
+    }
+
+    .highlight-card .item-unit {
+        font-size: 0.8rem;
+        color: var(--text-secondary-color);
+        font-weight: 500;
+    }
+
+/* Dark Theme */
+[data-bs-theme="dark"] .trend-chart-card,
+[data-bs-theme="dark"] .highlight-card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .bar-chart-container rect.historical {
+    fill: var(--gray-600);
+}

@@ -1,0 +1,68 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@if (Data != null)
+{
+    <div class="widget-container">
+        <div class="excitement-widget">
+            <div class="excitement-chart">
+                <svg width="100" height="100" viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" r="15.915" fill="none" class="chart-bg" stroke-width="4"></circle>
+                    <circle cx="18" cy="18" r="15.915" fill="none" class="chart-fg @GetColorClassForPercentage(Data.Percentage)" stroke-width="4" stroke-dasharray="@Data.Percentage, 100" stroke-linecap="round"></circle>
+                </svg>
+                <div class="excitement-chart-center-text">
+                    <div class="value">@Data.Percentage%</div>
+                    <div class="label">@Data.Label</div>
+                </div>
+            </div>
+            <div class="excitement-info">
+                <h4 class="title">@Data.Title</h4>
+                <p class="subtitle">@Data.Description</p>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public MarketAbsorptionData? Data { get; set; }
+
+    private string GetColorClassForPercentage(int percentage)
+    {
+        if (percentage >= 95) return "high-absorption";
+        if (percentage > 50) return "medium-absorption";
+        return "low-absorption";
+    }
+
+    private MarketAbsorptionData? highAbsorptionData;
+    private MarketAbsorptionData? mediumAbsorptionData;
+    private MarketAbsorptionData? lowAbsorptionData;
+
+    protected override void OnInitialized()
+    {
+        // داده‌های فرضی برای سناریوی نرخ جذب بالا
+        Data = highAbsorptionData = new MarketAbsorptionData
+        {
+            Title = "نرخ جذب عرضه",
+            Percentage = 98,
+            Label = "بسیار بالا",
+            Description = "تقریباً تمام حجم عرضه‌شده به فروش رسیده و رقابت شدیدی در معاملات شکل گرفته است که نشان‌دهنده تقاضای بسیار قوی در بازار است."
+        };
+
+        // داده‌های فرضی برای سناریوی نرخ جذب متوسط
+        mediumAbsorptionData = new MarketAbsorptionData
+        {
+            Title = "نرخ جذب عرضه",
+            Percentage = 75,
+            Label = "متوسط",
+            Description = "بخش قابل توجهی از حجم عرضه‌شده معامله شده است، اما رقابت در سطح متوسطی قرار داشته و بخشی از عرضه بدون مشتری باقی مانده است."
+        };
+
+        // داده‌های فرضی برای سناریوی نرخ جذب پایین
+        lowAbsorptionData = new MarketAbsorptionData
+        {
+            Title = "نرخ جذب عرضه",
+            Percentage = 40,
+            Label = "پایین",
+            Description = "کمتر از نیمی از حجم عرضه‌شده به فروش رسیده که نشان‌دهنده تقاضای ضعیف و رکود در معاملات این کالا است."
+        };
+    }
+}
