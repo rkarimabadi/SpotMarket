@@ -9,8 +9,8 @@
                    type="search"
                    class="search-input"
                    placeholder="جستجوی بازار یا گروه کالایی"
-                   @bind="searchTerm"
-                   @bind:event="oninput"
+                   value="@searchTerm"
+                   @oninput="OnSearchTermChanged"
                    @onfocus="ActivateSearch" />
         </div>
         <button class="cancel-button" @onclick="DeactivateSearch">لغو</button>
