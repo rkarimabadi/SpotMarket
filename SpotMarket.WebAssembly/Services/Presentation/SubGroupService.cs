@@ -4,27 +4,27 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SpotMarket.WebAssembly.Services.Presentation
 {
-    public interface IGroupService
+    public interface ISubGroupService
     {
-        Task<GroupListData> GetActiveSubGroupsAsync(int groupId);
-        Task<MarketConditionsData> GetSubGroupActivitiesAsync(int groupId);
-        Task<UpcomingOffersData> GetUpcomingOffersAsync(int groupId);
-        Task<UpcomingOffersData> GetTodayOffersAsync(int groupId);
+        Task<GroupListData> GetActiveCommoditiesAsync(int subGroupId);
+        Task<MarketConditionsData> GetCommodityActivitiesAsync(int subGroupId);
+        Task<UpcomingOffersData> GetUpcomingOffersAsync(int subGroupId);
+        Task<UpcomingOffersData> GetTodayOffersAsync(int subGroupId);
     }
 
-    public class GroupService : IGroupService
+    public class SubGroupService : ISubGroupService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _controllerPath = "/api/Group";
+        private readonly string _controllerPath = "/api/SubGroup";
 
-        public GroupService(HttpClient httpClient)
+        public SubGroupService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<GroupListData> GetActiveSubGroupsAsync(int groupId)
+        public async Task<GroupListData> GetActiveCommoditiesAsync(int subGroupId)
         {
-            return await _httpClient.GetFromJsonAsync<GroupListData>($"{_controllerPath}/{groupId}/sub-groups") ?? new GroupListData();
+            return await _httpClient.GetFromJsonAsync<GroupListData>($"{_controllerPath}/{subGroupId}/commodities") ?? new GroupListData();
             //return new GroupListData
             //{ 
             //    Items = new List<GroupListItem>
@@ -80,9 +80,9 @@ namespace SpotMarket.WebAssembly.Services.Presentation
             //};
         }
 
-        public async Task<MarketConditionsData> GetSubGroupActivitiesAsync(int groupId)
+        public async Task<MarketConditionsData> GetCommodityActivitiesAsync(int subGroupId)
         {
-            return await _httpClient.GetFromJsonAsync<MarketConditionsData>($"{_controllerPath}/{groupId}/activities") ?? new MarketConditionsData();
+            return await _httpClient.GetFromJsonAsync<MarketConditionsData>($"{_controllerPath}/{subGroupId}/activities") ?? new MarketConditionsData();
             //var data = new MarketConditionsData
             //    {
             //        Items = new List<MarketConditionItem>
@@ -95,9 +95,9 @@ namespace SpotMarket.WebAssembly.Services.Presentation
             //    };
             //return await Task.FromResult(data);
         }
-        public async Task<UpcomingOffersData> GetUpcomingOffersAsync(int groupId)
+        public async Task<UpcomingOffersData> GetUpcomingOffersAsync(int subGroupId)
         {
-            return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{groupId}/upcoming-offers") ?? new UpcomingOffersData();
+            return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{subGroupId}/upcoming-offers") ?? new UpcomingOffersData();
             //var data = new UpcomingOffersData
             //{
             //    Items = new List<UpcomingOfferItem>
@@ -108,9 +108,9 @@ namespace SpotMarket.WebAssembly.Services.Presentation
             //};
             //return await Task.FromResult(data);
         }
-        public async Task<UpcomingOffersData> GetTodayOffersAsync(int groupId)
+        public async Task<UpcomingOffersData> GetTodayOffersAsync(int subGroupId)
         {
-            return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{groupId}/today-offers") ?? new UpcomingOffersData();
+            return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{subGroupId}/today-offers") ?? new UpcomingOffersData();
         }
 
     }

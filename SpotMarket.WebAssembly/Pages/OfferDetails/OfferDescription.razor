@@ -1,0 +1,27 @@
+﻿@using System.Text.RegularExpressions
+@if (Offer != null)
+{
+    @if (!string.IsNullOrWhiteSpace(Offer.Description))
+    {
+        <div class="details-section">
+            <div class="details-group">
+                <div class="description-item">
+                    <span class="label">توضیحات</span>
+                    <p class="value">@((MarkupString)ReplaceDotWithBreak(Offer.Description))</p>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public OfferViewModel? Offer { get; set; }
+    private string ReplaceDotWithBreak(string html)
+    {
+        if (string.IsNullOrEmpty(html)) return html;
+        string pattern = @"(?<!\.)\.(?=(?: |\p{IsArabic}))(?!\.)";
+        string replacement = ".<br/>";
+        return Regex.Replace(html, pattern, replacement);
+    }
+}

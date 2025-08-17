@@ -1,5 +1,5 @@
 ﻿@page "/commodity"
-
+@page "/markets/{mainGroupId:int}/{groupId:int}/{subGroupId:int}/{commodityId:int}"
 <CommodityHeader/>
 <CommodityHierarchy/>
 <PriceTrends/>
@@ -8,5 +8,8 @@
 <CommodityMainPlayersWidget/>
 <DistributedAttributesWidget/>
 @code {
-
+    [Parameter] public int mainGroupId { get; set; }
+    [Parameter] public int groupId { get; set; }
+    [Parameter] public int subGroupId { get; set; }
+    [Parameter] public int commodityId { get; set; }
 }

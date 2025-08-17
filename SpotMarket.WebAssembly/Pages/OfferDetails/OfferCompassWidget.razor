@@ -1,0 +1,27 @@
+﻿<div class="compass-widget">
+    <div class="compass-list">
+        <div class="compass-item">
+            <div class="compass-dial positive">
+                <i class="bi bi-arrow-up"></i>
+            </div>
+            <div class="item-info">
+                <span class="title">حداکثر خرید</span>
+            </div>
+            <div class="item-stat positive">@($"{Offer.MaxOrderVolume:N0} {@Offer.MeasurementUnit}")</div>
+        </div>
+        <div class="compass-item">
+            <div class="compass-dial negative">
+                <i class="bi bi-arrow-down"></i>
+            </div>
+            <div class="item-info">
+                <span class="title">حداقل خرید</span>
+            </div>
+            <div class="item-stat negative">@($"{Offer.MinOrderVolume:N0} {@Offer.MeasurementUnit}")</div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public OfferViewModel? Offer { get; set; }
+}

@@ -1,0 +1,91 @@
+﻿@if (Offer != null)
+{
+    <div class="offer-pass-card @GetHallVisuals(Offer.OfferRing).IconCssClass">
+        @* بخش هدر اصلی *@
+        <div class="card-header">
+            <div class="header-info">
+                <div class="commodity-name">@Offer.CommodityName</div>
+                <div class="supplier-name">@Offer.Supplier</div>
+            </div>
+            <div class="header-icon">
+                <i class="bi bi-upc-scan"></i>
+            </div>
+        </div>
+
+        @* بخش میانی کارت *@
+        <div class="card-body">
+            <div class="metric-item">
+                <span class="value">@Offer.OfferVolume.ToString("N0") <span class="unit">@Offer.MeasurementUnit</span></span>
+                <span class="label">حجم عرضه</span>
+            </div>
+            <div class="metric-item">
+                <span class="value">@Offer.InitialPrice.ToString("N0") <span class="unit">@Offer.CurrencyUnit</span></span>
+                <span class="label">قیمت پایه</span>
+            </div>
+        </div>
+
+        @* بخش جزئیات قابل گسترش *@
+        <div class="card-footer">
+            <div class="details-toggle" @onclick="ToggleDetails">
+                <span>@(_detailsVisible ? "بستن جزئیات" : "مشاهده جزئیات")</span>
+                <i class="bi @(_detailsVisible ? "bi-chevron-up" : "bi-chevron-down")"></i>
+            </div>
+        </div>
+
+        @if (_detailsVisible)
+        {
+            <div class="details-panel">
+                <div class="detail-item">
+                    <span class="label">تاریخ عرضه</span>
+                    <span class="value">@Offer.OfferDate</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">تاریخ تحویل</span>
+                    <span class="value">@Offer.DeliveryDate</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">کارگزار</span>
+                    <span class="value">@Offer.Broker</span>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Offer.Description))
+                {
+                    <div class="description-item">
+                        <span class="label">توضیحات</span>
+                        <p class="value">@Offer.Description</p>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public OfferViewModel? Offer { get; set; }
+
+    private bool _detailsVisible = false;
+
+    private void ToggleDetails()
+    {
+        _detailsVisible = !_detailsVisible;
+    }
+
+    private (string IconCssClass, string IconBgCssClass) GetHallVisuals(string hallName)
+    {
+        if (hallName.Contains("صنعتی")) return ("bi bi-building", "industrial");
+        if (hallName.Contains("پتروشیمی")) return ("bi bi-droplet-fill", "petro");
+        if (hallName.Contains("کشاورزی")) return ("bi bi-tree-fill", "agri");
+        if (hallName.Contains("نفتی")) return ("bi bi-fuel-pump-fill", "oil-prod");
+        if (hallName.Contains("سیمان")) return ("bi bi-stack", "industrial");
+        if (hallName.Contains("خودرو")) return ("bi bi-car-front-fill", "auto");
+        if (hallName.Contains("طلا")) return ("bi bi-coin", "gold");
+        if (hallName.Contains("صادراتی")) return ("bi bi-globe-americas", "export");
+        if (hallName.Contains("حراج")) return ("bi bi-hammer", "auction");
+        if (hallName.Contains("املاک")) return ("bi bi-house-door-fill", "real-estate");
+        if (hallName.Contains("پریمیوم")) return ("bi bi-gem", "premium");
+        if (hallName.Contains("مناقصه")) return ("bi bi-file-earmark-text-fill", "tender");
+
+        // مقدار پیش‌فرض برای سایر تالارها
+        return ("bi bi-grid-fill", "other");
+    }
+}

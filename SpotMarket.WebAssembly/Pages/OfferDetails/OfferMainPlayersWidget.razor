@@ -1,0 +1,21 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@if (Players?.Any() == true)
+{
+    <div class="widget-container">
+        <div class="players-grid" style="grid-template-columns: repeat(@Players.Count(), 1fr);">
+            @foreach (var player in Players)
+            {
+                <div class="player-card">
+                    <div class="player-icon"><i class="@player.IconCssClass"></i></div>
+                    <div class="player-title">@player.Type</div>
+                    <div class="player-name">@player.Name</div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IEnumerable<MainPlayer>? Players { get; set; }
+}

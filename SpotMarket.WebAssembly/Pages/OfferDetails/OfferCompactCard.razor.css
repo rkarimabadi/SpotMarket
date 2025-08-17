@@ -1,0 +1,167 @@
+﻿/* بازطراحی کامل با الهام از Apple Wallet */
+.offer-pass-card {
+    border-radius: 1rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    margin: 0 1rem 1.5rem 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+    /* تم‌های رنگی */
+    .offer-pass-card.industrial {
+        background: linear-gradient(145deg, #6c757d, #495057);
+    }
+
+    .offer-pass-card.petro {
+        background: linear-gradient(145deg, #28a745, #1e7e34);
+    }
+
+    .offer-pass-card.cement {
+        background: linear-gradient(145deg, #ffc107, #d39e00);
+        color: var(--gray-900);
+    }
+
+        .offer-pass-card.cement .header-icon,
+        .offer-pass-card.cement .supplier-name {
+            color: rgba(0,0,0,0.7);
+        }
+
+
+/* بخش هدر */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem;
+}
+
+.header-info .commodity-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: white;
+}
+
+.header-info .supplier-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0.8;
+    color:whitesmoke;
+}
+
+.header-icon {
+    font-size: 2rem;
+    opacity: 0.8;
+    color: white;
+}
+
+/* بخش میانی */
+.card-body {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem 1rem;
+    position: relative;
+}
+    /* افکت بریدگی گوشه کارت */
+    .card-body::before, .card-body::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: var(--background-color);
+    }
+
+    .card-body::before {
+        top: -10px;
+        left: -10px;
+    }
+
+    .card-body::after {
+        top: -10px;
+        right: -10px;
+    }
+
+.metric-item {
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+}
+
+    .metric-item:first-child {
+        text-align: left;
+    }
+
+    .metric-item .label {
+        font-size: 0.8rem;
+        opacity: 0.8;
+    }
+
+    .metric-item .value {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .metric-item .unit {
+        font-size: 0.8rem;
+        opacity: 0.8;
+    }
+
+/* بخش فوتر و جزئیات */
+.card-footer {
+    padding: 0.75rem 1rem;
+    background-color: rgba(0,0,0,0.1);
+}
+
+.details-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.details-panel {
+    background-color: rgba(0,0,0,0.1);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+    .detail-item .label {
+        opacity: 0.8;
+    }
+
+    .detail-item .value {
+        font-weight: 500;
+    }
+
+.description-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+    .description-item .label {
+        opacity: 0.8;
+    }
+
+    .description-item .value {
+        font-weight: 400;
+        line-height: 1.6;
+    }
+
+/* Dark Theme */
+[data-bs-theme="dark"] .card-body::before,
+[data-bs-theme="dark"] .card-body::after {
+    background-color: var(--gray-900);
+}

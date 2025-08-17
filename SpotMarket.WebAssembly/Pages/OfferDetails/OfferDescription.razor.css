@@ -1,0 +1,35 @@
+﻿.details-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.details-group {
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+    overflow: hidden;
+}
+
+.description-item {
+    padding: 0.875rem 1rem;
+}
+
+    .description-item .label {
+        color: var(--text-secondary-color);
+        font-size: 1rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .description-item .value {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        text-align:justify;
+    }
+
+/* Dark Theme */
+[data-bs-theme="dark"] .details-group {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
