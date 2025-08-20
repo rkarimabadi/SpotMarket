@@ -1,5 +1,5 @@
 ﻿<div class="breadcrumb-hierarchy">
-    @foreach (var item in HierarchyItems)
+    @foreach (var item in Data)
     {
         <span class="breadcrumb-item @(item.IsActive ? "active" : "")">@item.Name</span>
         @if (!item.IsLast)
@@ -12,7 +12,8 @@
 </div>
 
 @code {
-
+    [Parameter]
+    public List<HierarchyItem> Data { get; set; }
 
     [Parameter]
     public List<HierarchyItem> HierarchyItems { get; set; } = new List<HierarchyItem>

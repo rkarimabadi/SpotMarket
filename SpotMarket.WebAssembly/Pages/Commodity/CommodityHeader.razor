@@ -1,14 +1,16 @@
 ﻿<div class="header-container">
-    <div class="header-icon @GetHallVisuals(Ring).IconBgCssClass">
-        <i class="bi @GetHallVisuals(Ring).IconCssClass"></i>
+    <div class="header-icon @GetHallVisuals(Data.Ring).IconBgCssClass">
+        <i class="bi @GetHallVisuals(Data.Ring).IconCssClass"></i>
     </div>
     <div class="header-info">
-        <h1>@CommodityName</h1>
-        <p class="symbol">@Symbol</p>
+        <h1>@Data.CommodityName</h1>
+        <p class="symbol">@Data.Symbol</p>
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public CommodityHeaderData Data { get; set; }
     [Parameter]
     public string CommodityName { get; set; } = "میلگرد";
     [Parameter]

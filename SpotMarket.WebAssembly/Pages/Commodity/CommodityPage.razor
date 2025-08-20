@@ -1,20 +1,94 @@
-﻿@page "/commodity"
+﻿@page "/commodity/{commodityId:int}"
 @page "/markets/{mainGroupId:int}/{groupId:int}/{subGroupId:int}/{commodityId:int}"
+
+@using SpotMarket.WebAssembly.Models.Presentation
+@using SpotMarket.WebAssembly.Services.Presentation
+@inject ICommodityService CommodityService
 @inject NavStateService NavState
-<CommodityHeader/>
-<CommodityHierarchy/>
-<PriceTrends/>
-<MarketAbsorptionWidget />
-<CommodityAttributesWidget/>
-<CommodityMainPlayersWidget/>
-<DistributedAttributesWidget/>
+
+@if (_isLoading)
+{
+    <div class="page-loader">
+        <p>در حال بارگذاری اطلاعات کالا...</p>
+    </div>
+}
+else if (_headerData != null) // چک می‌کنیم که حداقل داده هدر موجود باشد
+{
+    <CommodityHeader Data="_headerData" />
+    <CommodityHierarchy Data="_headerData.Hierarchy" />
+    <PriceTrends Data="_priceTrends" />
+    <MarketAbsorptionWidget Data="_marketAbsorption" />
+    <CommodityAttributesWidget Data="_attributes" />
+    <CommodityMainPlayersWidget Data="_mainPlayers" />
+    <DistributedAttributesWidget Data="_distributedAttributes" />
+}
+else
+{
+    <div class="alert alert-danger">
+        اطلاعاتی برای این کالا یافت نشد.
+    </div>
+}
+
+
 @code {
     [Parameter] public int mainGroupId { get; set; }
     [Parameter] public int groupId { get; set; }
     [Parameter] public int subGroupId { get; set; }
     [Parameter] public int commodityId { get; set; }
-    protected override async Task OnInitializedAsync(){
-        var pageTitle = $"تحلیل کالای";
-        NavState.SetNavState(pageTitle, true, $"/markets/{mainGroupId}/{groupId}/{subGroupId}");
+
+    private bool _isLoading = true;
+
+    // Data holders for each widget
+    private CommodityHeaderData? _headerData;
+    private PriceViewModel? _priceTrends;
+    private MarketAbsorptionData? _marketAbsorption;
+    private CommodityAttributesData? _attributes;
+    private IEnumerable<MainPlayer>? _mainPlayers;
+    private DistributedAttributesData? _distributedAttributes;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (commodityId > 0)
+        {
+            await LoadCommodityData();
+        }
+    }
+
+    private async Task LoadCommodityData()
+    {
+        _isLoading = true;
+
+        // Fetch all data in parallel for maximum efficiency
+        var headerTask = CommodityService.GetCommodityHeaderAsync(commodityId);
+        var priceTrendsTask = CommodityService.GetPriceTrendsAsync(commodityId);
+        var marketAbsorptionTask = CommodityService.GetMarketAbsorptionAsync(commodityId);
+        var attributesTask = CommodityService.GetCommodityAttributesAsync(commodityId);
+        var mainPlayersTask = CommodityService.GetMainPlayersAsync(commodityId);
+        var distributedAttributesTask = CommodityService.GetDistributedAttributesAsync(commodityId);
+
+        await Task.WhenAll(
+            headerTask,
+            priceTrendsTask,
+            marketAbsorptionTask,
+            attributesTask,
+            mainPlayersTask,
+            distributedAttributesTask
+        );
+
+        _headerData = headerTask.Result;
+        _priceTrends = priceTrendsTask.Result;
+        _marketAbsorption = marketAbsorptionTask.Result;
+        _attributes = attributesTask.Result;
+        _mainPlayers = mainPlayersTask.Result;
+        _distributedAttributes = distributedAttributesTask.Result;
+
+        _isLoading = false;
+
+        // Update navigation state after header data is loaded
+        if (_headerData != null)
+        {
+            var pageTitle = $"تحلیل کالای {_headerData.CommodityName}";
+            NavState.SetNavState(pageTitle, true, $"/markets/{mainGroupId}/{groupId}/{subGroupId}");
+        }
     }
 }

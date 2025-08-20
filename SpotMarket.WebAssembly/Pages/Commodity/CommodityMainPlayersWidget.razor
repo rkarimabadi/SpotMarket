@@ -1,9 +1,9 @@
 ﻿@using SpotMarket.WebAssembly.Models.Presentation
-@if (Players?.Any() == true)
+@if (Data?.Any() == true)
 {
     <div class="widget-container">
-        <div class="players-grid" style="grid-template-columns: repeat(@Players.Count(), 1fr);">
-            @foreach (var player in Players)
+        <div class="players-grid" style="grid-template-columns: repeat(@Data.Count(), 1fr);">
+            @foreach (var player in Data)
             {
                 <div class="player-card">
                     <div class="player-icon"><i class="@player.IconCssClass"></i></div>
@@ -22,11 +22,11 @@
 @code {
 
     [Parameter]
-    public IEnumerable<MainPlayer>? Players { get; set; }
+    public IEnumerable<MainPlayer>? Data { get; set; }
 
     protected override void OnInitialized()
     {
-        Players = new List<MainPlayer>
+        Data = new List<MainPlayer>
         {
            new()
            {
