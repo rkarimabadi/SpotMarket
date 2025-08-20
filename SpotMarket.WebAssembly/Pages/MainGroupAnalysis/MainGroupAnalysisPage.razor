@@ -9,11 +9,16 @@
     {
         <p><em>در حال بارگذاری اطلاعات گروه اصلی...</em></p>
     }  else {
+        if (groupListData is not null &&  groupListData.Items.Any(x => x.Status == GroupActivityStatus.HasOfferToday))
+        {
+            <MainGroupStatsRowWidget FirstData="marketStatsData" SecondData="tradeStatsData" Title="شرایط بازار" Subtitle="" />
+            @* <MainGroupStatsRowWidget Data="tradeStatsData" Title="تحقق اهداف" Subtitle="براساس آمار معاملات روز جاری" /> *@
+@*             <MarketConditionsWidget Data="groupActivitiesData" Subtitle="براساس آمار معاملات روز جاری" /> *@
+            
+        }
+
         @switch (groupActivityStatus)
         {
-            case GroupActivityStatus.HasOfferToday:
-                <MarketConditionsWidget Data="groupActivitiesData" />
-                break;
             case GroupActivityStatus.HasUpcomingOffer:
                 <UpcomingOffersWidget Data="upcomingOffersData" />
                 break;
@@ -37,6 +42,8 @@
     private GroupActivityData? activeGroupData;
     private UpcomingOffersData? upcomingOffersData;
     private MarketConditionsData? groupActivitiesData;
+    private MarketStatsData? marketStatsData;
+    private MarketStatsData? tradeStatsData;
     private string urlprefix => $"{mainGroupId}/";
     private bool _isLoading = true;
 
@@ -61,6 +68,8 @@
 
             upcomingOffersData = await MainGroupService.GetUpcomingOffersAsync(groupName.Code);
             groupActivitiesData = await MainGroupService.GetGroupActivitiesAsync(groupName.Code);
+            marketStatsData = await MainGroupService.GetMarketShareAsync(groupName.Code);
+            tradeStatsData = await MainGroupService.GetTradeShareAsync(groupName.Code);
         }
         catch (Exception ex)
         {

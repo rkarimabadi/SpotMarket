@@ -28,7 +28,7 @@
                 <MarketHeatmapWidget Data="marketHeatmapData" Subtitle="براساس میانگین وزنی قیمت" />
                 break;
             case MarketMainViewType.Shortcuts:
-                <MarketShortcutsWidget Data="marketShortcutsData" Subtitle="براساس گروه‌های اصلی" />
+                <AdvancedMarketShortcutsWidget Data="marketShortcutsData" Subtitle="" Title="" />
                 break;
         }
 
@@ -40,7 +40,7 @@
                 @switch (widgetType)
                 {
                     case MarketInfoWidgetType.SelectedCommodity:
-                        <MarketContactsWidget Data="marketContactsData" Title="کالاهای پرطرفدار" Subtitle="براساس سابقه بازار" />
+                        <MarketContactsWidget Data="marketContactsData" Title="کالاهای پرطرفدار" Subtitle="براساس تعدد عرضه" />
                         break;
                     case MarketInfoWidgetType.TodayGroups:
                         <CommodityStatusHorizontalWidget Data="commodityStatusData" Title="گروه‌های منتخب" Subtitle="براساس تعداد اطلاعیه عرضه" />

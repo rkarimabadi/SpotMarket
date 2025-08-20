@@ -40,9 +40,9 @@
     private MarketConditionsData OfferMetrics => new MarketConditionsData()
         {
             Items = new List<MarketConditionItem> {
-            new MarketConditionItem  { Title = "حجم عرضه", Value =offer.OfferVolume.ToString("N0"), Unit = offer.MeasurementUnit, IconCssClass = "bi bi-truck", IconBgCssClass = "volume" },
+            new MarketConditionItem  { Title = "حجم عرضه", Value =(offer.OfferVolume * offer.WeightFactor).ToString("N0"), Unit = offer.MeasurementUnit, IconCssClass = "bi bi-truck", IconBgCssClass = "volume" },
             new MarketConditionItem  { Title = "زمان تحویل", Value =deliveryDue , Unit = "روز بعد", IconCssClass = "bi bi-calendar-event", IconBgCssClass = "value" },
-            new MarketConditionItem  { Title = "پیش‌پرداخت", Value =$"{offer.PrepaymentPercent}" , Unit = "درصد", IconCssClass = "bi bi-arrows-expand", IconBgCssClass = "competition" },
+            new MarketConditionItem  { Title = "پیش‌پرداخت", Value =$"{offer.PrepaymentPercent.ToString("N0")}" , Unit = "درصد", IconCssClass = "bi bi-arrows-expand", IconBgCssClass = "competition" },
             new MarketConditionItem  { Title = "قیمت پایه", Value =offer.InitialPrice.ToString("N0") , Unit = offer.CurrencyUnit, IconCssClass = "bi bi-tag-fill", IconBgCssClass = "demand" },
         }
         };
@@ -62,7 +62,7 @@
         }
     };
 
-    private string offerMarketByCurrency => offer?.MeasurementUnit == "ریال" ? "داخلی" : "صادراتی";
+    
 
     private CommodityAttributesData offerAttribute => new CommodityAttributesData {
             Items = new List<CommodityAttributeItem>

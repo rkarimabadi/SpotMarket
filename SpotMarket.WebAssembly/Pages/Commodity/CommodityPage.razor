@@ -1,5 +1,6 @@
 ﻿@page "/commodity"
 @page "/markets/{mainGroupId:int}/{groupId:int}/{subGroupId:int}/{commodityId:int}"
+@inject NavStateService NavState
 <CommodityHeader/>
 <CommodityHierarchy/>
 <PriceTrends/>
@@ -12,4 +13,8 @@
     [Parameter] public int groupId { get; set; }
     [Parameter] public int subGroupId { get; set; }
     [Parameter] public int commodityId { get; set; }
+    protected override async Task OnInitializedAsync(){
+        var pageTitle = $"تحلیل کالای";
+        NavState.SetNavState(pageTitle, true, $"/markets/{mainGroupId}/{groupId}/{subGroupId}");
+    }
 }

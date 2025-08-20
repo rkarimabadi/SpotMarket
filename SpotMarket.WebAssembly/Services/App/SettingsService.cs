@@ -63,10 +63,10 @@ namespace SpotMarket.WebAssembly.Services.App
                 },
                 MarketPageLayout = new MarketSettings
                 {
-                    MainView = MarketMainViewType.List,
+                    MainView = MarketMainViewType.Shortcuts,
                     VisibleInfoWidgets = new List<MarketInfoWidgetType>
                     {
-                        MarketInfoWidgetType.ProgressRings
+                        MarketInfoWidgetType.SelectedCommodity
                     }
                 }
             };

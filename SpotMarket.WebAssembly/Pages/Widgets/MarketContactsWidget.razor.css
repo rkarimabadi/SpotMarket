@@ -22,7 +22,7 @@
 .contacts-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    gap: 0rem;
 }
 
 .contact-card {
@@ -31,6 +31,7 @@
     align-items: center;
     text-align: center;
     cursor: pointer;
+    min-width:0;
 }
 
 .contact-avatar {
@@ -51,22 +52,36 @@
 }
 
 /* رنگ‌بندی آواتارها */
-.contact-avatar.steel {
-    background-color: var(--gray-600);
+.contact-avatar.industrial {
+    background-color: #54a0ff;
 }
 
 .contact-avatar.petro {
-    background-color: var(--success-color);
-}
-
-.contact-avatar.cement {
-    background-color: var(--warning-color);
+    background-color: #50c878;
 }
 
 .contact-avatar.agri {
-    background-color: #e67e22;
+    background-color: #f0932b;
+}
+.contact-avatar.fork {
+    background-color: #57c0d0;
 }
 
+.contact-avatar.secondary {
+    background-color: #6c757d;
+}
+
+.contact-avatar.real-estate {
+    background-color: #007bff;
+}
+
+.contact-avatar.oil-products {
+    background-color: #17a2b8;
+}
+
+.contact-avatar.mineral {
+    background-color: #6f42c1;
+}
 
 .contact-card .title {
     font-size: 0.9rem;

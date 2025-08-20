@@ -1,45 +1,88 @@
-﻿@* الهام گرفته از ویجت‌های Control Center و Lock Screen اپل *@
+﻿@* الهام گرفته از ویجت‌های Control Center و Lock Screen اپل
+    این کامپوننت اکنون کاملا داده-محور است
+*@
+@using SpotMarket.WebAssembly.Models.Presentation
 
 <div class="stats-row-widget">
     <div class="widget-header">
-        <h3 class="widget-title">آمار فوری بازار</h3>
+        <h3 class="widget-title">@Title</h3>
     </div>
-    <div class="stats-container">
-        @* باکس اول: رقابت فولاد *@
-        <div class="stat-box">
-            <div class="box-icon steel">
-                <i class="bi bi-graph-up-arrow"></i>
-            </div>
-            <div class="box-info">
-                <span class="value positive">+۱۲.۵٪</span>
-                <span class="label">رقابت فولاد</span>
-            </div>
+    @if (Data != null && Data.Items.Any())
+    {
+        <div class="stats-container">
+            @foreach (var item in Data.Items)
+            {
+                <div class="stat-box">
+                    <div class="box-icon @item.ThemeCssClass">
+                        <i class="@item.IconCssClass"></i>
+                    </div>
+                    <div class="box-info">
+                        <span class="value @GetValueStateCssClass(item.ValueState)">@item.Value</span>
+                        <span class="label">@item.Label</span>
+                    </div>
+                </div>
+            }
         </div>
-
-        @* باکس دوم: تقاضای مس *@
-        <div class="stat-box">
-            <div class="box-icon copper">
-                <i class="bi bi-people-fill"></i>
-            </div>
-            <div class="box-info">
-                <span class="value">۲.۵x</span>
-                <span class="label">تقاضای مس</span>
-            </div>
-        </div>
-
-        @* باکس سوم: جذب سیمان *@
-        <div class="stat-box">
-            <div class="box-icon cement">
-                <i class="bi bi-check2-circle"></i>
-            </div>
-            <div class="box-info">
-                <span class="value negative">۷۸٪</span>
-                <span class="label">جذب سیمان</span>
-            </div>
-        </div>
-    </div>
+    }
 </div>
 
 @code {
-    // This component is currently using static data for design purposes.
+    [Parameter]
+    public string Title { get; set; } = "آمار فوری بازار";
+
+    [Parameter]
+    public MarketStatsData? Data { get; set; }
+
+    /// <summary>
+    /// کلاس CSS را بر اساس وضعیت مقدار (مثبت، منفی یا خنثی) برمی‌گرداند
+    /// </summary>
+    private string GetValueStateCssClass(ValueState state) => state switch
+    {
+        ValueState.Positive => "positive",
+        ValueState.Negative => "negative",
+        _ => ""
+    };
+
+    protected override void OnInitialized()
+    {
+        // اگر داده‌ای از بیرون به کامپوننت پاس داده نشده باشد، از داده‌های موکاپ استفاده کن
+        if (Data == null)
+        {
+            LoadMockData();
+        }
+    }
+
+    private void LoadMockData()
+    {
+        Data = new MarketStatsData
+            {
+                Items = new List<MarketStatItem>
+            {
+                new MarketStatItem
+                {
+                    Value = "+۱۲.۵٪",
+                    Label = "رقابت فولاد",
+                    IconCssClass = "bi bi-graph-up-arrow",
+                    ThemeCssClass = "steel",
+                    ValueState = ValueState.Positive
+                },
+                new MarketStatItem
+                {
+                    Value = "۲.۵x",
+                    Label = "تقاضای مس",
+                    IconCssClass = "bi bi-people-fill",
+                    ThemeCssClass = "copper",
+                    ValueState = ValueState.Neutral
+                },
+                new MarketStatItem
+                {
+                    Value = "۷۸٪",
+                    Label = "جذب سیمان",
+                    IconCssClass = "bi bi-check2-circle",
+                    ThemeCssClass = "cement",
+                    ValueState = ValueState.Negative
+                }
+            }
+            };
+    }
 }

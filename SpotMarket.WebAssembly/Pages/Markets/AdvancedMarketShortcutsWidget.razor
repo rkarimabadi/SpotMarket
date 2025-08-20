@@ -1,0 +1,85 @@
+﻿@* الهام گرفته از ویجت‌های برنامه Shortcuts و Home اپل
+    این ویجت اکنون دو حالت نمایش دارد: خلاصه و کامل
+*@
+
+@using System.Linq
+@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavigationManager
+
+<div class="shortcuts-widget">
+    <div class="widget-header">
+        <h3 class="widget-title">@Title</h3>
+        <h4 class="widget-subtitle">@Subtitle</h4>
+    </div>
+    @if (Data != null && Data.Items.Any())
+    {
+        <div class="shortcuts-grid">
+            @if (!_isExpanded)
+            {
+                // حالت خلاصه: نمایش ۳ آیتم اصلی
+                @foreach (var item in PrimaryItems.Take(3))
+                {
+                    <div class="shortcut-tile @item.ThemeCssClass" @onclick="() => GoTo(item.Code)">
+                        <div class="tile-icon"><i class="@item.IconCssClass"></i></div>
+                        <span class="title">@item.Title</span>
+                    </div>
+                }
+
+                // دکمه "سایر گروه‌ها" تنها در صورتی نمایش داده می‌شود که آیتم‌های بیشتری وجود داشته باشد
+                @if (HasMoreItems)
+                {
+                    <div class="shortcut-tile" @onclick="ExpandView">
+                        <div class="tile-icon"><i class="bi bi-grid-fill"></i></div>
+                        <span class="title">سایر گروه‌ها</span>
+                    </div>
+                }
+            }
+            else
+            {
+                // حالت کامل: نمایش تمام آیتم‌ها
+                @foreach (var item in Data.Items)
+                {
+                    <div class="shortcut-tile @item.ThemeCssClass" @onclick="() => GoTo(item.Code)">
+                        <div class="tile-icon"><i class="@item.IconCssClass"></i></div>
+                        <span class="title">@item.Title</span>
+                    </div>
+                }
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "میان‌برها";
+    [Parameter]
+    public string Subtitle { get; set; } = "بر اساس ارزش کل عرضه‌ها";
+    [Parameter]
+    public MarketShortcutsData? Data { get; set; }
+
+    // وضعیت نمایش ویجت (خلاصه یا کامل)
+    private bool _isExpanded = false;
+
+    // آیتم‌های اصلی (غیر ثانویه)
+    private List<MarketShortcutItem> PrimaryItems =>
+        Data?.Items.Where(i => i.ThemeCssClass != "secondary").ToList() ?? new List<MarketShortcutItem>();
+
+    // بررسی اینکه آیا آیتم‌های بیشتری برای نمایش وجود دارد یا خیر
+    private bool HasMoreItems =>
+        (Data?.Items.Count ?? 0) > 3;
+
+    // متد برای تغییر وضعیت به حالت کامل
+    private void ExpandView()
+    {
+        _isExpanded = true;
+    }
+
+    private void GoTo(int id)
+    {
+        // جلوگیری از ناوبری برای تایل "سایر گروه‌ها" که کد مشخصی ندارد
+        if (id > 0)
+        {
+            NavigationManager.NavigateTo($"/markets/{id}");
+        }
+    }
+}

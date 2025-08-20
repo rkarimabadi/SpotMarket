@@ -1,0 +1,152 @@
+﻿/* استایل برای ویجت آمار فوری با طراحی مینیمال */
+.stats-row-widget {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+    .stats-row-widget .widget-header {
+        margin-bottom: 1rem;
+    }
+
+    .stats-row-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+    .stats-row-widget .widget-subtitle {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-secondary-color);
+        margin: 0;
+    }
+.segmented-control {
+    display: flex;
+    padding: 3px;
+    background-color: var(--gray-200);
+    border-radius: 0.625rem;
+    margin: 0 0 1rem 0;
+}
+
+    .segmented-control button {
+        flex: 1;
+        padding: 0.5rem;
+        border: none;
+        background-color: transparent;
+        border-radius: 0.5rem;
+        color: var(--text-secondary-color);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .segmented-control button.active {
+            background-color: var(--card-background-color);
+            color: var(--text-primary-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+.stats-container {
+    display: flex;
+    gap: 0.6rem;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+    .stats-container::-webkit-scrollbar {
+        display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+    }
+
+.stat-box {
+    flex: 1;
+    min-width: 100px;
+    padding: 0.75rem 1rem 0.75rem 0.2rem;
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* محتوا در مرکز عمودی قرار می‌گیرد */
+}
+
+.box-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem; /* کاهش فاصله بین مقدار و لیبل */
+}
+
+    .box-info .value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+        line-height: 1.2;
+    }
+
+        .box-info .value.positive {
+            color: var(--success-color);
+        }
+
+        .box-info .value.negative {
+            color: var(--danger-color);
+        }
+
+.label-row {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem; /* فاصله بین آیکون و متن لیبل */
+}
+
+    .label-row .label {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--text-secondary-color);
+        /* برای جلوگیری از شکستن خط و نمایش سه‌نقطه */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+/* استایل جدید برای پس‌زمینه آیکون */
+.label-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* جلوگیری از کوچک شدن آیکون */
+}
+
+    .label-icon i {
+        font-size: 0.8rem;
+        color: white;
+    }
+
+    /* رنگ‌بندی پس‌زمینه آیکون‌ها */
+    .label-icon.count-share {
+        background-color: var(--danger-color);
+    }
+
+    .label-icon.volume-share {
+        background-color: var(--primary-color);
+    }
+    .label-icon.volume-realization {
+        background-color: var(--primary-color);
+    }
+
+    .label-icon.value-share {
+        background-color: var(--warning-color);
+    }
+    .label-icon.value-realization {
+    background-color: var(--warning-color);
+    }
+    .label-icon.count-realization {
+        background-color: var(--danger-color);
+    }
+
+
+/* حالت تیره */
+[data-bs-theme="dark"] .stat-box {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}

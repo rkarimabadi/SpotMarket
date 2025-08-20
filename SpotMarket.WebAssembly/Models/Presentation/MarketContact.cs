@@ -11,6 +11,7 @@ namespace SpotMarket.WebAssembly.Models.Presentation
         public string Subtitle { get; set; } = string.Empty;
         public string IconCssClass { get; set; } = string.Empty;
         public string AvatarCssClass { get; set; } = string.Empty;
+        public string UrlName { get; set; } = string.Empty;
     }
 
     /// <summary>

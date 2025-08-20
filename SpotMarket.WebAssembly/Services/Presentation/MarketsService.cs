@@ -69,17 +69,18 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         }
         public async Task<MarketContactsData> GetMarketContacts()
         {
-            var data = new MarketContactsData
-                {
-                    Items = new List<MarketContactItem>
-                    {
-                        new() { Title = "شمش‌بلوم", Subtitle = "غول حجم", IconCssClass = "bi bi-building", AvatarCssClass = "steel" },
-                        new() { Title = "مس", Subtitle = "قهرمان ارزش", IconCssClass = "bi bi-gem", AvatarCssClass = "agri" },
-                        new() { Title = "پلی‌اتیلن", Subtitle = "ستون‌فقرات", IconCssClass = "bi bi-droplet-fill", AvatarCssClass = "petro" },
-                        new() { Title = "سیمان", Subtitle = "شالوده توسعه", IconCssClass = "bi bi-cone-striped", AvatarCssClass = "cement" }
-                    }
-                };
-            return await Task.FromResult(data);
+            return await _httpClient.GetFromJsonAsync<MarketContactsData>($"{_controllerPath}/top-subgroups") ?? new MarketContactsData();
+            //var data = new MarketContactsData
+            //    {
+            //        Items = new List<MarketContactItem>
+            //        {
+            //            new() { Title = "شمش‌بلوم", Subtitle = "غول حجم", IconCssClass = "bi bi-building", AvatarCssClass = "steel" },
+            //            new() { Title = "مس", Subtitle = "قهرمان ارزش", IconCssClass = "bi bi-gem", AvatarCssClass = "agri" },
+            //            new() { Title = "پلی‌اتیلن", Subtitle = "ستون‌فقرات", IconCssClass = "bi bi-droplet-fill", AvatarCssClass = "petro" },
+            //            new() { Title = "سیمان", Subtitle = "شالوده توسعه", IconCssClass = "bi bi-cone-striped", AvatarCssClass = "cement" }
+            //        }
+            //    };
+            //return await Task.FromResult(data);
         }
         public async Task<MarketHeatmapData> GetMarketHeatmapData()
         {

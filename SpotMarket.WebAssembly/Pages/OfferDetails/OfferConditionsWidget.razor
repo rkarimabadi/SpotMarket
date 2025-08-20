@@ -29,25 +29,6 @@
 @code {
     [Parameter]
     public MarketConditionsData? Data { get; set; }
-
-    protected override void OnInitialized()
-    {
-        // داده‌های نمونه برای نمایش، در حالت واقعی این بخش باید از سرویس پر شود
-        if (Data == null)
-        {
-            Data = new MarketConditionsData
-                {
-                    Items = new List<MarketConditionItem>
-                    {
-                        new() { Title = "ارزش معاملات", Value = "۵.۸", Unit = "همت", IconCssClass = "bi bi-cash-stack", IconBgCssClass = "value" },
-                        new() { Title = "حجم معاملات", Value = "۸۴.۵", Unit = "هزار تن", IconCssClass = "bi bi-truck", IconBgCssClass = "volume" },
-                        new() { Title = "شاخص رقابت", Value = "+۱۲.۵٪", IconCssClass = "bi bi-fire", IconBgCssClass = "competition", ValueState = ValueState.Positive },
-                        new() { Title = "قدرت تقاضا", Value = "۱.۸x", IconCssClass = "bi bi-people", IconBgCssClass = "demand" }
-                    }
-                };
-        }
-    }
-
     private string GetValueCssClass(ValueState state) => state switch
     {
         ValueState.Positive => "positive",

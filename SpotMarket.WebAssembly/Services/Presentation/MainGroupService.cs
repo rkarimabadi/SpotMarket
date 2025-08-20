@@ -9,6 +9,8 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         Task<GroupListData> GetActiveGroupsAsync(int mainGroupId);
         Task<MarketConditionsData> GetGroupActivitiesAsync(int mainGroupId);
         Task<UpcomingOffersData> GetUpcomingOffersAsync(int mainGroupId);
+        Task<MarketStatsData> GetMarketShareAsync(int mainGroupId);
+        Task<MarketStatsData> GetTradeShareAsync(int mainGroupId);
     }
 
     public class MainGroupService : IMainGroupService
@@ -106,6 +108,23 @@ namespace SpotMarket.WebAssembly.Services.Presentation
             //    }
             //};
             //return await Task.FromResult(data);
+        }
+        public async Task<MarketStatsData> GetMarketShareAsync(int mainGroupId)
+        {
+            return await _httpClient.GetFromJsonAsync<MarketStatsData>($"{_controllerPath}/{mainGroupId}/market-share") ?? new MarketStatsData();
+            //var data = new UpcomingOffersData
+            //{
+            //    Items = new List<UpcomingOfferItem>
+            //    {
+            //        new() { DayOfWeek = "شنبه", DayOfMonth = "۲۰", Title = "عرضه شمش فولادی", Subtitle = "توسط فولاد خوزستان" },
+            //        new() { DayOfWeek = "دوشنبه", DayOfMonth = "۲۲", Title = "عرضه ورق گرم", Subtitle = "توسط فولاد مبارکه" }
+            //    }
+            //};
+            //return await Task.FromResult(data);
+        }
+        public async Task<MarketStatsData> GetTradeShareAsync(int mainGroupId) 
+        {
+            return await _httpClient.GetFromJsonAsync<MarketStatsData>($"{_controllerPath}/{mainGroupId}/trade-share") ?? new MarketStatsData();
         }
 
     }

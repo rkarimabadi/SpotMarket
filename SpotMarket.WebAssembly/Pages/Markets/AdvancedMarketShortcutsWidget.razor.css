@@ -1,4 +1,6 @@
-﻿/* استایل برای ویجت الهام گرفته از Shortcuts App */
+﻿/* استایل برای ویجت الهام گرفته از Shortcuts App 
+    هیچ تغییری در این فایل لازم نیست.
+*/
 .shortcuts-widget {
     background-color: var(--background-color);
     padding: 1rem 0;
@@ -13,71 +15,129 @@
         font-weight: 700;
         color: var(--text-primary-color);
     }
+
     .shortcuts-widget .widget-subtitle {
         font-size: 0.9rem;
         font-weight: 500;
         color: var(--text-secondary-color);
         margin: 0;
     }
+
 .shortcuts-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
 }
 
+@keyframes shimmer-effect {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
 .shortcut-tile {
     padding: 1rem;
     border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-background-color);
     color: white;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
 }
-
+    /* شبه‌عنصر برای ایجاد لایه درخشش */
+    .shortcut-tile::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform: translateX(-100%);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    }
+    .shortcut-tile:hover::after {
+        animation: shimmer-effect 0.85s ease-in-out;
+    }
     .shortcut-tile:hover {
-        transform: scale(1.05);
+        border-color: var(--primary-color);
     }
 
 .tile-icon {
     font-size: 1.5rem;
     margin-bottom: 2rem;
+    color: var(--text-primary-color);
 }
 
 .title {
     font-size: 1rem;
     font-weight: 600;
+    color: var(--text-primary-color);
 }
 
 /* رنگ‌بندی میان‌برها */
 .shortcut-tile.industrial {
     background-color: #54a0ff;
+    border: none;
 }
 
 .shortcut-tile.petro {
     background-color: #50c878;
+    border: none;
 }
 
 .shortcut-tile.agri {
     background-color: #f0932b;
+    border: none;
 }
+
 .shortcut-tile.fork {
     background-color: #57c0d0;
+    border: none;
 }
 
 .shortcut-tile.secondary {
     background-color: #6c757d;
+    border: none;
 }
 
 .shortcut-tile.real-estate {
     background-color: #007bff;
+    border: none;
 }
 
 .shortcut-tile.oil-products {
     background-color: #17a2b8;
+    border: none;
 }
 
 .shortcut-tile.mineral {
     background-color: #6f42c1;
+    border: none;
 }
+    .shortcut-tile.industrial .tile-icon,
+    .shortcut-tile.industrial .title,
+    .shortcut-tile.petro .tile-icon,
+    .shortcut-tile.petro .title,
+    .shortcut-tile.agri .tile-icon,
+    .shortcut-tile.agri .title,
+    .shortcut-tile.secondary .tile-icon,
+    .shortcut-tile.secondary .title,
+    .shortcut-tile.fork .tile-icon,
+    .shortcut-tile.fork .title,
+    .shortcut-tile.mineral .tile-icon,
+    .shortcut-tile.mineral .title,
+    .shortcut-tile.oil-products .tile-icon,
+    .shortcut-tile.oil-products .title,
+    .shortcut-tile.mineral .tile-icon,
+    .shortcut-tile.mineral .title,
+    .shortcut-tile.oil-products .tile-icon,
+    .shortcut-tile.oil-products .title,
+    .shortcut-tile.real-estate .tile-icon,
+    .shortcut-tile.real-estate .title {
+        color: white;
+    }
 
 
 /* حالت تیره */
