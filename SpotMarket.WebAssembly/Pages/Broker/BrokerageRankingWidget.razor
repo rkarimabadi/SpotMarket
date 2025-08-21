@@ -1,0 +1,80 @@
+﻿@if (Data != null && Data.Any())
+{
+    <div class="ranking-widget">
+        <div class="widget-header">
+            <h3 class="widget-title">@Title</h3>
+        </div>
+        <div class="ranking-list">
+            @foreach (var item in Data)
+            {
+                <div class="ranking-item">
+                    <div class="item-icon @item.ThemeCssClass">
+                        <i class="@item.IconCssClass"></i>
+                    </div>
+                    <div class="item-info">
+                        <span class="title">@item.Title</span>
+                        <span class="subtitle">@item.Subtitle</span>
+                    </div>
+                    <div class="item-rank">
+                        <span class="rank-value">@item.Rank</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "جایگاه در بازار";
+    [Parameter]
+    public List<RankingItem>? Data { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Data == null)
+        {
+            LoadSampleData();
+        }
+    }
+
+    private void LoadSampleData()
+    {
+        Data = new List<RankingItem>
+        {
+            new RankingItem
+            {
+                Title = "رتبه بر اساس ارزش",
+                Subtitle = "سهم ۱۱.۵٪ از کل معاملات",
+                Rank = 3,
+                IconCssClass = "bi bi-cash-stack",
+                ThemeCssClass = "value-rank"
+            },
+            new RankingItem
+            {
+                Title = "رتبه بر اساس حجم",
+                Subtitle = "سهم ۷.۲٪ از کل معاملات",
+                Rank = 5,
+                IconCssClass = "bi bi-stack",
+                ThemeCssClass = "volume-rank"
+            },
+            new RankingItem
+            {
+                Title = "رتبه بر اساس فعالیت",
+                Subtitle = "نرخ موفقیت عرضه ۸۵.۲٪",
+                Rank = 2,
+                IconCssClass = "bi bi-check-circle-fill",
+                ThemeCssClass = "activity-rank"
+            }
+        };
+    }
+
+    public class RankingItem
+    {
+        public string Title { get; set; } = "";
+        public string Subtitle { get; set; } = "";
+        public int Rank { get; set; }
+        public string IconCssClass { get; set; } = "";
+        public string ThemeCssClass { get; set; } = "";
+    }
+}

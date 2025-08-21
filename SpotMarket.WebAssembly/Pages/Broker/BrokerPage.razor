@@ -1,0 +1,28 @@
+﻿@page "/broker/{brokerId:int}"
+
+@using SpotMarket.WebAssembly.Models.Presentation
+@using SpotMarket.WebAssembly.Services.Presentation
+@using static SpotMarket.WebAssembly.Pages.Broker.BrokerageCompetitionWidget
+@inject NavStateService NavState
+
+<BrokerageHeader BrokerageName="آگاه" />
+<BrokerageCompetitionWidget />
+<BrokerageMarketShareWidget/>
+<BrokerageRankingWidget/>
+<BrokerageCommodityGroupWidget/>
+<BrokerageOffersWidget/>
+<BrokerageCompetitionWidget Data="successRate" />
+<BrokerageTopSuppliersWidget/>
+<BrokerageAllSuppliersWidget/>
+<BrokerageStrategicPerformanceWidget/>
+@code {
+    [Parameter] public int brokerId { get; set; }
+
+    private CompetitionData successRate = new CompetitionData
+    {
+        Percentage = 85.2,
+        Label = "نرخ موفقیت عرضه",
+        Title = "بهره‌وری در معاملات",
+        Description = "این کارگزاری در ۸۵.۲٪ از عرضه‌هایی که انجام داده، موفق به ثبت معامله شده است."
+    };
+}

@@ -1,0 +1,184 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavManager
+
+<div class="widget-container">
+    <div class="widget-header">
+        <h3 class="widget-title">@Title</h3>
+    </div>
+
+    <div class="segmented-control">
+        <button class="@(selectedTab == "past" ? "active" : "")" @onclick='() => SetSelectedTab("past")'>گذشته</button>
+        <button class="@(selectedTab == "today" ? "active" : "")" @onclick='() => SetSelectedTab("today")'>امروز</button>
+        <button class="@(selectedTab == "future" ? "active" : "")" @onclick='() => SetSelectedTab("future")'>آینده</button>
+    </div>
+
+    <div class="offers-content">
+        @{
+            var itemsToShow = GetCurrentList();
+            var totalItemCount = itemsToShow.Count;
+            var shouldShowExpandButton = totalItemCount > MaxInitialItems && !IsCategoryExpanded(selectedTab);
+            var visibleItems = shouldShowExpandButton ? itemsToShow.Take(MaxInitialItems).ToList() : itemsToShow;
+        }
+
+        @if (visibleItems.Any())
+        {
+            <div class="schedule-list-card">
+                <div class="schedule-list">
+                    @foreach (var item in visibleItems)
+                    {
+                        <div class="schedule-item" @onclick="() => GoToOffer(item)">
+                            <div class="date-marker">
+                                <span class="day">@item.DayOfWeek</span>
+                                <span class="date">@item.DayOfMonth</span>
+                            </div>
+                            <div class="info d-flex flex-column">
+                                <span class="title">@item.Title</span>
+                                <span class="subtitle">@item.Subtitle</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (shouldShowExpandButton)
+                {
+                    <div class="expand-button-container">
+                        <button class="expand-button" @onclick="() => ToggleExpand(selectedTab)">
+                            نمایش @(totalItemCount - MaxInitialItems) مورد دیگر
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-data-container">
+                <div class="no-data-content">
+                    <i class="bi bi-calendar-x"></i>
+                    <span>هیچ اطلاعیه‌عرضه‌ای در این دسته برای این کارگزار وجود ندارد.</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "اطلاعیه عرضه‌های کارگزاری";
+    [Parameter]
+    public UpcomingOffersData? Data { get; set; }
+
+    private const int MaxInitialItems = 5;
+    private const int MaxPastItems = 10;
+
+    private string selectedTab = "today";
+
+    private List<UpcomingOfferItem> PastOffers = new();
+    private List<UpcomingOfferItem> TodayOffers = new();
+    private List<UpcomingOfferItem> FutureOffers = new();
+
+    private Dictionary<string, bool> _expandedStates = new()
+    {
+        { "past", false },
+        { "today", false },
+        { "future", false }
+    };
+
+    protected override void OnInitialized()
+    {
+        if (Data == null)
+        {
+            LoadSampleData();
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Data != null && Data.Items.Any())
+        {
+            PastOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
+            TodayOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
+            FutureOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
+        }
+    }
+
+    private void LoadSampleData()
+    {
+        Data = new UpcomingOffersData
+        {
+            Items = new List<UpcomingOfferItem>
+            {
+                // === داده‌های امروز (2 مورد) ===
+                new UpcomingOfferItem { Title = "میلگرد آجدار 16، A3", Subtitle = "فولاد خراسان", DayOfWeek = "چهار", DayOfMonth = "30", OfferDateType = OfferDateType.Today, Type = UpcomingOfferType.Commodity, UrlName="rebar-16-a3" },
+                new UpcomingOfferItem { Title = "کاتد مس", Subtitle = "ملی صنایع مس ایران", DayOfWeek = "چهار", DayOfMonth = "30", OfferDateType = OfferDateType.Today, Type = UpcomingOfferType.Commodity, UrlName="copper-cathode" },
+
+                // === داده‌های آینده (6 مورد) ===
+                new UpcomingOfferItem { Title = "ورق گرم C", Subtitle = "فولاد مبارکه اصفهان", DayOfWeek = "شنبه", DayOfMonth = "02", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="hot-rolled-sheet-c" },
+                new UpcomingOfferItem { Title = "سیمان تیپ 2", Subtitle = "سیمان تهران", DayOfWeek = "شنبه", DayOfMonth = "02", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="cement-type-2" },
+                new UpcomingOfferItem { Title = "گندله سنگ آهن", Subtitle = "صنعتی و معدنی چادرملو", DayOfWeek = "یک", DayOfMonth = "03", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="iron-ore-pellets" },
+                new UpcomingOfferItem { Title = "پلی اتیلن ترفتالات", Subtitle = "پتروشیمی تندگویان", DayOfWeek = "دو", DayOfMonth = "04", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="pet-g" },
+                new UpcomingOfferItem { Title = "قیر 60/70", Subtitle = "نفت پاسارگاد", DayOfWeek = "دو", DayOfMonth = "04", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="bitumen-60-70" },
+                new UpcomingOfferItem { Title = "شکر سفید", Subtitle = "کارخانه قند اصفهان", DayOfWeek = "سه", DayOfMonth = "05", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="white-sugar" },
+
+                // === داده‌های گذشته (0 مورد) ===
+                // برای نمایش حالت خالی، داده‌ای برای گذشته در نظر گرفته نشده است
+            }
+        };
+    }
+
+    private void SetSelectedTab(string tabName)
+    {
+        selectedTab = tabName;
+    }
+
+    private List<UpcomingOfferItem> GetCurrentList()
+    {
+        return selectedTab switch
+        {
+            "past" => PastOffers,
+            "today" => TodayOffers,
+            "future" => FutureOffers,
+            _ => new List<UpcomingOfferItem>()
+        };
+    }
+
+    private bool IsCategoryExpanded(string category)
+    {
+        return _expandedStates.TryGetValue(category, out var isExpanded) && isExpanded;
+    }
+
+    private void ToggleExpand(string category)
+    {
+        if (_expandedStates.ContainsKey(category))
+        {
+            _expandedStates[category] = true;
+        }
+    }
+
+    private void GoToOffer(UpcomingOfferItem item)
+    {
+        if (item.Type == UpcomingOfferType.Commodity)
+        {
+            NavManager.NavigateTo($"/offers/{item.UrlName}");
+        }
+    }
+
+    // مدل‌های داده برای نمونه
+    public class UpcomingOffersData
+    {
+        public List<UpcomingOfferItem> Items { get; set; } = new();
+    }
+
+    public class UpcomingOfferItem
+    {
+        public string Title { get; set; } = "";
+        public string Subtitle { get; set; } = "";
+        public string DayOfWeek { get; set; } = "";
+        public string DayOfMonth { get; set; } = "";
+        public string UrlName { get; set; } = "";
+        public UpcomingOfferType Type { get; set; }
+        public OfferDateType OfferDateType { get; set; }
+    }
+
+    public enum UpcomingOfferType { Commodity, Group }
+    public enum OfferDateType { Past, Today, Future }
+}

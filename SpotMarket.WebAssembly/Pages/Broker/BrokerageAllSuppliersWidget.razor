@@ -1,0 +1,77 @@
+﻿@if (Data != null && Data.Any())
+{
+    <div class="all-suppliers-widget">
+        <div class="expandable-container @(_isExpanded ? "expanded" : "")">
+            <div class="widget-summary-row" @onclick="ToggleExpand">
+                <div class="item-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="item-info">
+                    <span class="info-title">تمام عرضه‌کنندگان</span>
+                    <span class="info-subtitle">@Data.Count عرضه‌کننده</span>
+                </div>
+                <div class="item-chevron">
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+            </div>
+
+            <div class="suppliers-list-card">
+                <div class="suppliers-grid">
+                    @foreach (var supplier in Data)
+                    {
+                        <div class="supplier-tag" @onclick="() => OnSupplierClick(supplier)">
+                            @supplier.Name
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<SupplierItem>? Data { get; set; }
+
+    private bool _isExpanded = false;
+
+    protected override void OnInitialized()
+    {
+        if (Data == null)
+        {
+            LoadSampleData();
+        }
+    }
+
+    private void LoadSampleData()
+    {
+        Data = new List<SupplierItem>
+        {
+            new SupplierItem { Name = "فولاد مبارکه اصفهان" },
+            new SupplierItem { Name = "ملی صنایع مس ایران" },
+            new SupplierItem { Name = "فولاد خوزستان" },
+            new SupplierItem { Name = "پتروشیمی تندگویان" },
+            new SupplierItem { Name = "صنعتی و معدنی چادرملو" },
+            new SupplierItem { Name = "سیمان تهران" },
+            new SupplierItem { Name = "فولاد خراسان" },
+            new SupplierItem { Name = "نفت پاسارگاد" },
+            new SupplierItem { Name = "ذوب آهن اصفهان" },
+            new SupplierItem { Name = "پتروشیمی امیرکبیر" },
+            new SupplierItem { Name = "پالایش نفت بندرعباس" },
+            new SupplierItem { Name = "فولاد هرمزگان" },
+            new SupplierItem { Name = "پتروشیمی مارون" },
+            new SupplierItem { Name = "سیمان سپاهان" },
+            new SupplierItem { Name = "گهر زمین" },
+        };
+    }
+
+    private void ToggleExpand()
+    {
+        _isExpanded = !_isExpanded;
+    }
+
+    private void OnSupplierClick(SupplierItem supplier)
+    {
+        Console.WriteLine($"Clicked on: {supplier.Name}");
+    }
+}

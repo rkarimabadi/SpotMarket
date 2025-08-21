@@ -1,0 +1,93 @@
+﻿@if (Data != null && Data.Any())
+{
+    <div class="strategic-performance-widget">
+        <div class="widget-header">
+            <h3 class="widget-title">@Title</h3>
+        </div>
+        <div class="performance-list-card">
+            @foreach (var item in Data)
+            {
+                <div class="performance-item">
+                    <span class="commodity-name">@item.CommodityName</span>
+                    <div class="indicators-container">
+                        <div class="indicator-row">
+                            <span class="indicator-label">ارزش</span>
+                            <div class="indicator @GetPerformanceCssClass(item.ValuePerformance)">
+                                @if (item.ValuePerformance == PerformanceStatus.NotPresent)
+                                {
+                                    <span class="dash"></span>
+                                }
+                                else
+                                {
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+
+                                    <span class="dot"></span>
+                                }
+                            </div>
+                        </div>
+                        <div class="indicator-row">
+                            <span class="indicator-label">حجم</span>
+                            <div class="indicator @GetPerformanceCssClass(item.VolumePerformance)">
+                                @if (item.VolumePerformance == PerformanceStatus.NotPresent)
+                                {
+                                    <span class="dash"></span>
+                                }
+                                else
+                                {
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+
+                                    <span class="dot"></span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "تخصص در کالاهای استراتژیک";
+    [Parameter]
+    public List<StrategicPerformanceItem>? Data { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Data == null)
+        {
+            LoadSampleData();
+        }
+    }
+
+    private void LoadSampleData()
+    {
+        Data = new List<StrategicPerformanceItem>
+        {
+            new StrategicPerformanceItem { CommodityName = "شمش فولادی", ValuePerformance = PerformanceStatus.Strong, VolumePerformance = PerformanceStatus.Strong },
+            new StrategicPerformanceItem { CommodityName = "کاتد مس", ValuePerformance = PerformanceStatus.Strong, VolumePerformance = PerformanceStatus.Weak },
+            new StrategicPerformanceItem { CommodityName = "ورق گرم", ValuePerformance = PerformanceStatus.Weak, VolumePerformance = PerformanceStatus.Strong },
+            new StrategicPerformanceItem { CommodityName = "میلگرد", ValuePerformance = PerformanceStatus.NotPresent, VolumePerformance = PerformanceStatus.NotPresent },
+            new StrategicPerformanceItem { CommodityName = "پلی اتیلن", ValuePerformance = PerformanceStatus.Weak, VolumePerformance = PerformanceStatus.Weak },
+        };
+    }
+
+    private string GetPerformanceCssClass(PerformanceStatus status) => status switch
+    {
+        PerformanceStatus.Strong => "strong",
+        PerformanceStatus.Weak => "weak",
+        _ => "not-present"
+    };
+
+    public class StrategicPerformanceItem
+    {
+        public string CommodityName { get; set; } = "";
+        public PerformanceStatus ValuePerformance { get; set; }
+        public PerformanceStatus VolumePerformance { get; set; }
+    }
+
+    public enum PerformanceStatus { Strong, Weak, NotPresent }
+}

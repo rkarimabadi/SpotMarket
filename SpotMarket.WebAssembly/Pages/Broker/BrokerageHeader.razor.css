@@ -1,0 +1,47 @@
+﻿.brokerage-header-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.brokerage-icon {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+    .brokerage-icon .bi {
+        font-size: 1.75rem;
+    }
+
+.brokerage-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.brokerage-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    margin: 0;
+}
+
+.page-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    margin: 0;
+}
+
+/* Dark Theme Adjustments */
+[data-bs-theme="dark"] .brokerage-header-container {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}

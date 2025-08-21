@@ -1,0 +1,65 @@
+﻿@if (Data != null && Data.Any())
+{
+    <div class="market-share-widget">
+        <div class="widget-header">
+            <h3 class="widget-title">@Title</h3>
+        </div>
+        <div class="cards-container">
+            @foreach (var item in Data)
+            {
+                <div class="market-share-card @item.ThemeCssClass">
+                    <div class="card-icon">
+                        <i class="@item.IconCssClass"></i>
+                    </div>
+                    <div class="card-info">
+                        <span class="title">@item.Title</span>
+                        <span class="value">@item.Value</span>
+                    </div>
+                    <div class="card-subtitle">
+                        @item.Subtitle
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "سهم از بازار";
+    [Parameter]
+    public List<MarketShareItem>? Data { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Data == null)
+        {
+            LoadSampleData();
+        }
+    }
+
+    private void LoadSampleData()
+    {
+        Data = new List<MarketShareItem>
+        {
+            new MarketShareItem
+            {
+                Title = "سهم از حجم معاملات",
+                Value = "7.2%",
+                Subtitle = "معادل ۳۵۰ هزار تن",
+                IconCssClass = "bi bi-stack blue",
+                ThemeCssClass = "volume-card"
+            },
+            new MarketShareItem
+            {
+                Title = "سهم از ارزش معاملات",
+                Value = "11.5%",
+                Subtitle = "معادل ۴.۸ همت",
+                IconCssClass = "bi bi-cash-stack green",
+                ThemeCssClass = "value-card"
+            }
+        };
+    }
+
+
+}

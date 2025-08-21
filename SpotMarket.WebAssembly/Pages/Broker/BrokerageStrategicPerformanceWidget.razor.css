@@ -1,0 +1,116 @@
+﻿.strategic-performance-widget {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+    .strategic-performance-widget .widget-header {
+        margin-bottom: 1rem;
+    }
+
+    .strategic-performance-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+.performance-list-card {
+    padding: 0.5rem;
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.performance-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+    .performance-item:last-child {
+        border-bottom: none;
+    }
+
+
+.commodity-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.indicators-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.indicator-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.indicator-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+    width: 30px; /* Fixed width for alignment */
+}
+
+.indicator {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+    .indicator .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var(--gray-300); /* Default color for empty dots */
+    }
+
+    /* Styling based on performance */
+    .indicator.strong .dot {
+        background-color: var(--success-color);
+    }
+
+    .indicator.weak .dot:first-child {
+        background-color: var(--warning-color);
+    }
+
+    .indicator.not-present .dash {
+        width: 31px;
+        height: 4px;
+        background-color: var(--gray-400);
+        border-radius: 2px;
+    }
+
+/* Dark Theme */
+[data-bs-theme="dark"] .performance-list-card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .performance-item {
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .indicator .dot {
+    background-color: var(--gray-600);
+}
+
+[data-bs-theme="dark"] .indicator.strong .dot {
+    background-color: var(--success-color);
+}
+
+[data-bs-theme="dark"] .indicator.weak .dot:first-child {
+    background-color: var(--warning-color);
+}
+
+[data-bs-theme="dark"] .indicator.not-present .dash {
+    background-color: var(--gray-500);
+}

@@ -1,0 +1,78 @@
+﻿@using System.Globalization
+
+@if (Data != null && Data.Any())
+{
+    <div class="commodity-group-widget">
+        <div class="widget-header">
+            <h3 class="widget-title">@Title</h3>
+        </div>
+        <div class="widget-content">
+            <div class="chart-container">
+                <svg viewBox="0 0 36 36" class="doughnut-chart">
+                    <circle class="chart-background" cx="18" cy="18" r="15.9155"></circle>
+                    @{
+                        double cumulativePercentage = 0;
+                        foreach (var item in Data)
+                        {
+                            <circle class="chart-segment"
+                                    cx="18" cy="18" r="15.9155"
+                                    stroke="@item.Color"
+                                    stroke-dasharray="@item.Percentage.ToString(CultureInfo.InvariantCulture), 100"
+                                    stroke-dashoffset="@(-cumulativePercentage)">
+                            </circle>
+                            cumulativePercentage += item.Percentage;
+                        }
+                    }
+                </svg>
+                <div class="chart-center-text">
+                    <span>@ChartCenterTitle</span>
+                </div>
+            </div>
+            <div class="legend-container">
+                @foreach (var item in Data)
+                {
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background-color: @item.Color;"></span>
+                        <span class="legend-label">@item.GroupName</span>
+                        <span class="legend-value">@item.Percentage%</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "عملکرد در گروه‌های کالایی";
+    [Parameter]
+    public string ChartCenterTitle { get; set; } = "بر اساس ارزش";
+    [Parameter]
+    public List<CommodityGroupShareItem>? Data { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Data == null)
+        {
+            LoadSampleData();
+        }
+    }
+
+    private void LoadSampleData()
+    {
+        Data = new List<CommodityGroupShareItem>
+        {
+            new CommodityGroupShareItem { GroupName = "محصولات فولادی", Percentage = 45, Color = "#54a0ff" },
+            new CommodityGroupShareItem { GroupName = "پتروشیمی", Percentage = 30, Color = "#50c878" },
+            new CommodityGroupShareItem { GroupName = "معدنی", Percentage = 15, Color = "#f0932b" },
+            new CommodityGroupShareItem { GroupName = "سایر", Percentage = 10, Color = "#6c757d" }
+        };
+    }
+
+    public class CommodityGroupShareItem
+    {
+        public string GroupName { get; set; } = "";
+        public double Percentage { get; set; }
+        public string Color { get; set; } = "";
+    }
+}
