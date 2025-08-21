@@ -35,34 +35,4 @@
     private MarketAbsorptionData? highAbsorptionData;
     private MarketAbsorptionData? mediumAbsorptionData;
     private MarketAbsorptionData? lowAbsorptionData;
-
-    protected override void OnInitialized()
-    {
-        // داده‌های فرضی برای سناریوی نرخ جذب بالا
-        Data = highAbsorptionData = new MarketAbsorptionData
-        {
-            Title = "نرخ جذب عرضه",
-            Percentage = 98,
-            Label = "بسیار بالا",
-            Description = "تقریباً تمام حجم عرضه‌شده به فروش رسیده و رقابت شدیدی در معاملات شکل گرفته است که نشان‌دهنده تقاضای بسیار قوی در بازار است."
-        };
-
-        // داده‌های فرضی برای سناریوی نرخ جذب متوسط
-        mediumAbsorptionData = new MarketAbsorptionData
-        {
-            Title = "نرخ جذب عرضه",
-            Percentage = 75,
-            Label = "متوسط",
-            Description = "بخش قابل توجهی از حجم عرضه‌شده معامله شده است، اما رقابت در سطح متوسطی قرار داشته و بخشی از عرضه بدون مشتری باقی مانده است."
-        };
-
-        // داده‌های فرضی برای سناریوی نرخ جذب پایین
-        lowAbsorptionData = new MarketAbsorptionData
-        {
-            Title = "نرخ جذب عرضه",
-            Percentage = 40,
-            Label = "پایین",
-            Description = "کمتر از نیمی از حجم عرضه‌شده به فروش رسیده که نشان‌دهنده تقاضای ضعیف و رکود در معاملات این کالا است."
-        };
-    }
 }

@@ -1,0 +1,159 @@
+﻿.segmented-control {
+    display: flex;
+    padding: 3px;
+    background-color: var(--gray-200);
+    border-radius: 0.625rem;
+    margin-bottom: 1rem;
+}
+
+    .segmented-control button {
+        flex: 1;
+        padding: 0.1rem 0.5rem;
+        border: none;
+        background-color: transparent;
+        border-radius: 0.5rem;
+        color: var(--text-secondary-color);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .segmented-control button.active {
+            background-color: var(--card-background-color);
+            color: var(--text-primary-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+/* === List Styles === */
+.schedule-list-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden; /* برای چسبیدن دکمه "بیشتر" */
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+}
+
+.schedule-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.date-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 0.75rem;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+    .date-marker .day {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--danger-color);
+    }
+
+    .date-marker .date {
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+.info .title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.info .subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+/* === Expand Button Styles === */
+.expand-button-container {
+    padding: 0;
+}
+
+.expand-button {
+    width: 100%;
+    padding: 0.85rem;
+    border: none;
+    border-top: 1px solid var(--border-color);
+    background-color: transparent; /* همرنگ با پس‌زمینه کارت */
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .expand-button:hover {
+        background-color: rgba(var(--primary-color-rgb), 0.05);
+    }
+
+/* === No Data Styles === */
+.no-data-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    min-height: 150px;
+}
+
+.no-data-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-secondary-color);
+    opacity: 0.7;
+}
+
+    .no-data-content .bi {
+        font-size: 2.5rem;
+    }
+
+    .no-data-content span {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+
+/* === Dark Theme === */
+[data-bs-theme="dark"] .segmented-control {
+    background-color: var(--gray-900);
+}
+
+    [data-bs-theme="dark"] .segmented-control button.active {
+        background-color: var(--gray-700);
+    }
+
+[data-bs-theme="dark"] .schedule-list-card,
+[data-bs-theme="dark"] .no-data-container {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .date-marker {
+    background-color: var(--gray-900);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .expand-button {
+    border-top-color: var(--gray-700);
+}

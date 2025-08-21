@@ -25,7 +25,7 @@
     font-weight: 700;
 }
 
-.price-info .price-change {
+/*.price-info .price-change {
     font-size: 1rem;
     font-weight: 600;
 }
@@ -39,10 +39,57 @@
     }
 
 .price-info .price-change-context {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);*/
+    /*margin-top: 4px;*/
+/*}*/
+
+.price-change-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50rem; /* ایجاد حالت کپسولی */
+    font-weight: 600;
+    width: 100%;
+}
+.price-change-container .prcent {
+    font-size: 0.75rem;
+    border-radius: 10px;
+    background-color: ghostwhite;
+    padding: 1px 10px;
+    font-weight: lighter;
+}
+    .price-change-container.positive {
+        background-color: rgba(25, 135, 84, 0.1); /* سبز کم‌رنگ */
+        color: var(--success-color);
+    }
+
+    .price-change-container.negative {
+        background-color: rgba(220, 53, 69, 0.1); /* قرمز کم‌رنگ */
+        color: var(--danger-color);
+    }
+
+.change-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+    .change-indicator .bi {
+        font-size: 1.5rem; /* بزرگ‌تر کردن فلش */
+        line-height: 1;
+    }
+
+    .change-indicator .change-value {
+        font-size: 0.9rem;
+    }
+
+.change-context {
+    font-size: 0.75rem;
     font-weight: 500;
     color: var(--text-secondary-color);
-    margin-top: 4px;
 }
 
 .date-info {
@@ -136,7 +183,32 @@
         color: var(--text-secondary-color);
         font-weight: 500;
     }
+.no-data-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.75rem;
+    color: var(--text-secondary-color);
+}
 
+.no-data-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0.7;
+}
+
+    .no-data-content .bi {
+        font-size: 3rem; /* آیکون بزرگ */
+    }
+
+    .no-data-content span {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
 /* Dark Theme */
 [data-bs-theme="dark"] .trend-chart-card,
 [data-bs-theme="dark"] .highlight-card {

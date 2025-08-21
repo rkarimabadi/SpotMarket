@@ -11,6 +11,9 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         Task<CommodityAttributesData?> GetCommodityAttributesAsync(int commodityId);
         Task<IEnumerable<MainPlayer>?> GetMainPlayersAsync(int commodityId);
         Task<DistributedAttributesData?> GetDistributedAttributesAsync(int commodityId);
+        Task<List<HierarchyItem>> GetCommodityHierarchyAsync(int commodityId);
+        Task<UpcomingOffersData> GetOfferHistoryAsync(int commodityId);
+        Task<DistributedAttributesData> GetPlayerDistributionAsync(int commodityId);
     }
 
         public class CommodityService : ICommodityService
@@ -32,6 +35,10 @@ namespace SpotMarket.WebAssembly.Services.Presentation
             {
                 return await _httpClient.GetFromJsonAsync<PriceViewModel>($"{_controllerPath}/{commodityId}/price-trends");
             }
+            public async Task<List<HierarchyItem>> GetCommodityHierarchyAsync(int commodityId)
+            {
+                return await _httpClient.GetFromJsonAsync<List<HierarchyItem>>($"{_controllerPath}/{commodityId}/hierarchy");
+            }
 
             public async Task<MarketAbsorptionData?> GetMarketAbsorptionAsync(int commodityId)
             {
@@ -51,6 +58,15 @@ namespace SpotMarket.WebAssembly.Services.Presentation
             public async Task<DistributedAttributesData?> GetDistributedAttributesAsync(int commodityId)
             {
                 return await _httpClient.GetFromJsonAsync<DistributedAttributesData>($"{_controllerPath}/{commodityId}/distributed-attributes");
+            }
+
+            public async Task<DistributedAttributesData?> GetPlayerDistributionAsync(int commodityId)
+            {
+                return await _httpClient.GetFromJsonAsync<DistributedAttributesData>($"{_controllerPath}/{commodityId}/player-distribution");
+            }
+            public async Task<UpcomingOffersData> GetOfferHistoryAsync(int commodityId)
+        {
+                return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{commodityId}/offer-history");
             }
         }
 }

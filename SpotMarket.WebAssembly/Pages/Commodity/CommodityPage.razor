@@ -15,12 +15,15 @@
 else if (_headerData != null) // چک می‌کنیم که حداقل داده هدر موجود باشد
 {
     <CommodityHeader Data="_headerData" />
-    <CommodityHierarchy Data="_headerData.Hierarchy" />
+    <CommodityHierarchy Data="_hierarchyData" />
     <PriceTrends Data="_priceTrends" />
     <MarketAbsorptionWidget Data="_marketAbsorption" />
-    <CommodityAttributesWidget Data="_attributes" />
+    <CommodityOffersWidget Data="_offerHistory" Title="" />
     <CommodityMainPlayersWidget Data="_mainPlayers" />
+    <CommodityAttributesWidget Data="_attributes" />
     <DistributedAttributesWidget Data="_distributedAttributes" />
+    <DistributedAttributesWidget Data="_playerDistribution" />
+
 }
 else
 {
@@ -40,11 +43,14 @@ else
 
     // Data holders for each widget
     private CommodityHeaderData? _headerData;
+    private List<HierarchyItem>? _hierarchyData;
     private PriceViewModel? _priceTrends;
     private MarketAbsorptionData? _marketAbsorption;
     private CommodityAttributesData? _attributes;
     private IEnumerable<MainPlayer>? _mainPlayers;
     private DistributedAttributesData? _distributedAttributes;
+    private DistributedAttributesData? _playerDistribution;
+    private UpcomingOffersData? _offerHistory;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -65,14 +71,19 @@ else
         var attributesTask = CommodityService.GetCommodityAttributesAsync(commodityId);
         var mainPlayersTask = CommodityService.GetMainPlayersAsync(commodityId);
         var distributedAttributesTask = CommodityService.GetDistributedAttributesAsync(commodityId);
-
+        var playerDistributionTask = CommodityService.GetPlayerDistributionAsync(commodityId);
+        var hierarchyTask = CommodityService.GetCommodityHierarchyAsync(commodityId);
+        var offerHistoryTask = CommodityService.GetOfferHistoryAsync(commodityId);
         await Task.WhenAll(
             headerTask,
             priceTrendsTask,
             marketAbsorptionTask,
             attributesTask,
             mainPlayersTask,
-            distributedAttributesTask
+            hierarchyTask,
+            distributedAttributesTask,
+            playerDistributionTask,
+            offerHistoryTask
         );
 
         _headerData = headerTask.Result;
@@ -81,7 +92,9 @@ else
         _attributes = attributesTask.Result;
         _mainPlayers = mainPlayersTask.Result;
         _distributedAttributes = distributedAttributesTask.Result;
-
+        _playerDistribution = playerDistributionTask.Result;
+        _hierarchyData = hierarchyTask.Result;
+        _offerHistory = offerHistoryTask.Result;
         _isLoading = false;
 
         // Update navigation state after header data is loaded

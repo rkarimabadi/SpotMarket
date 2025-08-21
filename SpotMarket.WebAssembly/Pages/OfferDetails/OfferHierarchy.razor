@@ -1,7 +1,8 @@
-﻿<div class="breadcrumb-hierarchy">
+﻿@inject NavigationManager NavigationManager
+<div class="breadcrumb-hierarchy">
     @foreach (var item in HierarchyItems)
     {
-        <span class="breadcrumb-item @(item.IsActive ? "active" : "")">@item.Name</span>
+        <span class="breadcrumb-item @(item.IsActive ? "active" : "")" style="cursor:@(item.IsActive ? "pointer" : "unset")" @onclick="() => GoTo(item)">@item.Name</span>
         @if (!item.IsLast)
         {
             <span class="breadcrumb-separator">
@@ -15,10 +16,21 @@
 
 
     [Parameter]
-    public List<HierarchyItem> HierarchyItems { get; set; } = new List<HierarchyItem>
+    public List<HierarchyItem> HierarchyItems { get; set; }
+    private void GoTo(HierarchyItem item)
     {
-        new HierarchyItem { Name = "صنعتی" },
-        new HierarchyItem { Name = "فولاد" },
-        new HierarchyItem { Name = "میلگرد", IsActive = true }
-    };
+        if (item.Id > 0 && item.IsActive)
+        {
+            var urlName = item.Type switch
+            {
+                "Ring" => $"{item.Id}",
+                "MainGroup" => $"{item.Id}",
+                "Group" => $"{HierarchyItems.First(x => x.Type == "MainGroup").Id}/{item.Id}",
+                "SubGroup" => $"{HierarchyItems.First(x => x.Type == "MainGroup").Id}/{HierarchyItems.First(x => x.Type == "Group").Id}/{item.Id}",
+                "Commodity" => $"{HierarchyItems.First(x => x.Type == "MainGroup").Id}/{HierarchyItems.First(x => x.Type == "Group").Id}/{HierarchyItems.First(x => x.Type == "SubGroup").Id}/{item.Id}",
+                _ => ""
+            };
+            NavigationManager.NavigateTo($"/markets/{urlName}");
+        }
+    }
 }

@@ -19,7 +19,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    padding: 0 0 0.75rem 0;
 }
 
 .icon-wrapper {

@@ -3,7 +3,7 @@
     align-items: center;
     flex-wrap: nowrap;
     gap: 4px;
-    padding: 1rem 0;
+    padding: 0 0;
     overflow-x: auto;
     justify-content: start;
     scrollbar-width: none;
@@ -18,12 +18,12 @@
 .breadcrumb-item {
     background-color: var(--gray-200);
     color: var(--text-secondary-color);
-    padding: 6px 12px !important;
-    border-radius: 20px !important;
-    font-size: 0.95rem !important;
+    padding: 4px 10px !important;
+    border-radius: 15px !important;
+    font-size: 0.75rem !important;
     font-weight: 500 !important;
     transition: background-color 0.2s !important;
-    white-space:nowrap;
+    white-space: nowrap;
 }
 
     .breadcrumb-item.active {

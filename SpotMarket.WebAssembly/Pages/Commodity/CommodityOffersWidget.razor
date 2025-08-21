@@ -1,0 +1,135 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavManager
+
+<div class="widget-container">
+    <div class="widget-header">
+        <h3 class="widget-title">@Title</h3>
+    </div>
+
+    <div class="segmented-control">
+        <button class="@(selectedTab == "past" ? "active" : "")" @onclick='() => selectedTab = "past"'>گذشته</button>
+        <button class="@(selectedTab == "today" ? "active" : "")" @onclick='() => selectedTab = "today"'>امروز</button>
+        <button class="@(selectedTab == "future" ? "active" : "")" @onclick='() => selectedTab = "future"'>آینده</button>
+    </div>
+
+    <div class="offers-content">
+        @{
+            var itemsToShow = GetCurrentList();
+            var totalItemCount = itemsToShow.Count;
+            var shouldShowExpandButton = totalItemCount > MaxInitialItems && !IsCategoryExpanded(selectedTab);
+            var visibleItems = shouldShowExpandButton ? itemsToShow.Take(MaxInitialItems).ToList() : itemsToShow;
+        }
+
+        @if (visibleItems.Any())
+        {
+            <div class="schedule-list-card">
+                <div class="schedule-list">
+                    @foreach (var item in visibleItems)
+                    {
+                        <div class="schedule-item" @onclick="() => GoToOffer(item)">
+                            <div class="date-marker">
+                                <span class="day">@item.DayOfWeek</span>
+                                <span class="date">@item.DayOfMonth</span>
+                            </div>
+                            <div class="info d-flex flex-column">
+                                <span class="title">@item.Title</span>
+                                <span class="subtitle">@item.Subtitle</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (shouldShowExpandButton)
+                {
+                    <div class="expand-button-container">
+                        <button class="expand-button" @onclick="() => ToggleExpand(selectedTab)">
+                            نمایش @(totalItemCount - MaxInitialItems) مورد دیگر
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-data-container">
+                <div class="no-data-content">
+                    <i class="bi bi-calendar-x"></i>
+                    <span>هیچ اطلاعیه‌عرضه‌ای در @selectedTabInPersian وجود ندارد.</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "اطلاعیه عرضه‌ها";
+    [Parameter]
+    public UpcomingOffersData? Data { get; set; }
+
+    private const int MaxInitialItems = 5;
+    private const int MaxPastItems = 10;
+
+    private string selectedTab = "today"; // تب پیش‌فرض
+
+    private List<UpcomingOfferItem> PastOffers = new();
+    private List<UpcomingOfferItem> TodayOffers = new();
+    private List<UpcomingOfferItem> FutureOffers = new();
+
+    // برای نگهداری وضعیت "نمایش بیشتر" برای هر تب
+    private Dictionary<string, bool> _expandedStates = new()
+    {
+        { "past", false },
+        { "today", false },
+        { "future", false }
+    };
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Data != null && Data.Items.Any())
+        {
+            PastOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
+            TodayOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
+            FutureOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
+        }
+    }
+
+    private List<UpcomingOfferItem> GetCurrentList()
+    {
+        return selectedTab switch
+        {
+            "past" => PastOffers,
+            "today" => TodayOffers,
+            "future" => FutureOffers,
+            _ => new List<UpcomingOfferItem>()
+        };
+    }
+    private string selectedTabInPersian => selectedTab switch
+        {
+            "past" => "روزهای گذشته",
+            "today" => "روز جاری",
+            "future" => "روزهای آینده",
+            _ => "این دسته"
+        };
+
+    private bool IsCategoryExpanded(string category)
+    {
+        return _expandedStates.TryGetValue(category, out var isExpanded) && isExpanded;
+    }
+
+    private void ToggleExpand(string category)
+    {
+        if (_expandedStates.ContainsKey(category))
+        {
+            _expandedStates[category] = true;
+        }
+    }
+
+    private void GoToOffer(UpcomingOfferItem item)
+    {
+        if (item.Type == UpcomingOfferType.Commodity)
+        {
+            NavManager.NavigateTo($"/offers/{item.UrlName}");
+        }
+    }
+}

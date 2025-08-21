@@ -23,26 +23,4 @@
 
     [Parameter]
     public IEnumerable<MainPlayer>? Data { get; set; }
-
-    protected override void OnInitialized()
-    {
-        Data = new List<MainPlayer>
-        {
-           new()
-           {
-               Type = "برترین کارگزار",
-               Name = "کارگزاری مفید",
-               IconCssClass = "bi bi-person-workspace",
-               MarketShare = 18.4m
-           },
-           new()
-           {
-               Type = "برترین عرضه‌کننده",
-               Name = "فولاد مبارکه",
-               IconCssClass = "bi bi-buildings-fill",
-               MarketShare = 25.1m
-           }
-        };
-        base.OnInitialized();
-    }
 }

@@ -17,7 +17,7 @@
             @if (!_isExpanded)
             {
                 // حالت خلاصه: نمایش ۳ آیتم اصلی
-                @foreach (var item in PrimaryItems.Take(3))
+                @foreach (var item in InitialItems)
                 {
                     <div class="shortcut-tile @item.ThemeCssClass" @onclick="() => GoTo(item.Code)">
                         <div class="tile-icon"><i class="@item.IconCssClass"></i></div>
@@ -59,7 +59,18 @@
 
     // وضعیت نمایش ویجت (خلاصه یا کامل)
     private bool _isExpanded = false;
+    private List<MarketShortcutItem> InitialItems
+    {
+        get
+        {
+            if (Data?.Items == null) return new List<MarketShortcutItem>();
 
+            var primaryItems = Data.Items.Where(i => i.ThemeCssClass != "secondary");
+            var secondaryItems = Data.Items.Where(i => i.ThemeCssClass == "secondary");
+
+            return primaryItems.Concat(secondaryItems).Take(3).ToList();
+        }
+    }
     // آیتم‌های اصلی (غیر ثانویه)
     private List<MarketShortcutItem> PrimaryItems =>
         Data?.Items.Where(i => i.ThemeCssClass != "secondary").ToList() ?? new List<MarketShortcutItem>();

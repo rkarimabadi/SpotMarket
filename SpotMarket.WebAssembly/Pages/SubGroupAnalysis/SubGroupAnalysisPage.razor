@@ -11,7 +11,7 @@
     {
         <p><em>در حال بارگذاری اطلاعات زیرگروه...</em></p>
     }  else {
-        @if (subGroupActivityStatus == GroupActivityStatus.Inactive)
+@*         @if (subGroupActivityStatus == GroupActivityStatus.Inactive)
         {
             <NoActivityWidget />
         } else
@@ -22,9 +22,9 @@
             } else {
                 <UpcomingOffersWidget Data="todayOffersData" Take="3" Title="عرضه‌های امروز" />
             }
-        }
+        } *@
         <ExpandableSubGroupListWidget Data="groupListData" Unit="کالا" Title="کالاهای فعال" UrlPrefix="@urlprefix" />
-        <UpcomingOffersWidget Data="upcomingOffersData" />
+        @* <UpcomingOffersWidget Data="upcomingOffersData" /> *@
     }
 
 </div>

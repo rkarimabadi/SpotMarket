@@ -2,46 +2,57 @@
 @using System.Text
 
 <div class="widget-container">
+    @if (Data != null && Data.PriceHistory.Any())
+    {
     <div class="trend-chart-card">
         <div class="widget-header">
             <div class="price-info">
-                <div class="current-price">@PriceData.CurrentPrice.ToString("N0", new CultureInfo("fa-IR"))</div>
+                <div class="current-price">@Data.CurrentPrice.ToString("N0", new CultureInfo("fa-IR"))</div>
             </div>
 
-            <div class="date-info @(PriceData.IsOutdated ? "outdated" : "")">
-                @if (PriceData.IsOutdated)
+            <div class="date-info @(Data.IsOutdated ? "outdated" : "")">
+                @if (Data.IsOutdated)
                 {
                     <i class="bi bi-clock-history"></i>
                 }
-                <span>@PriceData.DateLabel</span>
+                <span>@Data.DateLabel</span>
             </div>
         </div>
-        <div class="price-info d-flex mb-2">
-            <div class="price-change @(PriceData.ChangeAmount >= 0 ? "positive" : "negative")">
-                @($"{(PriceData.ChangeAmount >= 0 ? "+" : "")}{PriceData.ChangeAmount:N0} ({PriceData.ChangePercentage:F2}%)")
+@*         <div class="price-info d-flex mb-2">
+            <div class="price-change @(Data.ChangeAmount >= 0 ? "positive" : "negative")">
+                @($"{(Data.ChangeAmount >= 0 ? "+" : "")}{Data.ChangeAmount:N0} ({Data.ChangePercentage:F2}%)")
             </div>
-            <div class="ms-1 price-change-context">@PriceData.ChangeContext</div>
+            <div class="ms-1 price-change-context">@Data.ChangeContext</div>
+        </div> *@
+        <div class="price-change-container @(Data.ChangeAmount >= 0 ? "positive" : "negative") mb-2">
+            <div class="change-indicator">
+                <i class="bi @(Data.ChangeAmount >= 0 ? "bi-arrow-up-short" : "bi-arrow-down-short")"></i>
+                <span class="prcent">@($"{Data.ChangePercentage:F2}%")</span>
+                <span class="change-value">@($"{Math.Abs(Data.ChangeAmount):N0}")</span>
+            </div>
+            <div class="change-context">@Data.ChangeContext</div>
         </div>
+
         <div class="bar-chart-container">
-            @if (PriceData.PriceHistory.Any())
+            @if (Data.PriceHistory.Any())
             {
                 <svg width="100%" height="100%" viewBox="0 0 350 110">
                     @{
-                        var maxPrice = PriceData.PriceHistory.Max(d => d.Price);
-                        var minPrice = PriceData.PriceHistory.Min(d => d.Price);
+                        var maxPrice = Data.PriceHistory.Max(d => d.Price);
+                        var minPrice = Data.PriceHistory.Min(d => d.Price);
                         var priceRange = maxPrice - minPrice;
                         if (priceRange == 0) priceRange = 1;
 
-                        var barWidthPercentage = (100.0 / PriceData.PriceHistory.Count) * 0.5; // 50% of available space
+                        var barWidthPercentage = (100.0 / Data.PriceHistory.Count) * 0.5;
 
-                        for (int i = 0; i < PriceData.PriceHistory.Count; i++)
+                        for (int i = 0; i < Data.PriceHistory.Count; i++)
                         {
-                            var item = PriceData.PriceHistory[i];
+                            var item = Data.PriceHistory[i];
                             var barHeight = ((double)(item.Price - minPrice) / (double)priceRange) * 80 + 20; // % height (20% min)
-                            var x = (100.0 / PriceData.PriceHistory.Count) * (i + 0.5);
+                            var x = (100.0 / Data.PriceHistory.Count) * (i + 0.5);
                             var y = 90 - barHeight;
 
-                            <rect x="@((x - barWidthPercentage / 2).ToString(CultureInfo.InvariantCulture))%" y="90" width="@(barWidthPercentage.ToString(CultureInfo.InvariantCulture))%" height="0" class="@(i == PriceData.PriceHistory.Count - 1 ? "latest" : "historical")" rx="4" ry="4">
+                            <rect x="@((x - barWidthPercentage / 2).ToString(CultureInfo.InvariantCulture))%" y="90" width="@(barWidthPercentage.ToString(CultureInfo.InvariantCulture))%" height="0" class="@(i == Data.PriceHistory.Count - 1 ? "latest" : "historical")" rx="4" ry="4">
                                 <animate attributeName="height" from="0" to="@(barHeight.ToString(CultureInfo.InvariantCulture))" dur="0.5s" begin="@($"{i * 0.1}s")" fill="freeze" />
                                 <animate attributeName="y" from="90" to="@(y.ToString(CultureInfo.InvariantCulture))" dur="0.5s" begin="@($"{i * 0.1}s")" fill="freeze" />
                             </rect>
@@ -55,7 +66,7 @@
     </div>
 
     <div class="highlights-container">
-        @foreach (var highlight in PriceData.Highlights)
+        @foreach (var highlight in Data.Highlights)
         {
             <div class="highlight-card">
                 <div class="item-header">
@@ -70,42 +81,26 @@
             </div>
         }
     </div>
+}
+    else
+    {
+        <!-- حالت نمایش نبودن داده -->
+        <div class="trend-chart-card">
+            <div class="bar-chart-container no-data-container">
+                <div class="no-data-content">
+                    <i class="bi bi-bar-chart-line"></i>
+                    <span>داده‌ای برای نمایش وجود ندارد</span>
+                </div>
+            </div>
+        </div>
+    }
 </div>
-
 
 @code {
 
 
     [Parameter]
-    public PriceViewModel PriceData { get; set; } = new PriceViewModel
-    {
-        CurrentPrice = 24500,
-        ChangeAmount = 250,
-        ChangePercentage = 1.03,
-        ChangeContext = "نسبت به عرضه ۷ روز قبل",
-        DateLabel = "آخرین عرضه (۱۵ روز پیش)",
-        IsOutdated = true,
-        PriceHistory = new List<PriceHistoryPoint>
-        {
-            new PriceHistoryPoint { DateLabel = "۵/۱", Price = 24050 },
-            new PriceHistoryPoint { DateLabel = "۵/۸", Price = 24100 },
-            new PriceHistoryPoint { DateLabel = "۵/۱۵", Price = 23950 },
-            new PriceHistoryPoint { DateLabel = "۵/۱", Price = 24050 },
-            new PriceHistoryPoint { DateLabel = "۵/۸", Price = 24100 },
-            new PriceHistoryPoint { DateLabel = "۵/۱۵", Price = 23950 },
-            new PriceHistoryPoint { DateLabel = "۵/۱", Price = 24050 },
-            new PriceHistoryPoint { DateLabel = "۵/۸", Price = 24100 },
-            new PriceHistoryPoint { DateLabel = "۵/۱۵", Price = 23950 },
-            new PriceHistoryPoint { DateLabel = "۵/۲۳", Price = 24500 }
-        },
-        Highlights = new List<HighlightViewModel>
-        {
-            new HighlightViewModel { Title = "قیمت پایه", Value = "23,900", IconSvg = "bi bi-tag-fill" },
-            new HighlightViewModel { Title = "رقابت", Value = "1.2", Unit = "برابر", IconColorClass = "green", IconSvg = "bi bi-fire" },
-            new HighlightViewModel { Title = "متوسط خرید", Value = "24,850", IconColorClass = "red", IconSvg = "bi bi-arrows-expand" },
-            new HighlightViewModel { Title = "متوسط ۳ عرضه", Value = "24,150", IconSvg = "bi bi-graph-up" }
-        }
-    };
+    public PriceViewModel Data { get; set; }
 
     private MarkupString GenerateSvgTextLabel(PriceHistoryPoint item, double x)
     {
