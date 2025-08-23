@@ -4,17 +4,17 @@
 }
 
 .widget-header {
-    padding: 0 1rem;
+    padding: 0;
     margin-bottom: 1rem;
 }
 
 .widget-title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
 }
 
 .offers-content {
-    padding: 0 1rem;
+    padding: 0;
 }
 
 .segmented-control {
@@ -22,7 +22,7 @@
     padding: 3px;
     background-color: var(--gray-200);
     border-radius: 0.625rem;
-    margin: 0 1rem 1rem 1rem;
+    margin: 1rem 0;
 }
 
     .segmented-control button {
@@ -88,16 +88,21 @@
         font-weight: 700;
         line-height: 1.2;
     }
-
+.info {
+    min-width: 0;
+}
 .info .title {
     font-size: 1rem;
     font-weight: 600;
 }
 
-.info .subtitle {
-    font-size: 0.875rem;
-    color: var(--text-secondary-color);
-}
+    .info .subtitle {
+        font-size: 0.875rem;
+        color: var(--text-secondary-color);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 
 .expand-button-container {
     padding: 0;
