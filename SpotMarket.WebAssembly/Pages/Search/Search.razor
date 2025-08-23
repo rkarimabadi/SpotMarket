@@ -1,0 +1,22 @@
+﻿@page "/search"
+@inject NavStateService NavState
+<PageTitle>جستجو</PageTitle>
+<MarketSearch OnSearchStateChanged="HandleSearchStateChange" />
+
+@if (!isSearching)
+{
+    <ComingSoonContainer Title="جستجو"/>
+}
+@code {
+    private bool isSearching;
+    protected override void OnInitialized()
+    {
+        NavState.SetNavState("جستجو", true);
+        base.OnInitialized();
+    }
+    private void HandleSearchStateChange(bool searching)
+    {
+        isSearching = searching;
+        StateHasChanged();
+    }
+}

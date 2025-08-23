@@ -63,10 +63,12 @@
 
 .search-results-container {
     position: fixed;
-    top: calc(60px + var(--safe-area-inset-top, 0) + 170px); /* Below search bar */
+    top: calc(60px + var(--safe-area-inset-top, 0) + 100px);
     left: 0;
     right: 0;
     bottom: 0;
+    max-width: 600px;
+    margin: 0 auto;
     background-color: var(--background-color);
     z-index: 4;
     overflow-y: auto;
@@ -82,6 +84,8 @@
 
 .search-results-list {
     background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
     margin: 0 1rem;
     border-radius: 1rem;
     overflow: hidden;
@@ -110,10 +114,6 @@
     color: white;
 }
 
-    .result-icon.industrial {
-        background-color: var(--gray-600);
-    }
-
     .result-icon.petro {
         background-color: var(--success-color);
     }
@@ -125,7 +125,21 @@
     .result-icon.agri {
         background-color: #e67e22;
     }
+    .result-icon.industrial {
+        background-color: var(--gray-600);
+    }
 
+    .result-icon.broker {
+        background-color: #20c997; /* Teal */
+    }
+
+    .result-icon.supplier {
+        background-color: #6f42c1; /* Purple */
+    }
+
+    .result-icon.secondary {
+        background-color: var(--gray-500);
+    }
 .result-info .title {
     font-weight: 600;
 }

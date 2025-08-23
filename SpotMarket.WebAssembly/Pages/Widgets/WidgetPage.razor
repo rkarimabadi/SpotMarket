@@ -1,50 +1,47 @@
 ﻿@page "/widgets"
 @inject NavStateService NavState
 
-<MarketSearch OnSearchStateChanged="HandleSearchStateChange" />
-@if (!isSearching)
-{
-    <GroupActivityWidget Data="activeGroupData" />
-    <GroupKpiWidget />
-    <SubGroupListWidget/>
-    <CommodityStatusHorizontalWidget Data="commodityStatusData" />
-    <CommodityStatusWidget/>
-    <MarketWatchlistWidget/>
-    <MarketTickerWidget/>
-    <JournalInspiredWidget/>
-    <MarketForecastWidget/>
-    <MarketProgressRingsWidget Data="marketActivityItems" />
-    <MarketComplicationsWidget/>
-    <MarketAwardsWidget/>
-    <MarketAdvanceProgressBarWidget/>
-    <MarketProgressBarWidget/>
-    <MarketAlarmsWidget/>
-    <MarketCompassWidget/>
-    <MarketConditionsWidget/>
-    <MarketContactsWidget Data="marketContactsData" />
-    <MarketControlWidget/>
-    <MarketExcitementWidget Data="marketExcitementData" />
-    <MarketListWidget Data="marketInfoItems" />
-    <MarketMetricsWidget/>
-    <MarketMoversWidget Data="marketMoversData" />
-    <NewsWidget Data="newsData" />
-    <MarketPulseWidget Data="marketPulseData" />
-    <MainPlayersWidget Players="mainPlayersData" />
-    <IndustryComparisonWidget/>
-    <MarketRingsWidget/>
-    <MarketScheduleWidget/>
-    <MarketSignalsWidget/>
-    <MarketSentimentWidget Data="marketSentimentData" />
-    <MarketShortcutsWidget Data="marketShortcutsData"/>
-    <MarketSnapshotsWidget/>
-    <MarketStatsRowWidget/>
-    <TradingHallsWidget Data="tradingHallsData" />
-    <SupplyRiskWidget Data="supplyRiskData" />
-    <MarketVitalsWidget/>
-    <WatchlistWidget/>
-}
+
+<GroupActivityWidget Data="activeGroupData" />
+<GroupKpiWidget />
+<SubGroupListWidget/>
+<CommodityStatusHorizontalWidget Data="commodityStatusData" />
+<CommodityStatusWidget/>
+<MarketWatchlistWidget/>
+<MarketTickerWidget/>
+<JournalInspiredWidget/>
+<MarketForecastWidget/>
+<MarketProgressRingsWidget Data="marketActivityItems" />
+<MarketComplicationsWidget/>
+<MarketAwardsWidget/>
+<MarketAdvanceProgressBarWidget/>
+<MarketProgressBarWidget/>
+<MarketAlarmsWidget/>
+<MarketCompassWidget/>
+<MarketConditionsWidget/>
+<MarketContactsWidget Data="marketContactsData" />
+<MarketControlWidget/>
+<MarketExcitementWidget Data="marketExcitementData" />
+<MarketListWidget Data="marketInfoItems" />
+<MarketMetricsWidget/>
+<MarketMoversWidget Data="marketMoversData" />
+<NewsWidget Data="newsData" />
+<MarketPulseWidget Data="marketPulseData" />
+<MainPlayersWidget Players="mainPlayersData" />
+<IndustryComparisonWidget/>
+<MarketRingsWidget/>
+<MarketScheduleWidget/>
+<MarketSignalsWidget/>
+<MarketSentimentWidget Data="marketSentimentData" />
+<MarketShortcutsWidget Data="marketShortcutsData"/>
+<MarketSnapshotsWidget/>
+<MarketStatsRowWidget/>
+<TradingHallsWidget Data="tradingHallsData" />
+<SupplyRiskWidget Data="supplyRiskData" />
+<MarketVitalsWidget/>
+<WatchlistWidget/>
 @code {
-    private bool isSearching;
+    
 
     private IEnumerable<MainPlayer> mainPlayersData = new List<MainPlayer>();
     private MarketExcitementData? marketExcitementData;
@@ -67,11 +64,7 @@
         NavState.SetNavState("ویجت‌ها", true);
         loadDemoData();
     }
-    private void HandleSearchStateChange(bool searching)
-    {
-        isSearching = searching;
-        StateHasChanged();
-    }
+
     private void loadDemoData()
     {
         mainPlayersData = new List<MainPlayer>
