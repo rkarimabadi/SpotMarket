@@ -29,7 +29,7 @@
 
     .segmented-control button {
         flex: 1;
-        padding: 0.5rem;
+        padding:0.1rem 0.5rem;
         border: none;
         background-color: transparent;
         border-radius: 0.5rem;
@@ -97,7 +97,7 @@
 }
 
     .label-row .label {
-        font-size: 0.8rem;
+        font-size: clamp(0.4rem, 3vw,0.8rem);
         font-weight: 500;
         color: var(--text-secondary-color);
         /* برای جلوگیری از شکستن خط و نمایش سه‌نقطه */

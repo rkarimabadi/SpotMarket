@@ -19,12 +19,10 @@
             if(groupActivitiesData.Items.Any()) 
             {
                 <MarketConditionsWidget Data="groupActivitiesData" />
-            } else {
-                <UpcomingOffersWidget Data="todayOffersData" Take="3" Title="عرضه‌های امروز" />
             }
         } *@
         <ExpandableSubGroupListWidget Data="groupListData" Unit="کالا" Title="کالاهای فعال" UrlPrefix="@urlprefix" />
-        @* <UpcomingOffersWidget Data="upcomingOffersData" /> *@
+        <SubGroupOffersWidget Data="upcomingOffersData" />
     }
 
 </div>
@@ -38,7 +36,6 @@
     private GroupActivityStatus subGroupActivityStatus;
     private GroupActivityData? activeGroupData;
     private UpcomingOffersData? upcomingOffersData;
-    private UpcomingOffersData? todayOffersData;
     private MarketConditionsData? groupActivitiesData;
 
     private string urlprefix => $"{mainGroupId}/{groupId}/{subGroupId}/";
@@ -69,8 +66,7 @@
 
             subGroupActivityStatus = groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
 
-            upcomingOffersData = await SubGroupService.GetUpcomingOffersAsync(groupName.Code);
-            todayOffersData = await SubGroupService.GetTodayOffersAsync(groupName.Code);
+            upcomingOffersData = await SubGroupService.GetOfferHistoryAsync(groupName.Code);
             groupActivitiesData = await SubGroupService.GetCommodityActivitiesAsync(groupName.Code);
         }
         catch (Exception ex)

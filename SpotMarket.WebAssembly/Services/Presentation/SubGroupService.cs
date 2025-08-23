@@ -8,8 +8,7 @@ namespace SpotMarket.WebAssembly.Services.Presentation
     {
         Task<GroupListData> GetActiveCommoditiesAsync(int subGroupId);
         Task<MarketConditionsData> GetCommodityActivitiesAsync(int subGroupId);
-        Task<UpcomingOffersData> GetUpcomingOffersAsync(int subGroupId);
-        Task<UpcomingOffersData> GetTodayOffersAsync(int subGroupId);
+        Task<UpcomingOffersData> GetOfferHistoryAsync(int subGroupId);
     }
 
     public class SubGroupService : ISubGroupService
@@ -95,22 +94,9 @@ namespace SpotMarket.WebAssembly.Services.Presentation
             //    };
             //return await Task.FromResult(data);
         }
-        public async Task<UpcomingOffersData> GetUpcomingOffersAsync(int subGroupId)
+        public async Task<UpcomingOffersData> GetOfferHistoryAsync(int subGroupId)
         {
-            return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{subGroupId}/upcoming-offers") ?? new UpcomingOffersData();
-            //var data = new UpcomingOffersData
-            //{
-            //    Items = new List<UpcomingOfferItem>
-            //    {
-            //        new() { DayOfWeek = "شنبه", DayOfMonth = "۲۰", Title = "عرضه شمش فولادی", Subtitle = "توسط فولاد خوزستان" },
-            //        new() { DayOfWeek = "دوشنبه", DayOfMonth = "۲۲", Title = "عرضه ورق گرم", Subtitle = "توسط فولاد مبارکه" }
-            //    }
-            //};
-            //return await Task.FromResult(data);
-        }
-        public async Task<UpcomingOffersData> GetTodayOffersAsync(int subGroupId)
-        {
-            return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{subGroupId}/today-offers") ?? new UpcomingOffersData();
+            return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{subGroupId}/offer-history") ?? new UpcomingOffersData();
         }
 
     }
