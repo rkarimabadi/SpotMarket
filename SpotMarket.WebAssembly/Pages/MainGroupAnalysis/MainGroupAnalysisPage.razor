@@ -4,7 +4,8 @@
 @inject IMarketsService MarketService
 @inject IMainGroupService MainGroupService
 <div class="page-container">
-    <GroupHeaderWidget Data="@groupName" />
+    <MainGroupHeaderWidget Data="@groupName" />
+    <MainGroupHierarchyWidget HierarchyItems="mainGroupHierarchyDate" />
     @if (_isLoading)
     {
         <p><em>در حال بارگذاری اطلاعات گروه اصلی...</em></p>
@@ -44,6 +45,7 @@
     private MarketConditionsData? groupActivitiesData;
     private MarketStatsData? marketStatsData;
     private MarketStatsData? tradeStatsData;
+    private List<HierarchyItem> mainGroupHierarchyDate = new();
     private string urlprefix => $"{mainGroupId}/";
     private bool _isLoading = true;
 
@@ -62,6 +64,7 @@
             groupName = groupList.Items.FirstOrDefault(g => g.Code == mainGroupId);
             var pageTitle = $"تحلیل گروه اصلی {groupName?.Title}";
             NavState.SetNavState(pageTitle, true, "/markets");
+            mainGroupHierarchyDate.Add( new HierarchyItem {  Id = mainGroupId, Name = groupName.Title, IsActive = false, Type= "MainGroup"});
             groupListData = await MainGroupService.GetActiveGroupsAsync(groupName.Code);
 
             groupActivityStatus = groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;

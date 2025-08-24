@@ -6,7 +6,6 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
 }
 
 .group-icon {
@@ -31,6 +30,9 @@
         background-color: #f0932b;
     }
 
+    .group-icon.fork {
+        background-color: #6c757d;
+    }
     .group-icon.secondary {
         background-color: #6c757d;
     }

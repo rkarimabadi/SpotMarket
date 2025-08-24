@@ -1,0 +1,43 @@
+﻿.breadcrumb-hierarchy {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+    overflow-x: auto;
+    justify-content: start;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+}
+    .breadcrumb-item + .breadcrumb-item::before {
+        float: inherit !important;
+        padding-left: inherit !important;
+        color: inherit !important;
+        content: inherit !important;
+    }
+.breadcrumb-item {
+    background-color: var(--gray-200);
+    color: var(--text-secondary-color);
+    padding: 4px 10px !important;
+    border-radius: 15px !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    transition: background-color 0.2s !important;
+    white-space: nowrap;
+}
+
+    .breadcrumb-item.active {
+        background-color: var(--primary-color);
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+.breadcrumb-separator {
+    color: var(--text-secondary-color);
+    opacity: 0.4;
+    transform: rotate(180deg); /* Flip for RTL */
+    display: flex; /* Helps with alignment */
+    align-items: center;
+}
+.breadcrumb-separator svg {
+    transform: rotate(180deg);
+}

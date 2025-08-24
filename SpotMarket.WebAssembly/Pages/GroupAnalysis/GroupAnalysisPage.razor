@@ -5,40 +5,31 @@
 @inject IMainGroupService MainGroupService
 @inject IGroupService GroupService
 <div class="page-container">
-    <GroupHeaderWidget Data="@groupName" />
+    <GroupHeaderWidget Data="@groupHeaderData" />
+    <GroupHierarchyWidget HierarchyItems="@groupHierarchyData"/>
     @if (_isLoading)
     {
         <p><em>در حال بارگذاری اطلاعات گروه اصلی...</em></p>
-    }  else {
-
-@*         @if (groupActivityStatus == GroupActivityStatus.Inactive)
+    }  else
+    {
+        if (groupActivityStatus == GroupActivityStatus.Inactive)
         {
             <NoActivityWidget />
-        } else
-        {
-            if (groupActivitiesData.Items.Any())
-            {
-                <MarketConditionsWidget Data="groupActivitiesData" />
-            } else {
-                <UpcomingOffersWidget Data="todayOffersData" Take="3" Title="عرضه‌های امروز" />
-            }
-        } *@
+        }
+
         <ExpandableSubGroupListWidget Data="groupListData" Unit="زیرگروه" Title="زیرگرو‌ه های فعال" UrlPrefix="@urlprefix" />
-@*         <UpcomingOffersWidget Data="upcomingOffersData" /> *@
     }
 
 </div>
 @code {
     [Parameter] public int mainGroupId { get; set; }
     [Parameter] public int groupId { get; set; }
-    private MarketShortcutItem? groupName;
-    private GroupListData groupList = new();
+
     private GroupListData? groupListData;
     private GroupActivityStatus groupActivityStatus;
     private GroupActivityData? activeGroupData;
-    private UpcomingOffersData? upcomingOffersData;
-    private UpcomingOffersData? todayOffersData;
-    private MarketConditionsData? groupActivitiesData;
+    private List<HierarchyItem>? groupHierarchyData;
+    private GroupHeaderData? groupHeaderData;
 
     private string urlprefix => $"{mainGroupId}/{groupId}/";
     private bool _isLoading = true;
@@ -54,21 +45,14 @@
     {
         try
         {
-            var mainGroupList = await MarketService.GetMarketShortcutsData();
-            groupName = mainGroupList.Items.FirstOrDefault(g => g.Code == mainGroupId);
-            groupList = await MainGroupService.GetActiveGroupsAsync(mainGroupId);
-            var _groupName = groupList.Items.FirstOrDefault(g => g.UrlName == groupId.ToString());
-            groupName.Title = _groupName.Title;
-            groupName.Code = int.Parse(_groupName.UrlName);
-            var pageTitle = $"تحلیل گروه {groupName?.Title}";
-            NavState.SetNavState(pageTitle, true, $"/markets/{mainGroupId}");
-            groupListData = await GroupService.GetActiveSubGroupsAsync(groupName.Code);
+            groupHierarchyData = await GroupService.GetGroupHierarchyAsync(groupId);
+            groupHeaderData = await GroupService.GetGroupHeaderDataAsync(groupId);
 
+            var pageTitle = $"تحلیل گروه {groupHeaderData?.GroupName}";
+
+            NavState.SetNavState(pageTitle, true, $"/markets/{groupHierarchyData?.First(x => x.Type == "MainGroup")?.Id ?? mainGroupId}");
+            groupListData = await GroupService.GetActiveSubGroupsAsync(groupId);
             groupActivityStatus = groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
-
-            upcomingOffersData = await GroupService.GetUpcomingOffersAsync(groupName.Code);
-            todayOffersData = await GroupService.GetTodayOffersAsync(groupName.Code);
-            groupActivitiesData = await GroupService.GetSubGroupActivitiesAsync(groupName.Code);
         }
         catch (Exception ex)
         {

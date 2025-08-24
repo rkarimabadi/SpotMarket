@@ -1,5 +1,5 @@
 ﻿.header-container {
-    padding: 24px 8px 0 8px;
+    padding: 1rem 0;
     display: flex;
     gap: 1rem;
     align-items: normal;
@@ -17,7 +17,7 @@
         font-size: 0.8rem;
         font-weight: 500;
         color: var(--text-secondary-color);
-        margin-top: 8px;
+        margin: 0;
         letter-spacing: 0.5px;
     }
 .header-icon {
@@ -32,22 +32,28 @@
     flex-shrink: 0;
 }
 
-.header-icon.industrial {
-    background-color: var(--gray-600); /* صنعتی و سیمان */
-}
+    .header-icon.industrial {
+        background-color: #54a0ff;
+    }
 
-.header-icon.petro {
-    background-color: var(--success-color); /* پتروشیمی */
-}
+    .header-icon.petro {
+        background-color: #50c878;
+    }
 
-.header-icon.agri {
-    background-color: #e67e22; /* کشاورزی */
-}
+    .header-icon.agri {
+        background-color: #f0932b;
+    }
+    .header-icon.fork {
+        background-color: #6c757d;
+    }
 
 
-.header-icon.oil-prod {
-    background-color: #34495e; /* فرآورده های نفتی */
-}
+    .header-icon.oil-prod {
+        background-color: #17a2b8;
+    }
+    .header-icon.mineral {
+        background-color: #6f42c1;
+    }
 
 .header-icon.auto {
     background-color: #9b59b6; /* خودرو */
@@ -65,9 +71,9 @@
     background-color: var(--danger-color); /* حراج */
 }
 
-.header-icon.real-estate {
-    background-color: #1abc9c; /* املاک */
-}
+    .header-icon.real-estate {
+        background-color: #007bff;
+    }
 
 .header-icon.premium {
     background-color: #8e44ad; /* پریمیوم */
@@ -77,6 +83,6 @@
     background-color: #2c3e50; /* مناقصه */
 }
 
-.header-icon.other {
-    background-color: var(--text-secondary-color); /* سایر */
-}
+    .header-icon.other {
+        background-color: #6c757d;
+    }

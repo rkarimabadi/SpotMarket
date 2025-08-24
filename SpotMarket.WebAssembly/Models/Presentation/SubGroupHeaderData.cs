@@ -6,4 +6,9 @@
         public string GroupName { get; set; } = string.Empty;
         public string IconCssClass { get; set; } = "bi bi-box";
     }
+    public class GroupHeaderData
+    {
+        public string GroupName { get; set; } = string.Empty;
+        public string IconCssClass { get; set; } = "bi bi-box";
+    }
 }
