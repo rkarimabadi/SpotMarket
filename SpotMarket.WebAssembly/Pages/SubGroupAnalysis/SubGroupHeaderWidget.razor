@@ -1,0 +1,25 @@
+﻿@if(Data is not null)
+{
+    <div class="group-header-container">
+        <div class="group-title-section">
+            <div class="group-icon @themeCssClass(Data.IconCssClass)"><i class="@Data.IconCssClass"></i></div>
+            <h1 class="group-title">@Data.SubGroupName</h1>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public SubGroupHeaderData? Data { get; set; }
+
+    private string themeCssClass(string iconCssClass) => iconCssClass switch
+    {
+        "bi bi-building" => "industrial",
+        "bi bi-tree-fill" =>  "agri",
+        "bi bi-droplet-fill" =>  "petro",
+        "bi bi-gem" =>  "mineral",
+        "bi bi-fuel-pump-fill" =>  "oil-products",
+        "bi bi-house-door-fill" =>  "real-estate",
+        "bi bi-shop" =>  "fork"
+    };
+}

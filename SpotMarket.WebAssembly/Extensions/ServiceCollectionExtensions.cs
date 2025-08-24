@@ -1,4 +1,5 @@
-﻿using SpotMarket.WebAssembly.Services.Presentation;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SpotMarket.WebAssembly.Services.Presentation;
 
 namespace SpotMarket.WebAssembly.Extensions
 {
@@ -22,7 +23,7 @@ namespace SpotMarket.WebAssembly.Extensions
             services.AddHttpClient<IOfferDetailsService, OfferDetailsService>(configureClient);
             services.AddHttpClient<ICommodityService, CommodityService>(configureClient);
             services.AddHttpClient<ISearchService, SearchService>(configureClient);
-
+            services.AddHttpClient<IBrokerService, BrokerService>(configureClient);
             return services;
         }
     }

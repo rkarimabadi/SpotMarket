@@ -29,37 +29,4 @@
     public string Title { get; set; } = "سهم از بازار";
     [Parameter]
     public List<MarketShareItem>? Data { get; set; }
-
-    protected override void OnInitialized()
-    {
-        if (Data == null)
-        {
-            LoadSampleData();
-        }
-    }
-
-    private void LoadSampleData()
-    {
-        Data = new List<MarketShareItem>
-        {
-            new MarketShareItem
-            {
-                Title = "سهم از حجم معاملات",
-                Value = "7.2%",
-                Subtitle = "معادل ۳۵۰ هزار تن",
-                IconCssClass = "bi bi-stack blue",
-                ThemeCssClass = "volume-card"
-            },
-            new MarketShareItem
-            {
-                Title = "سهم از ارزش معاملات",
-                Value = "11.5%",
-                Subtitle = "معادل ۴.۸ همت",
-                IconCssClass = "bi bi-cash-stack green",
-                ThemeCssClass = "value-card"
-            }
-        };
-    }
-
-
 }

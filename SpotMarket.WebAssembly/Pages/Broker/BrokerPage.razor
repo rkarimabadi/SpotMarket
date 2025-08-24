@@ -3,26 +3,86 @@
 @using SpotMarket.WebAssembly.Models.Presentation
 @using SpotMarket.WebAssembly.Services.Presentation
 @using static SpotMarket.WebAssembly.Pages.Broker.BrokerageCompetitionWidget
+@using static SpotMarket.WebAssembly.Pages.Broker.BrokerageRankingWidget
+@using static SpotMarket.WebAssembly.Pages.Broker.BrokerageCommodityGroupWidget
+@using static SpotMarket.WebAssembly.Pages.Broker.BrokerageStrategicPerformanceWidget
+@using static SpotMarket.WebAssembly.Pages.Broker.BrokerageMarketShareWidget
+@using SpotMarket.WebAssembly.Models
+
 @inject NavStateService NavState
+@inject IBrokerService BrokerService
 
-<BrokerageHeader BrokerageName="آگاه" />
-<BrokerageCompetitionWidget />
-<BrokerageMarketShareWidget/>
-<BrokerageRankingWidget/>
-<BrokerageCommodityGroupWidget/>
-<BrokerageOffersWidget/>
-<BrokerageCompetitionWidget Data="successRate" />
-<BrokerageTopSuppliersWidget/>
-<BrokerageAllSuppliersWidget/>
-<BrokerageStrategicPerformanceWidget/>
+@if (loading)
+{
+    <p><em>در حال بارگذاری اطلاعات...</em></p>
+}
+else
+{
+    <BrokerageHeader Data="brokerHeaderData" />
+    <BrokerageCompetitionWidget Data="competitionRatioData" />
+    <BrokerageMarketShareWidget Data="marketShareData" />
+    <BrokerageRankingWidget Data="rankingData" />
+    <BrokerageCommodityGroupWidget Data="commodityGroupShareData" />
+    <BrokerageOffersWidget Data="upcomingOffersData" />
+    <BrokerageCompetitionWidget Data="successRateData" />
+    <BrokerageTopSuppliersWidget Data="topSuppliersData" />
+    <BrokerageAllSuppliersWidget Data="allSuppliersData" />
+    <BrokerageStrategicPerformanceWidget Data="strategicPerformanceData" />
+}
+
 @code {
-    [Parameter] public int brokerId { get; set; }
+    [Parameter]
+    public int brokerId { get; set; }
 
-    private CompetitionData successRate = new CompetitionData
+    private bool loading = true;
+    private int previousBrokerId;
+
+    // Data holders for each widget
+    private BrokerHeaderData? brokerHeaderData;
+    private CompetitionData? competitionRatioData;
+    private CompetitionData? successRateData;
+    private List<MarketShareItem>? marketShareData;
+    private List<RankingItem>? rankingData;
+    private List<CommodityGroupShareItem>? commodityGroupShareData;
+    private UpcomingOffersData? upcomingOffersData;
+    private TopSuppliersData? topSuppliersData;
+    private List<SupplierItem>? allSuppliersData;
+    private List<StrategicPerformanceItem>? strategicPerformanceData;
+
+    protected override async Task OnParametersSetAsync()
     {
-        Percentage = 85.2,
-        Label = "نرخ موفقیت عرضه",
-        Title = "بهره‌وری در معاملات",
-        Description = "این کارگزاری در ۸۵.۲٪ از عرضه‌هایی که انجام داده، موفق به ثبت معامله شده است."
-    };
+        // Fetch data only if the brokerId has changed
+        if (brokerId > 0 && brokerId != previousBrokerId)
+        {
+            loading = true;
+            previousBrokerId = brokerId;
+
+            await Task.WhenAll(
+                LoadBrokerHeader(),
+                LoadCompetitionRatio(),
+                LoadSuccessRate(),
+                LoadMarketShare(),
+                LoadRanking(),
+                LoadCommodityGroupShare(),
+                LoadBrokerOffers(),
+                LoadTopSuppliers(),
+                LoadAllSuppliers(),
+                LoadStrategicPerformance()
+            );
+
+            loading = false;
+        }
+    }
+
+    // Individual async methods for fetching data for each component
+    private async Task LoadBrokerHeader() => brokerHeaderData = await BrokerService.GetBrokerHeaderAsync(brokerId);
+    private async Task LoadCompetitionRatio() => competitionRatioData = await BrokerService.GetCompetitionRatioAsync(brokerId);
+    private async Task LoadSuccessRate() => successRateData = await BrokerService.GetSuccessRateAsync(brokerId);
+    private async Task LoadMarketShare() => marketShareData = await BrokerService.GetMarketShareAsync(brokerId);
+    private async Task LoadRanking() => rankingData = await BrokerService.GetRankingAsync(brokerId);
+    private async Task LoadCommodityGroupShare() => commodityGroupShareData = await BrokerService.GetCommodityGroupShareAsync(brokerId);
+    private async Task LoadBrokerOffers() => upcomingOffersData = await BrokerService.GetBrokerOffersAsync(brokerId);
+    private async Task LoadTopSuppliers() => topSuppliersData = await BrokerService.GetTopSuppliersAsync(brokerId);
+    private async Task LoadAllSuppliers() => allSuppliersData = await BrokerService.GetAllSuppliersAsync(brokerId);
+    private async Task LoadStrategicPerformance() => strategicPerformanceData = await BrokerService.GetStrategicPerformanceAsync(brokerId);
 }

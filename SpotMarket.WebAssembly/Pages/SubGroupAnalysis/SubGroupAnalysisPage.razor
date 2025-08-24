@@ -1,4 +1,5 @@
 ﻿@page "/markets/{mainGroupId:int}/{groupId:int}/{subGroupId:int}"
+@page "/commodity-tree/sub-group/{subGroupId:int}"
 @using SpotMarket.WebAssembly.Services.Presentation
 @inject NavStateService NavState
 @inject IMarketsService MarketService
@@ -6,37 +7,36 @@
 @inject IGroupService GroupService
 @inject ISubGroupService SubGroupService
 <div class="page-container">
-    <GroupHeaderWidget Data="@groupName" />
+
+    <SubGroupHeaderWidget Data="subGroupHeaderData" />
+
+    <SubGroupHierarchyWidget HierarchyItems="subGroupHierarchyData" />
+
     @if (_isLoading)
     {
         <p><em>در حال بارگذاری اطلاعات زیرگروه...</em></p>
     }  else {
-@*         @if (subGroupActivityStatus == GroupActivityStatus.Inactive)
+        if (subGroupActivityStatus == GroupActivityStatus.Inactive)
         {
             <NoActivityWidget />
-        } else
-        {            
-            if(groupActivitiesData.Items.Any()) 
-            {
-                <MarketConditionsWidget Data="groupActivitiesData" />
-            }
-        } *@
-        <ExpandableSubGroupListWidget Data="groupListData" Unit="کالا" Title="کالاهای فعال" UrlPrefix="@urlprefix" />
+        }
+
+        <ExpandableSubGroupListWidget Data="commodityListData" Unit="کالا" Title="کالاهای فعال" UrlPrefix="@urlprefix" />
+
         <SubGroupOffersWidget Data="upcomingOffersData" />
     }
 
 </div>
 @code {
-    [Parameter] public int mainGroupId { get; set; }
-    [Parameter] public int groupId { get; set; }
+    [Parameter] public int? mainGroupId { get; set; }
+    [Parameter] public int? groupId { get; set; }
     [Parameter] public int subGroupId { get; set; }
-    private MarketShortcutItem? groupName;
-    private GroupListData subGroupList = new();
-    private GroupListData? groupListData;
+
+    private GroupListData? commodityListData;
     private GroupActivityStatus subGroupActivityStatus;
-    private GroupActivityData? activeGroupData;
     private UpcomingOffersData? upcomingOffersData;
-    private MarketConditionsData? groupActivitiesData;
+    private SubGroupHeaderData? subGroupHeaderData;
+    private List<HierarchyItem>? subGroupHierarchyData;
 
     private string urlprefix => $"{mainGroupId}/{groupId}/{subGroupId}/";
     private bool _isLoading = true;
@@ -52,22 +52,14 @@
     {
         try
         {
-            var mainGroupList = await MarketService.GetMarketShortcutsData();
-            groupName = mainGroupList.Items.FirstOrDefault(g => g.Code == mainGroupId);
-            subGroupList = await GroupService.GetActiveSubGroupsAsync(groupId);
-            var _groupName = subGroupList.Items.FirstOrDefault(g => g.UrlName == subGroupId.ToString());
+            subGroupHeaderData = await SubGroupService.GetSubGroupHeaderDataAsync(subGroupId);
+            subGroupHierarchyData = await SubGroupService.GetSubGroupHierarchyAsync(subGroupId);
 
-            groupName.Title = _groupName.Title;
-            groupName.Code = int.Parse(_groupName.UrlName);
-
-            var pageTitle = $"تحلیل زیرگروه {groupName?.Title}";
-            NavState.SetNavState(pageTitle, true, $"/markets/{mainGroupId}/{groupId}");
-            groupListData = await SubGroupService.GetActiveCommoditiesAsync(groupName.Code);
-
-            subGroupActivityStatus = groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
-
-            upcomingOffersData = await SubGroupService.GetOfferHistoryAsync(groupName.Code);
-            groupActivitiesData = await SubGroupService.GetCommodityActivitiesAsync(groupName.Code);
+            var pageTitle = $"تحلیل زیرگروه {subGroupHeaderData?.SubGroupName}";
+            NavState.SetNavState(pageTitle, true, $"/markets/{subGroupHierarchyData?.First(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{subGroupHierarchyData?.First(x => x.Type == "Group")?.Id ?? groupId}");
+            commodityListData = await SubGroupService.GetActiveCommoditiesAsync(subGroupId);
+            subGroupActivityStatus = commodityListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : commodityListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
+            upcomingOffersData = await SubGroupService.GetOfferHistoryAsync(subGroupId);
         }
         catch (Exception ex)
         {

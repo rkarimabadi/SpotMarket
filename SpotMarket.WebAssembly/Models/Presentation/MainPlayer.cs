@@ -5,12 +5,13 @@
         /// <summary>
         /// نوع بازیگر، مثلا: برترین کارگزار
         /// </summary>
-        public string Type { get; set; } = string.Empty;
+        public MainPlayerType Type { get; set; }
 
         /// <summary>
         /// نام بازیگر، مثلا: کارگزاری مفید
         /// </summary>
         public string Name { get; set; } = string.Empty;
+        public int Id { get; set; }
 
         /// <summary>
         /// کلاس آیکون بوت‌استرپ برای نمایش
@@ -22,5 +23,5 @@
         /// </summary>
         public decimal MarketShare { get; set; }
     }
-
+    public enum MainPlayerType { Broker, Supplier }
 }

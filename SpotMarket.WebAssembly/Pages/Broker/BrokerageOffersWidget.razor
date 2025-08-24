@@ -53,7 +53,7 @@
             <div class="no-data-container">
                 <div class="no-data-content">
                     <i class="bi bi-calendar-x"></i>
-                    <span>هیچ اطلاعیه‌عرضه‌ای در این دسته برای این کارگزار وجود ندارد.</span>
+                    <span>هیچ اطلاعیه‌عرضه‌ای در @selectedTabInPersian برای این کارگزار وجود ندارد.</span>
                 </div>
             </div>
         }
@@ -82,14 +82,6 @@
         { "future", false }
     };
 
-    protected override void OnInitialized()
-    {
-        if (Data == null)
-        {
-            LoadSampleData();
-        }
-    }
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
@@ -101,29 +93,13 @@
         }
     }
 
-    private void LoadSampleData()
+    private string selectedTabInPersian => selectedTab switch
     {
-        Data = new UpcomingOffersData
-        {
-            Items = new List<UpcomingOfferItem>
-            {
-                // === داده‌های امروز (2 مورد) ===
-                new UpcomingOfferItem { Title = "میلگرد آجدار 16، A3", Subtitle = "فولاد خراسان", DayOfWeek = "چهار", DayOfMonth = "30", OfferDateType = OfferDateType.Today, Type = UpcomingOfferType.Commodity, UrlName="rebar-16-a3" },
-                new UpcomingOfferItem { Title = "کاتد مس", Subtitle = "ملی صنایع مس ایران", DayOfWeek = "چهار", DayOfMonth = "30", OfferDateType = OfferDateType.Today, Type = UpcomingOfferType.Commodity, UrlName="copper-cathode" },
-
-                // === داده‌های آینده (6 مورد) ===
-                new UpcomingOfferItem { Title = "ورق گرم C", Subtitle = "فولاد مبارکه اصفهان", DayOfWeek = "شنبه", DayOfMonth = "02", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="hot-rolled-sheet-c" },
-                new UpcomingOfferItem { Title = "سیمان تیپ 2", Subtitle = "سیمان تهران", DayOfWeek = "شنبه", DayOfMonth = "02", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="cement-type-2" },
-                new UpcomingOfferItem { Title = "گندله سنگ آهن", Subtitle = "صنعتی و معدنی چادرملو", DayOfWeek = "یک", DayOfMonth = "03", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="iron-ore-pellets" },
-                new UpcomingOfferItem { Title = "پلی اتیلن ترفتالات", Subtitle = "پتروشیمی تندگویان", DayOfWeek = "دو", DayOfMonth = "04", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="pet-g" },
-                new UpcomingOfferItem { Title = "قیر 60/70", Subtitle = "نفت پاسارگاد", DayOfWeek = "دو", DayOfMonth = "04", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="bitumen-60-70" },
-                new UpcomingOfferItem { Title = "شکر سفید", Subtitle = "کارخانه قند اصفهان", DayOfWeek = "سه", DayOfMonth = "05", OfferDateType = OfferDateType.Future, Type = UpcomingOfferType.Commodity, UrlName="white-sugar" },
-
-                // === داده‌های گذشته (0 مورد) ===
-                // برای نمایش حالت خالی، داده‌ای برای گذشته در نظر گرفته نشده است
-            }
-        };
-    }
+        "past" => "روزهای گذشته",
+        "today" => "روز جاری",
+        "future" => "روزهای آینده",
+        _ => "این دسته"
+    };
 
     private void SetSelectedTab(string tabName)
     {
@@ -161,24 +137,4 @@
             NavManager.NavigateTo($"/offers/{item.UrlName}");
         }
     }
-
-    // مدل‌های داده برای نمونه
-    public class UpcomingOffersData
-    {
-        public List<UpcomingOfferItem> Items { get; set; } = new();
-    }
-
-    public class UpcomingOfferItem
-    {
-        public string Title { get; set; } = "";
-        public string Subtitle { get; set; } = "";
-        public string DayOfWeek { get; set; } = "";
-        public string DayOfMonth { get; set; } = "";
-        public string UrlName { get; set; } = "";
-        public UpcomingOfferType Type { get; set; }
-        public OfferDateType OfferDateType { get; set; }
-    }
-
-    public enum UpcomingOfferType { Commodity, Group }
-    public enum OfferDateType { Past, Today, Future }
 }

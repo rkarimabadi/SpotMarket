@@ -43,8 +43,10 @@ namespace SpotMarket.WebAssembly.Services.Presentation
             {
                 return type switch
                 {
-                    SearchResultType.Commodity => $"/commodity/{id}",
-                    SearchResultType.Group => $"/groups/{id}",
+                    SearchResultType.Commodity => $"/commodity-tree/commodities/{id}",
+                    SearchResultType.Group => $"/commodity-tree/groups/{id}",
+                    SearchResultType.SubGroup => $"/commodity-tree/sub-groups/{id}",
+                    SearchResultType.MainGroup => $"/commodity-tree/main-groups/{id}",
                     SearchResultType.Broker => $"/players/brokers/{id}",
                     SearchResultType.Supplier => $"/players/suppliers/{id}",
                     _ => "#"

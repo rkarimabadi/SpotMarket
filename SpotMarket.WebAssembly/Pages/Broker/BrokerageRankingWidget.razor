@@ -30,45 +30,6 @@
     [Parameter]
     public List<RankingItem>? Data { get; set; }
 
-    protected override void OnInitialized()
-    {
-        if (Data == null)
-        {
-            LoadSampleData();
-        }
-    }
-
-    private void LoadSampleData()
-    {
-        Data = new List<RankingItem>
-        {
-            new RankingItem
-            {
-                Title = "رتبه بر اساس ارزش",
-                Subtitle = "سهم ۱۱.۵٪ از کل معاملات",
-                Rank = 3,
-                IconCssClass = "bi bi-cash-stack",
-                ThemeCssClass = "value-rank"
-            },
-            new RankingItem
-            {
-                Title = "رتبه بر اساس حجم",
-                Subtitle = "سهم ۷.۲٪ از کل معاملات",
-                Rank = 5,
-                IconCssClass = "bi bi-stack",
-                ThemeCssClass = "volume-rank"
-            },
-            new RankingItem
-            {
-                Title = "رتبه بر اساس فعالیت",
-                Subtitle = "نرخ موفقیت عرضه ۸۵.۲٪",
-                Rank = 2,
-                IconCssClass = "bi bi-check-circle-fill",
-                ThemeCssClass = "activity-rank"
-            }
-        };
-    }
-
     public class RankingItem
     {
         public string Title { get; set; } = "";

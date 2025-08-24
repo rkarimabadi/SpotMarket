@@ -34,7 +34,7 @@
                     <div class="legend-item">
                         <span class="legend-dot" style="background-color: @item.Color;"></span>
                         <span class="legend-label">@item.GroupName</span>
-                        <span class="legend-value">@item.Percentage%</span>
+                        <span class="legend-value">@item.Percentage.ToString("N0")%</span>
                     </div>
                 }
             </div>
@@ -49,30 +49,4 @@
     public string ChartCenterTitle { get; set; } = "بر اساس ارزش";
     [Parameter]
     public List<CommodityGroupShareItem>? Data { get; set; }
-
-    protected override void OnInitialized()
-    {
-        if (Data == null)
-        {
-            LoadSampleData();
-        }
-    }
-
-    private void LoadSampleData()
-    {
-        Data = new List<CommodityGroupShareItem>
-        {
-            new CommodityGroupShareItem { GroupName = "محصولات فولادی", Percentage = 45, Color = "#54a0ff" },
-            new CommodityGroupShareItem { GroupName = "پتروشیمی", Percentage = 30, Color = "#50c878" },
-            new CommodityGroupShareItem { GroupName = "معدنی", Percentage = 15, Color = "#f0932b" },
-            new CommodityGroupShareItem { GroupName = "سایر", Percentage = 10, Color = "#6c757d" }
-        };
-    }
-
-    public class CommodityGroupShareItem
-    {
-        public string GroupName { get; set; } = "";
-        public double Percentage { get; set; }
-        public string Color { get; set; } = "";
-    }
 }

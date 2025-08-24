@@ -4,8 +4,6 @@
 {
     <div class="widget-container">
         <div class="competition-widget">
-            <!-- === BLOCK CHANGED START === -->
-            <!-- بازطراحی با لیبل در زیر آرک -->
             <div class="competition-radial-gauge">
                 <div class="gauge-graphic">
                     <svg viewBox="0 0 100 56">
@@ -20,7 +18,6 @@
                     @Data.Label
                 </div>
             </div>
-            <!-- === BLOCK CHANGED END === -->
             <div class="competition-info">
                 <h4 class="title">@Data.Title</h4>
                 <p class="subtitle">@Data.Description</p>
@@ -35,40 +32,12 @@
     [Parameter]
     public CompetitionData? Data { get; set; }
 
-    // طول کمان SVG برابر است با: π * r = 3.14159 * 40
     private const double ArcLength = 125.66;
-
-    protected override void OnInitialized()
-    {
-        if (Data == null)
-        {
-            LoadSampleData();
-        }
-    }
 
     private string CalculateStrokeOffset()
     {
         var percentage = Math.Max(0, Math.Min(100, Data?.Percentage ?? 0));
         var offset = ArcLength * (1 - (percentage / 100));
         return offset.ToString(CultureInfo.InvariantCulture);
-    }
-
-    private void LoadSampleData()
-    {
-        Data = new CompetitionData
-        {
-            Percentage = 12.5,
-            Label = "میانگین رقابت",
-            Title = "قدرت فروش",
-            Description = "این کارگزاری به‌طور میانگین موفق شده است کالاها را ۱۲.۵٪ بالاتر از قیمت پایه به فروش برساند."
-        };
-    }
-
-    public class CompetitionData
-    {
-        public double Percentage { get; set; }
-        public string Label { get; set; } = string.Empty;
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
     }
 }

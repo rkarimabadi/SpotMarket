@@ -1,6 +1,6 @@
 ﻿@using System.Globalization
 
-@if (VolumeData != null && ValueData != null && CountData != null)
+@if (Data.ByVolume != null && Data.ByValue != null && Data.ByCount != null)
 {
     <div class="top-suppliers-widget">
         <div class="widget-header">
@@ -17,9 +17,9 @@
             @{
                 var itemsToShow = selectedTab switch
                 {
-                    "volume" => VolumeData,
-                    "count" => CountData,
-                    _ => ValueData
+                    "volume" => Data.ByVolume,
+                    "count" => Data.ByCount,
+                    _ => Data.ByValue
                 };
                 var maxVal = itemsToShow.Any() ? itemsToShow.Max(i => i.Value) : 1;
             }
@@ -49,51 +49,7 @@
     [Parameter]
     public string Title { get; set; } = "بزرگترین عرضه‌کنندگان";
 
-    private List<SupplierPerformanceItem>? VolumeData { get; set; }
-    private List<SupplierPerformanceItem>? ValueData { get; set; }
-    private List<SupplierPerformanceItem>? CountData { get; set; }
+    [Parameter] public TopSuppliersData Data { get; set; }
 
     private string selectedTab = "value";
-
-    protected override void OnInitialized()
-    {
-        LoadSampleData();
-    }
-
-    private void LoadSampleData()
-    {
-        ValueData = new List<SupplierPerformanceItem>
-        {
-            new SupplierPerformanceItem { SupplierName = "فولاد مبارکه اصفهان", Value = 1200, DisplayValue = "۱.۲ همت" },
-            new SupplierPerformanceItem { SupplierName = "ملی صنایع مس ایران", Value = 950, DisplayValue = "۹۵۰ میلیارد تومان" },
-            new SupplierPerformanceItem { SupplierName = "فولاد خوزستان", Value = 800, DisplayValue = "۸۰۰ میلیارد تومان" },
-            new SupplierPerformanceItem { SupplierName = "پتروشیمی تندگویان", Value = 650, DisplayValue = "۶۵۰ میلیارد تومان" },
-            new SupplierPerformanceItem { SupplierName = "صنعتی و معدنی چادرملو", Value = 500, DisplayValue = "۵۰۰ میلیارد تومان" }
-        };
-
-        VolumeData = new List<SupplierPerformanceItem>
-        {
-            new SupplierPerformanceItem { SupplierName = "فولاد مبارکه اصفهان", Value = 150, DisplayValue = "۱۵۰ هزار تن" },
-            new SupplierPerformanceItem { SupplierName = "صنعتی و معدنی چادرملو", Value = 125, DisplayValue = "۱۲۵ هزار تن" },
-            new SupplierPerformanceItem { SupplierName = "سیمان تهران", Value = 110, DisplayValue = "۱۱۰ هزار تن" },
-            new SupplierPerformanceItem { SupplierName = "فولاد خراسان", Value = 90, DisplayValue = "۹۰ هزار تن" },
-            new SupplierPerformanceItem { SupplierName = "فولاد خوزستان", Value = 75, DisplayValue = "۷۵ هزار تن" }
-        };
-
-        CountData = new List<SupplierPerformanceItem>
-        {
-            new SupplierPerformanceItem { SupplierName = "فولاد مبارکه اصفهان", Value = 45, DisplayValue = "۴۵ عرضه" },
-            new SupplierPerformanceItem { SupplierName = "سیمان تهران", Value = 38, DisplayValue = "۳۸ عرضه" },
-            new SupplierPerformanceItem { SupplierName = "پتروشیمی تندگویان", Value = 32, DisplayValue = "۳۲ عرضه" },
-            new SupplierPerformanceItem { SupplierName = "فولاد خوزستان", Value = 25, DisplayValue = "۲۵ عرضه" },
-            new SupplierPerformanceItem { SupplierName = "نفت پاسارگاد", Value = 20, DisplayValue = "۲۰ عرضه" }
-        };
-    }
-
-    public class SupplierPerformanceItem
-    {
-        public string SupplierName { get; set; } = "";
-        public double Value { get; set; }
-        public string DisplayValue { get; set; } = "";
-    }
 }

@@ -1,13 +1,14 @@
 ﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavManager
 @if (Players?.Any() == true)
 {
     <div class="widget-container">
         <div class="players-grid" style="grid-template-columns: repeat(@Players.Count(), 1fr);">
             @foreach (var player in Players)
             {
-                <div class="player-card">
+                <div class="player-card" @onclick="() => GoToPlayer(player)">
                     <div class="player-icon"><i class="@player.IconCssClass"></i></div>
-                    <div class="player-title">@player.Type</div>
+                    <div class="player-title">@PlayerType(player.Type)</div>
                     <div class="player-name">@player.Name</div>
                 </div>
             }
@@ -18,4 +19,22 @@
 @code {
     [Parameter]
     public IEnumerable<MainPlayer>? Players { get; set; }
+    private string PlayerType(MainPlayerType type) => type switch
+    {
+        MainPlayerType.Broker => "کارگزار فروشنده",
+        MainPlayerType.Supplier => "عرضه‌کننده",
+        _ => "نامشخص"
+    };
+    private void GoToPlayer(MainPlayer item)
+    {
+        switch (item.Type)
+        {
+            case MainPlayerType.Broker:
+                NavManager.NavigateTo($"/players/brokers/{item.Id}");
+                break;
+            case MainPlayerType.Supplier:
+                NavManager.NavigateTo($"/players/suppliers/{item.Id}");
+                break;
+        }
+    }
 }

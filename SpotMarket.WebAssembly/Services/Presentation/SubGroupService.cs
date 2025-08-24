@@ -9,6 +9,8 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         Task<GroupListData> GetActiveCommoditiesAsync(int subGroupId);
         Task<MarketConditionsData> GetCommodityActivitiesAsync(int subGroupId);
         Task<UpcomingOffersData> GetOfferHistoryAsync(int subGroupId);
+        Task<SubGroupHeaderData> GetSubGroupHeaderDataAsync(int subGroupId);
+        Task<List<HierarchyItem>> GetSubGroupHierarchyAsync(int subGroupId);
     }
 
     public class SubGroupService : ISubGroupService
@@ -97,6 +99,14 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         public async Task<UpcomingOffersData> GetOfferHistoryAsync(int subGroupId)
         {
             return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{subGroupId}/offer-history") ?? new UpcomingOffersData();
+        }
+        public async Task<SubGroupHeaderData> GetSubGroupHeaderDataAsync(int subGroupId)
+        {
+            return await _httpClient.GetFromJsonAsync<SubGroupHeaderData>($"{_controllerPath}/{subGroupId}/header") ?? new SubGroupHeaderData();
+        }
+        public async Task<List<HierarchyItem>> GetSubGroupHierarchyAsync(int subGroupId)
+        {
+            return await _httpClient.GetFromJsonAsync<List<HierarchyItem>>($"{_controllerPath}/{subGroupId}/hierarchy") ?? new List<HierarchyItem>();
         }
 
     }
