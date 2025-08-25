@@ -1,5 +1,9 @@
 ﻿@inject NavigationManager NavigationManager
 <div class="breadcrumb-hierarchy">
+    <span class="breadcrumb-item active" style="cursor: pointer" @onclick="() => GoTo(home)"><i class="bi bi-house-fill"></i></span>
+    <span class="breadcrumb-separator">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.707 17.707L14.293 19.121L8.172 13L14.293 6.879L15.707 8.293L11.001 13L15.707 17.707Z"></path></svg>
+    </span>
     @foreach (var item in HierarchyItems)
     {
         <span class="breadcrumb-item @(item.IsActive ? "active" : "")" style="cursor:@(item.IsActive ? "pointer" : "unset")" @onclick="() => GoTo(item)">@item.Name</span>
@@ -17,6 +21,7 @@
 
     [Parameter]
     public List<HierarchyItem> HierarchyItems { get; set; }
+    private HierarchyItem home = new HierarchyItem { Type = "market", Id = 1, IsActive = true };
     private void GoTo(HierarchyItem item)
     {
         if (item.Id > 0 && item.IsActive)

@@ -98,10 +98,10 @@ else
         _isLoading = false;
 
         // Update navigation state after header data is loaded
-        if (_headerData != null)
+        if (_headerData != null && _hierarchyData != null && _hierarchyData.Any())
         {
             var pageTitle = $"تحلیل کالای {_headerData.CommodityName}";
-            NavState.SetNavState(pageTitle, true, $"/markets/{mainGroupId}/{groupId}/{subGroupId}");
+            NavState.SetNavState(pageTitle, true, $"/markets/{_hierarchyData?.FirstOrDefault(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{_hierarchyData?.FirstOrDefault(x => x.Type == "Group")?.Id ?? groupId}/{_hierarchyData?.FirstOrDefault(x => x.Type == "SubGroup")?.Id ?? subGroupId}");
         }
     }
 }

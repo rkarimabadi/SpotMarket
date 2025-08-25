@@ -1,4 +1,5 @@
 ﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavigationManager
 @if (Data != null)
 {
     <div class="widget-container">
@@ -17,7 +18,7 @@
             {
                 foreach (var item in itemsToShow)
                 {
-                    <div class="data-list-item">
+                    <div class="data-list-item" @onclick="() => GoTo(item)">
                         <div class="item-rank">@item.Rank</div>
                         <div class="item-main-info">
                             <div class="title">@item.Title</div>
@@ -56,5 +57,12 @@
             ValueState.Negative => "negative",
             _ => "neutral"
         };
+    }
+    private void GoTo(MarketMoverItem item)
+    {
+        if (item.CommodityId > 0)
+        {
+            NavigationManager.NavigateTo($"/commodity-tree/commodities/{item.CommodityId}");
+        }
     }
 }

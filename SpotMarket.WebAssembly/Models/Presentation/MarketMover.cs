@@ -7,6 +7,7 @@
     public class MarketMoverItem
     {
         public int Rank { get; set; }
+        public int CommodityId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Subtitle { get; set; } = string.Empty;
         public string Value { get; set; } = string.Empty;
@@ -16,7 +17,7 @@
     /// <summary>
     /// وضعیت مقدار را برای تعیین رنگ (مثبت، منفی، خنثی) مشخص می‌کند
     /// </summary>
-    public enum ValueState { Neutral, Positive, Negative  }
+    public enum ValueState { Neutral, Positive, Negative }
 
     /// <summary>
     /// نگهدارنده کل داده‌های مورد نیاز برای ویجت پویایی بازار

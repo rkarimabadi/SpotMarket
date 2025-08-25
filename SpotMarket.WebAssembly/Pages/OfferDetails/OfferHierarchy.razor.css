@@ -3,7 +3,6 @@
     align-items: center;
     flex-wrap: nowrap;
     gap: 4px;
-    padding: 1rem 0;
     overflow-x: auto;
     justify-content: start;
     scrollbar-width: none;

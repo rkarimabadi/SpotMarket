@@ -55,6 +55,7 @@
     align-items: center;
     padding: 0.875rem 1rem;
     border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
 }
 
     .data-list-item:last-child {
@@ -69,6 +70,9 @@
     text-align: center;
 }
 
+.item-main-info {
+    min-width: 0;
+}
 .item-main-info .title {
     font-weight: 600;
     color: var(--text-primary-color);
@@ -77,6 +81,9 @@
 .item-main-info .subtitle {
     font-size: 0.875rem;
     color: var(--text-secondary-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* === بخش جدید: استایل برای کانتینر مقدار و لیبل === */

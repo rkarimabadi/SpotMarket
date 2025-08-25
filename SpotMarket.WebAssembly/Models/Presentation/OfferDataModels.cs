@@ -1,7 +1,7 @@
 ﻿namespace SpotMarket.WebAssembly.Models.Presentation
 {
     public class OfferViewModel
-{
+    {
         public int Id { get; set; }
         public string Symbol { get; set; } = string.Empty;
         public string CommodityName { get; set; } = string.Empty;
@@ -11,6 +11,7 @@
         public string Supplier { get; set; } = string.Empty;
         public string Manufacturer { get; set; } = string.Empty;
         public string Broker { get; set; } = string.Empty;
+        public int BrokerId { get; set; }
         public string OfferDate { get; set; } = string.Empty;
         public string DeliveryDate { get; set; } = string.Empty;
         public decimal InitialPrice { get; set; }
@@ -31,5 +32,5 @@
         public string SettlementType { get; set; } = string.Empty;
         public string PackagingType { get; set; } = string.Empty;
         public string SecurityType { get; set; } = string.Empty;
-}
+    }
 }

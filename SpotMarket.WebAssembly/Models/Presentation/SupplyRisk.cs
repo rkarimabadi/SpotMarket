@@ -19,6 +19,7 @@
         public string Subtitle { get; set; } = string.Empty;
         public RiskLevel RiskLevel { get; set; }
         public string Value { get; set; } = string.Empty;
+        public int CommodityId { get; set; }
     }
 
     /// <summary>

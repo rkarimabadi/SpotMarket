@@ -29,7 +29,9 @@
     .group-icon.agri {
         background-color: #f0932b;
     }
-
+    .group-icon.fork {
+        background-color: #6c757d;
+    }
     .group-icon.secondary {
         background-color: #6c757d;
     }

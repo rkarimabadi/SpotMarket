@@ -32,9 +32,9 @@
             {
                 "Ring" => $"{item.Id}",
                 "MainGroup" => $"{item.Id}",
-                "Group" => $"{HierarchyItems.First(x => x.Type == "MainGroup").Id}/{item.Id}",
-                "SubGroup" => $"{HierarchyItems.First(x => x.Type == "MainGroup").Id}/{HierarchyItems.First(x => x.Type == "Group").Id}/{item.Id}",
-                "Commodity" => $"{HierarchyItems.First(x => x.Type == "MainGroup").Id}/{HierarchyItems.First(x => x.Type == "Group").Id}/{HierarchyItems.First(x => x.Type == "SubGroup").Id}/{item.Id}",
+                "Group" => $"{HierarchyItems?.FirstOrDefault(x => x.Type == "MainGroup")?.Id}/{item.Id}",
+                "SubGroup" => $"{HierarchyItems?.FirstOrDefault(x => x.Type == "MainGroup")?.Id}/{HierarchyItems?.FirstOrDefault(x => x.Type == "Group")?.Id}/{item.Id}",
+                "Commodity" => $"{HierarchyItems?.FirstOrDefault(x => x.Type == "MainGroup")?.Id}/{HierarchyItems?.FirstOrDefault(x => x.Type == "Group")?.Id}/{HierarchyItems?.FirstOrDefault(x => x.Type == "SubGroup")?.Id}/{item.Id}",
                 _ => ""
             };
             NavigationManager.NavigateTo($"/markets/{urlName}");

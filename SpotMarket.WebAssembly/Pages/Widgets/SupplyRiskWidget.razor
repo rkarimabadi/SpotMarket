@@ -1,4 +1,5 @@
 ﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavigationManager
 @if (Data != null && Data.Items.Any())
 {
     <div class="widget-container">
@@ -8,7 +9,7 @@
         <div class="data-card">
             @foreach (var item in Data.Items)
             {
-                <div class="data-list-item">
+                <div class="data-list-item" @onclick="() => GoTo(item)">
                     <div class="item-rank">
                         <i class="@GetIconClass(item.RiskLevel)"></i>
                     </div>
@@ -38,5 +39,12 @@
             RiskLevel.Low => "bi bi-check-circle-fill text-success",
             _ => "bi bi-question-circle-fill"
         };
+    }
+    private void GoTo(SupplyRiskItem item)
+    {
+        if (item.CommodityId > 0)
+        {
+            NavigationManager.NavigateTo($"/commodity-tree/commodities/{item.CommodityId}");
+        }
     }
 }
