@@ -53,12 +53,21 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         {
             return await _httpClient.GetFromJsonAsync<CompetitionData>($"{_controllerPath}/{supplierId}/competition-ratio");
         }
+        public async Task<MarketMetricData?> GetMarketMetricAsync(int supplierId)
+        {
+            return await _httpClient.GetFromJsonAsync<MarketMetricData>($"{_controllerPath}/{supplierId}/market-metric");
+        }
+        public async Task<SupplierCommodityAnalysisData?> GetSupplierCommodityAnalysisAsync(int supplierId)
+        {
+            return await _httpClient.GetFromJsonAsync<SupplierCommodityAnalysisData>($"{_controllerPath}/{supplierId}/commodity-analysis");
+        }
+
         /// <summary>
         /// Fetches the seasonal activity data for a specific supplier.
         /// </summary>
         public async Task<SeasonalActivityData?> GetSeasonalActivityAsync(int supplierId)
         {
-            return await _httpClient.GetFromJsonAsync<SeasonalActivityData>($"{_controllerPath}/{supplierId}/seasonal-activity");
+            return await _httpClient.GetFromJsonAsync<SeasonalActivityData?>($"{_controllerPath}/{supplierId}/seasonal-activity") ?? new SeasonalActivityData();
 
             // --- Sample Data Generation ---
             //var sampleData = new SeasonalActivityData

@@ -19,6 +19,8 @@ else
     <SupplierCommodityGroup Data="_marketShare" />
     <SupplierCompetition Data="_stabilityData" />
     <SupplierSeasonalActivity Data="_seasonalActivityData" />
+    <SupplierMetrics Data="_marketMetricData"/>
+    <SupplierCommodityAnalysis Data="_supplierCommodityAnalysisTableData"/>
 
     <!-- Other widgets will be added here later -->
 }
@@ -38,6 +40,8 @@ else
     private IEnumerable<MainPlayer>? _mainPlayers;
     private List<CommodityGroupShareItem>? _marketShare;
     private SeasonalActivityData? _seasonalActivityData;
+    private MarketMetricData? _marketMetricData;
+    private SupplierCommodityAnalysisData? _supplierCommodityAnalysisTableData;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -55,6 +59,8 @@ else
                 LoadSupplierHierarchy(),
                 LoadSupplierStability(),
                 LoadSeasonalActivity(),
+                LoadMarketMetric(),
+                LoadCommodityAnalysis(),
                 LoadSupplierMarketShare()
             );
 
@@ -91,5 +97,13 @@ else
     private async Task LoadSeasonalActivity()
     {
         _seasonalActivityData = await SupplierService.GetSeasonalActivityAsync(SupplierId);
+    }
+    private async Task LoadMarketMetric()
+    {
+        _marketMetricData = await SupplierService.GetMarketMetricAsync(SupplierId);
+    }
+    private async Task LoadCommodityAnalysis()
+    {
+        _supplierCommodityAnalysisTableData = await SupplierService.GetSupplierCommodityAnalysisAsync(SupplierId);
     }
 }

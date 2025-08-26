@@ -1,0 +1,29 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+
+@if (Data?.Metrics != null && Data.Metrics.Any())
+{
+<div class="health-widget">
+        <div class="cards-container">
+            @foreach (var metric in Data.Metrics)
+            {
+                <div class="card health-card">
+                    <div class="card-body health-card-content">
+                        <div class="card-icon-wrapper @metric.ThemeColorCssClass">
+                            <i class="@metric.IconCssClass"></i>
+                        </div>
+                        <div class="card-text-content">
+                            <span class="card-title">@metric.Title</span>
+                            <span class="card-value @metric.ThemeColorCssClass">@metric.Value</span>
+                            <span class="card-subtitle">@metric.Subtitle</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+</div>
+}
+
+@code {
+    [Parameter]
+    public MarketMetricData? Data { get; set; }
+}
