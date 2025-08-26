@@ -1,0 +1,45 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavManager
+@if (Data?.Any() == true)
+{
+    <div class="widget-container">
+        <div class="players-grid" style="grid-template-columns: repeat(@Data.Count(), 1fr);">
+            @foreach (var player in Data)
+            {
+                <div class="player-card" @onclick="() => GoToPlayer(player)">
+                    <div class="player-icon"><i class="@player.IconCssClass"></i></div>
+                    <div class="player-title">@PlayerType(player.Type)</div>
+                    <div class="player-name">@player.Name</div>
+                    <div class="player-stat-container">
+                        <div class="player-share">@player.MarketShare.ToString("0.0")%</div>
+@*                         <div class="player-share-label">از ارزش کل معاملات</div> *@
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public IEnumerable<MainPlayer>? Data { get; set; }
+    private string PlayerType(MainPlayerType type) => type switch
+    {
+        MainPlayerType.Broker => "کارگزار اصلی",
+        MainPlayerType.Commodity => "کالای استراتژیک",
+        _ => "نامشخص"
+    };
+    private void GoToPlayer(MainPlayer item)
+    {
+        switch (item.Type)
+        {
+            case MainPlayerType.Broker:
+                NavManager.NavigateTo($"/players/brokers/{item.Id}");
+                break;
+            case MainPlayerType.Commodity:
+                NavManager.NavigateTo($"/commodity-tree/commodities/{item.Id}");
+                break;
+        }
+    }
+}

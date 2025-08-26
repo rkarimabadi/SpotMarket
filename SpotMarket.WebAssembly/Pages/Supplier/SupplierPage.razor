@@ -1,0 +1,95 @@
+﻿@page "/players/suppliers/{supplierId:int}"
+
+@using SpotMarket.WebAssembly.Models.Presentation
+@using SpotMarket.WebAssembly.Services.Presentation
+@inject ISupplierService SupplierService
+
+@if (_isLoading)
+{
+    <div class="page-loader">
+        <p><em>در حال بارگذاری اطلاعات عرضه‌کننده...</em></p>
+    </div>
+}
+else
+{
+    <SupplierHeader Data="_headerData" />
+    @* <SupplierHierarchy Data="_hierarchyData" /> *@
+    <SupplierRanking Data="_rankingData" />
+    <SupplierMainPlayers Data="_mainPlayers" />
+    <SupplierCommodityGroup Data="_marketShare" />
+    <SupplierCompetition Data="_stabilityData" />
+    <SupplierSeasonalActivity Data="_seasonalActivityData" />
+
+    <!-- Other widgets will be added here later -->
+}
+
+@code {
+    [Parameter]
+    public int SupplierId { get; set; }
+
+    private bool _isLoading = true;
+    private int _previousSupplierId;
+
+    // Data holders for each component
+    private SupplierHeaderData? _headerData;
+    private CompetitionData? _stabilityData;
+    private List<HierarchyItem>? _hierarchyData;
+    private List<RankingItem>? _rankingData;
+    private IEnumerable<MainPlayer>? _mainPlayers;
+    private List<CommodityGroupShareItem>? _marketShare;
+    private SeasonalActivityData? _seasonalActivityData;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // Fetch data only if the supplierId has changed
+        if (SupplierId > 0 && SupplierId != _previousSupplierId)
+        {
+            _isLoading = true;
+            _previousSupplierId = SupplierId;
+
+            // Load all necessary data in parallel
+            await Task.WhenAll(
+                LoadSupplierHeader(),
+                LoadSupplierRanking(),
+                LoadSupplierMainPlayers(),
+                LoadSupplierHierarchy(),
+                LoadSupplierStability(),
+                LoadSeasonalActivity(),
+                LoadSupplierMarketShare()
+            );
+
+            _isLoading = false;
+        }
+    }
+
+    private async Task LoadSupplierHeader()
+    {
+        _headerData = await SupplierService.GetSupplierHeaderAsync(SupplierId);
+    }
+
+    private async Task LoadSupplierHierarchy()
+    {
+        _hierarchyData = await SupplierService.GetSupplierHierarchyAsync(SupplierId);
+    }
+
+    private async Task LoadSupplierRanking()
+    {
+        _rankingData = await SupplierService.GetSupplierRankingAsync(SupplierId);
+    }
+    private async Task LoadSupplierMainPlayers()
+    {
+        _mainPlayers = await SupplierService.GetMainPlayersAsync(SupplierId);
+    }
+    private async Task LoadSupplierMarketShare()
+    {
+        _marketShare = await SupplierService.GetMarketShareAsync(SupplierId);
+    }
+    private async Task LoadSupplierStability()
+    {
+        _stabilityData = await SupplierService.GetCompetitionRatioAsync(SupplierId);
+    }
+    private async Task LoadSeasonalActivity()
+    {
+        _seasonalActivityData = await SupplierService.GetSeasonalActivityAsync(SupplierId);
+    }
+}

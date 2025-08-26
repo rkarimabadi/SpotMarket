@@ -23,5 +23,5 @@
         /// </summary>
         public decimal MarketShare { get; set; }
     }
-    public enum MainPlayerType { Broker, Supplier }
+    public enum MainPlayerType { Broker, Supplier, Commodity }
 }

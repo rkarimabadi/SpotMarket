@@ -1,0 +1,148 @@
+﻿/* Inspired by Apple's Fitness rings and modern data visualization */
+.seasonal-activity-widget {
+    padding: 1rem 0;
+}
+
+.widget-header {
+    margin-bottom: 1rem;
+}
+
+.widget-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+.widget-content {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 150px;
+    aspect-ratio: 1 / 1;
+}
+
+    .chart-container svg {
+        width: 100%;
+        height: 100%;
+    }
+
+.track-circle {
+    fill: none;
+    stroke: var(--border-color);
+    stroke-width: 20;
+}
+
+.season-arc {
+    fill: none;
+    stroke-width: 20;
+    stroke-linecap: round;
+    transition: opacity 0.8s ease-out;
+}
+
+/* Seasonal Colors */
+.season-0 {
+    stroke: #34c759;
+}
+/* Spring - Green */
+.season-1 {
+    stroke: #ff9500;
+}
+/* Summer - Orange */
+.season-2 {
+    stroke: #ff3b30;
+}
+/* Autumn - Red */
+.season-3 {
+    stroke: #007aff;
+}
+/* Winter - Blue */
+
+.chart-center-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.center-title {
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+    font-weight: 500;
+}
+
+.center-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+.legend-container {
+    width: 100%;
+    max-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+    .legend-dot.season-0 {
+        background-color: #34c759;
+    }
+/* Spring - Green */
+    .legend-dot.season-1 {
+        background-color: #ff9500;
+    }
+/* Summer - Orange */
+    .legend-dot.season-2 {
+        background-color: #ff3b30;
+    }
+/* Autumn - Red */
+    .legend-dot.season-3 {
+        background-color: #007aff;
+    }
+.legend-label {
+    flex-grow: 1;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+.legend-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+/* Dark Theme Adjustments */
+[data-bs-theme="dark"] .widget-content {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .track-circle {
+    stroke: var(--gray-700);
+}

@@ -1,0 +1,33 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavigationManager
+
+@if (Data != null && Data.Any())
+{
+    <div class="breadcrumb-hierarchy">
+        @foreach (var item in Data)
+        {
+            <span class="breadcrumb-item @(item.IsActive ? "active" : "")" @onclick="() => GoTo(item)">
+                @item.Name
+            </span>
+            @if (!item.IsLast)
+            {
+                <span class="breadcrumb-separator">
+                    <i class="bi bi-chevron-left"></i>
+                </span>
+            }
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<HierarchyItem>? Data { get; set; }
+
+    private void GoTo(HierarchyItem item)
+    {
+        if (item.IsActive && item.Id > 0)
+        {
+            NavigationManager.NavigateTo($"/players/suppliers/{item.Id}");
+        }
+    }
+}

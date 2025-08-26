@@ -1,0 +1,109 @@
+﻿.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+.section-header {
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+.competition-widget {
+    padding: 1rem;
+    margin: 0;
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* === STYLES CHANGED START === */
+/* استایل‌های اصلاح شده برای گیج شعاعی با لیبل در پایه */
+.competition-radial-gauge {
+    width: 110px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gauge-graphic {
+    position: relative;
+    width: 100%;
+}
+
+    .gauge-graphic svg {
+        width: 100%;
+        height: auto;
+    }
+
+.competition-radial-gauge path {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+}
+
+.gauge-background {
+    stroke: var(--gray-200);
+}
+
+.gauge-value {
+    stroke: var(--primary-color);
+    stroke-dasharray: 125.66; /* π * 40 */
+    stroke-dashoffset: 125.66; /* Start empty */
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.gauge-text-container {
+    position: absolute;
+    bottom: -35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-flow: column;
+    align-content: center;
+    align-items: center;
+}
+
+    .gauge-text-container .value {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+        direction: ltr;
+    }
+
+.gauge-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    font-weight: 500;
+    text-align: center;
+    margin-top: 0.3rem;
+}
+/* === STYLES CHANGED END === */
+
+.competition-info .title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary-color);
+}
+
+.competition-info .subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    line-height: 1.5;
+}
+
+[data-bs-theme="dark"] .competition-widget {
+    background-color: var(--gray-800);
+}
+
+[data-bs-theme="dark"] .gauge-background {
+    stroke: var(--gray-700);
+}

@@ -1,5 +1,5 @@
 ﻿@using System.Globalization
-
+@inject NavigationManager NavManager
 @if (Data.ByVolume != null && Data.ByValue != null && Data.ByCount != null)
 {
     <div class="top-suppliers-widget">
@@ -29,7 +29,7 @@
                 <div class="bar-chart-list">
                     @foreach (var item in itemsToShow)
                     {
-                        <div class="chart-row">
+                        <div class="chart-row" @onclick="() => GoToSupplier(item)">
                             <div class="row-label">
                                 <span class="supplier-name">@item.SupplierName</span>
                                 <span class="supplier-value">@item.DisplayValue</span>
@@ -52,4 +52,11 @@
     [Parameter] public TopSuppliersData Data { get; set; }
 
     private string selectedTab = "value";
+    private void GoToSupplier(SupplierPerformanceItem item)
+    {
+        if (item.SupplierId > 0)
+        {
+            NavManager.NavigateTo($"/players/suppliers/{item.SupplierId}");
+        }
+    }
 }

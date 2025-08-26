@@ -1,0 +1,78 @@
+﻿@using System.Globalization
+@using SpotMarket.WebAssembly.Models.Presentation
+
+@if (Data != null && Data.SeasonActivities.Any())
+{
+    <div class="seasonal-activity-widget">
+        <div class="widget-header">
+            <h3 class="widget-title">پراکندگی فصلی فعالیت</h3>
+        </div>
+        <div class="widget-content">
+            <div class="chart-container">
+                <svg viewBox="0 0 120 120">
+                    <!-- Background Track -->
+                    <circle cx="60" cy="60" r="50" class="track-circle" />
+
+                    <!-- Season Arcs -->
+                    @for (var i = 0; i < Data.SeasonActivities.Count; i++)
+                    {
+                        var season = Data.SeasonActivities[i];
+                        var startAngle = i * 90;
+                        var endAngle = startAngle + 90;
+                        <path d="@DescribeArc(60, 60, 50, startAngle, endAngle)"
+                              class="season-arc season-@i"
+                              style="opacity: @season.ActivityLevel.ToString(CultureInfo.InvariantCulture);" />
+                    }
+                </svg>
+                <div class="chart-center-text">
+                    <span class="center-title">فصل اوج</span>
+                    <span class="center-value">@Data.PeakSeasonName</span>
+                </div>
+            </div>
+            <div class="legend-container">
+                @foreach (var season in Data.SeasonActivities)
+                {
+                    <div class="legend-item">
+                        <span class="legend-dot season-@(GetSeasonIndex(season.SeasonName))"></span>
+                        <span class="legend-label">@season.SeasonName</span>
+                        <span class="legend-value">@season.OfferCount عرضه</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public SeasonalActivityData? Data { get; set; }
+
+    private int GetSeasonIndex(string seasonName) => seasonName switch
+    {
+        "بهار" => 0,
+        "تابستان" => 1,
+        "پاییز" => 2,
+        "زمستان" => 3,
+        _ => 0
+    };
+
+    // Helper function to convert polar coordinates to Cartesian for SVG path
+    private (double X, double Y) PolarToCartesian(double centerX, double centerY, double radius, double angleInDegrees)
+    {
+        var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+        return (
+            centerX + (radius * Math.Cos(angleInRadians)),
+            centerY + (radius * Math.Sin(angleInRadians))
+        );
+    }
+
+    // Helper function to create an SVG arc path
+    private string DescribeArc(double x, double y, double radius, double startAngle, double endAngle)
+    {
+        var start = PolarToCartesian(x, y, radius, endAngle);
+        var end = PolarToCartesian(x, y, radius, startAngle);
+        var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+        var d = $"M {start.X.ToString(CultureInfo.InvariantCulture)} {start.Y.ToString(CultureInfo.InvariantCulture)} A {radius.ToString(CultureInfo.InvariantCulture)} {radius.ToString(CultureInfo.InvariantCulture)} 0 {largeArcFlag} 0 {end.X.ToString(CultureInfo.InvariantCulture)} {end.Y.ToString(CultureInfo.InvariantCulture)}";
+        return d;
+    }
+}

@@ -1,0 +1,42 @@
+﻿/* Reusing the same clean, pill-based design for consistency */
+.breadcrumb-hierarchy {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    gap: 0.5rem;
+    padding: 0.5rem 0 1rem 0;
+}
+
+.breadcrumb-item {
+    background-color: var(--gray-200);
+    color: var(--text-secondary-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 50rem; /* Pill shape */
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: default;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+    .breadcrumb-item.active {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+.breadcrumb-separator {
+    color: var(--text-secondary-color);
+    opacity: 0.5;
+}
+
+/* Dark Theme Adjustments */
+[data-bs-theme="dark"] .breadcrumb-item {
+    background-color: var(--gray-700);
+    color: var(--gray-300);
+}
+
+    [data-bs-theme="dark"] .breadcrumb-item.active {
+        background-color: var(--primary-color);
+        color: white;
+    }
