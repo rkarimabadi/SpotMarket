@@ -4,6 +4,7 @@
 @inject IMarketsService MarketService
 @inject IMainGroupService MainGroupService
 @inject IGroupService GroupService
+<PageTitle>گروه کالای @groupHeaderData?.GroupName</PageTitle>
 <div class="page-container">
     <GroupHeaderWidget Data="@groupHeaderData" />
     <GroupHierarchyWidget HierarchyItems="@groupHierarchyData"/>
