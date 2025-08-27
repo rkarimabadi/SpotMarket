@@ -13,5 +13,7 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         Task<SeasonalActivityData?> GetSeasonalActivityAsync(int supplierId);
         Task<MarketMetricData?> GetMarketMetricAsync(int supplierId);
         Task<SupplierCommodityAnalysisData?> GetSupplierCommodityAnalysisAsync(int supplierId);
+        Task<UpcomingOffersData?> GetSupplierOffersAsync(int supplierId);
+        Task<List<SupplierItem>?> GetAllBrokersAsync(int supplierId);
     }
 }

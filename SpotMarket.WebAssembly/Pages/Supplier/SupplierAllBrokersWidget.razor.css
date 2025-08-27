@@ -1,0 +1,129 @@
+﻿.all-suppliers-widget {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+    .all-suppliers-widget .widget-header {
+        margin-bottom: 1rem;
+    }
+
+    .all-suppliers-widget .widget-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--text-primary-color);
+    }
+
+.expandable-container {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.widget-summary-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: var(--secondary-color);
+    flex-shrink: 0;
+}
+
+    .item-icon .bi {
+        font-size: 1.25rem;
+    }
+
+.item-info {
+    flex-grow: 1;
+}
+
+    .item-info .info-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary-color);
+    }
+
+    .item-info .info-subtitle {
+        font-size: 0.8rem;
+        color: var(--text-secondary-color);
+    }
+
+.item-chevron .bi {
+    font-size: 1.25rem;
+    color: var(--text-secondary-color);
+    transition: transform 0.3s ease;
+}
+
+/* Expanded State */
+.expandable-container.expanded .item-chevron .bi {
+    transform: rotate(180deg);
+}
+
+.suppliers-list-card {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.3s ease-out, padding 0.5s ease-out;
+    padding: 0 1rem;
+}
+
+.expandable-container.expanded .suppliers-list-card {
+    max-height: 1000px; /* A large enough value to show all content */
+    opacity: 1;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+
+.suppliers-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.supplier-tag {
+    padding: 0.5rem 1rem;
+    background-color: var(--gray-200);
+    border-radius: 50rem; /* Pill shape */
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .supplier-tag:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+/* Dark Theme */
+[data-bs-theme="dark"] .expandable-container {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+    [data-bs-theme="dark"] .expandable-container.expanded .suppliers-list-card {
+        border-top-color: var(--gray-700);
+    }
+
+[data-bs-theme="dark"] .supplier-tag {
+    background-color: var(--gray-700);
+    color: var(--gray-300);
+}
+
+    [data-bs-theme="dark"] .supplier-tag:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }

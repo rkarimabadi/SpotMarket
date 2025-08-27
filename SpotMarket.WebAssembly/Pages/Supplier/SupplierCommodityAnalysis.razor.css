@@ -1,182 +1,201 @@
-﻿.analysis-card-list {
-    padding: 0.5rem 0;
+﻿/* Container styles inspired by TradingHallsWidget for consistency */
+.widget-container {
+    padding: 1rem 0;
 }
 
-.analysis-pass-card {
-    border-radius: 1rem;
-    color: white;
+.section-header {
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+.horizontal-scroll-container {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding: 0 1rem 1rem 1rem; /* Padding for shadow and scrollbar space */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    scroll-snap-type: x mandatory;
+}
+
+    .horizontal-scroll-container::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+
+/* New card design for commodity analysis */
+.commodity-analysis-card {
+    flex: 0 0 240px; /* Fixed width for each card */
+    padding: 1rem;
+    border-radius: 1.25rem;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    margin: 0 0 1.5rem 0;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(145deg, var(--primary-color), var(--primary-dark));
-    box-shadow: 0 8px 25px -5px rgba(var(--primary-color-rgb), 0.3);
+    gap: 1rem;
+    scroll-snap-align: start;
+    transition: transform 0.2s ease-in-out;
 }
 
-/* بخش هدر */
 .card-header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 1rem;
+    align-items: center;
+    gap: 0.75rem;
 }
 
-.header-info .commodity-name {
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.3;
+.card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
     color: white;
+    background-color: var(--primary-color); /* A consistent color for analysis icon */
+    flex-shrink: 0;
 }
 
-.header-info .supplier-info {
-    font-size: 0.8rem;
-    font-weight: 400;
-    opacity: 0.8;
-    color:azure;
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.header-icon {
-    font-size: 1.75rem;
-    opacity: 0.8;
-    color:aliceblue;
-}
-
-/* بخش میانی */
 .card-body {
     display: flex;
-    justify-content: space-around;
-    padding: 1.5rem 1rem;
-    position: relative;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    flex-direction: column;
+    gap: 1rem;
+    flex-grow: 1; /* Ensures footer is pushed to the bottom */
 }
 
-    /* افکت بریدگی گوشه کارت */
-    .card-body::before, .card-body::after {
-        content: '';
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background-color: var(--background-color);
-    }
-
-    .card-body::before {
-        top: -10px;
-        left: -10px;
-    }
-
-    .card-body::after {
-        top: -10px;
-        right: -10px;
-    }
-
-[data-bs-theme="dark"] .card-body::before,
-[data-bs-theme="dark"] .card-body::after {
-    background-color: var(--background-color);
-}
-
-.metric-item {
+.stat-item {
     display: flex;
     flex-direction: column;
-    text-align: center;
     gap: 0.25rem;
 }
 
-    .metric-item .label {
-        font-size: 0.75rem;
-        opacity: 0.8;
+.stat-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+/* Visual indicator for success rate */
+.success-rate-indicator {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
+    height: 8px;
+    width: 100%;
+}
+
+    .success-rate-indicator .bar {
+        background-color: var(--border-color);
+        border-radius: 4px;
+        height: 100%;
     }
 
-    .metric-item .value {
-        font-size: 1.1rem;
-        font-weight: 500;
+    .success-rate-indicator.rate-low .bar:nth-child(1) {
+        background-color: var(--danger-color);
     }
 
-/* بخش فوتر و جزئیات */
+    .success-rate-indicator.rate-medium .bar:nth-child(1),
+    .success-rate-indicator.rate-medium .bar:nth-child(2) {
+        background-color: var(--warning-color);
+    }
+
+    .success-rate-indicator.rate-high .bar:nth-child(1),
+    .success-rate-indicator.rate-high .bar:nth-child(2),
+    .success-rate-indicator.rate-high .bar:nth-child(3) {
+        background-color: var(--success-color);
+    }
+
+.empty-state {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-secondary-color);
+}
+
+/* New graphical footer with icons and colored values */
 .card-footer {
-    padding: 0.45rem 1rem;
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-.details-toggle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    font-weight: 300;
-    font-size: 0.7rem;
-}
-
-.details-panel {
-    background-color: rgba(0, 0, 0, 0.1);
-    padding: 1rem;
+    padding-top: 0.75rem;
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    gap: 1rem; /* فاصله بیشتر بین آیتم‌های جزئیات */
-    animation: fadeIn 0.3s ease;
+    gap: 0.6rem;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.detail-item {
+.footer-stat-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    font-size: 0.9rem;
+    gap: 0.5rem;
 }
 
-    .detail-item .label {
-        opacity: 0.8;
+    .footer-stat-item i {
+        font-size: 1rem;
+        color: var(--text-secondary-color);
+        flex-shrink: 0;
     }
 
-    .detail-item .value {
-        font-weight: 500;
-    }
-
-/* --- کامپوننت‌های بصری داخل پنل جزئیات --- */
-.progress-bar-container {
-    width: 120px;
-    height: 8px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-bar-fill {
-    height: 100%;
-    background-color: var(--mood-excellent-bg); /* رنگ سبز روشن برای موفقیت */
-    border-radius: 4px;
-}
-
-.price-comparison-badge {
-    padding: 0.25rem 0.6rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
+.footer-stat-value {
+    font-size: 0.8rem;
     font-weight: 500;
-    color: var(--gray-900); /* متن تیره برای خوانایی روی پس‌زمینه روشن */
+    color: var(--text-primary-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-    .price-comparison-badge.status-higher {
-        background-color: var(--mood-sad-bg); /* نارنجی/قرمز */
+    /* Color classes for footer values */
+    .footer-stat-value.sell-through-high {
+        color: var(--success-color);
     }
 
-    .price-comparison-badge.status-lower {
-        background-color: var(--mood-excellent-bg); /* سبز */
+    .footer-stat-value.sell-through-medium {
+        color: var(--warning-color);
     }
 
-    .price-comparison-badge.status-similar,
-    .price-comparison-badge.status-na {
-        background-color: var(--mood-neutral-bg); /* خاکستری */
+    .footer-stat-value.sell-through-low {
+        color: var(--danger-color);
+    }
+
+    .footer-stat-value.status-higher {
+        color: var(--danger-color);
+    }
+
+    .footer-stat-value.status-lower {
+        color: var(--success-color);
+    }
+
+    .footer-stat-value.status-neutral {
+        color: var(--text-secondary-color);
+    }
+
+    .footer-stat-value.competition-high {
+        color: var(--danger-color);
+    }
+
+    .footer-stat-value.competition-medium {
+        color: var(--warning-color);
+    }
+
+    .footer-stat-value.competition-low {
+        color: var(--success-color);
     }

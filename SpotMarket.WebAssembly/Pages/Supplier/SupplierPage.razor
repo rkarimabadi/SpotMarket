@@ -17,10 +17,12 @@ else
     <SupplierRanking Data="_rankingData" />
     <SupplierMainPlayers Data="_mainPlayers" />
     <SupplierCommodityGroup Data="_marketShare" />
+    <SupplierMetrics Data="_marketMetricData"/>
     <SupplierCompetition Data="_stabilityData" />
     <SupplierSeasonalActivity Data="_seasonalActivityData" />
-    <SupplierMetrics Data="_marketMetricData"/>
     <SupplierCommodityAnalysis Data="_supplierCommodityAnalysisTableData"/>
+    <SupplierAllBrokersWidget Data="_supplierAllBrokersData"/>
+    <SupplierOffers Data="_supplierOffersData" Title=""/>
 
     <!-- Other widgets will be added here later -->
 }
@@ -42,6 +44,8 @@ else
     private SeasonalActivityData? _seasonalActivityData;
     private MarketMetricData? _marketMetricData;
     private SupplierCommodityAnalysisData? _supplierCommodityAnalysisTableData;
+    private List<SupplierItem>? _supplierAllBrokersData;
+    private UpcomingOffersData? _supplierOffersData;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -61,6 +65,8 @@ else
                 LoadSeasonalActivity(),
                 LoadMarketMetric(),
                 LoadCommodityAnalysis(),
+                LoadSupplierAllBrokers(),
+                LoadSupplierOffers(),
                 LoadSupplierMarketShare()
             );
 
@@ -105,5 +111,13 @@ else
     private async Task LoadCommodityAnalysis()
     {
         _supplierCommodityAnalysisTableData = await SupplierService.GetSupplierCommodityAnalysisAsync(SupplierId);
+    }
+    private async Task LoadSupplierAllBrokers()
+    {
+        _supplierAllBrokersData = await SupplierService.GetAllBrokersAsync(SupplierId);
+    }
+    private async Task LoadSupplierOffers()
+    {
+        _supplierOffersData = await SupplierService.GetSupplierOffersAsync(SupplierId);
     }
 }

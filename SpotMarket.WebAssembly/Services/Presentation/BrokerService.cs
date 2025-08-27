@@ -53,16 +53,16 @@ namespace SpotMarket.WebAssembly.Services.Presentation
         {
             return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{brokerId}/offers");
         }
+        public async Task<List<SupplierItem>?> GetAllSuppliersAsync(int brokerId)
+        {
+            return await _httpClient.GetFromJsonAsync<List<SupplierItem>>($"{_controllerPath}/{brokerId}/all-suppliers");
+        }
 
         public async Task<TopSuppliersData?> GetTopSuppliersAsync(int brokerId)
         {
             return await _httpClient.GetFromJsonAsync<TopSuppliersData>($"{_controllerPath}/{brokerId}/top-suppliers");
         }
 
-        public async Task<List<SupplierItem>?> GetAllSuppliersAsync(int brokerId)
-        {
-            return await _httpClient.GetFromJsonAsync<List<SupplierItem>>($"{_controllerPath}/{brokerId}/all-suppliers");
-        }
 
         public async Task<List<StrategicPerformanceItem>?> GetStrategicPerformanceAsync(int brokerId)
         {

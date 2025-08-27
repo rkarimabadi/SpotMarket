@@ -1,79 +1,73 @@
 ﻿@using SpotMarket.WebAssembly.Models.Presentation
+@using System.Text.RegularExpressions
 
 @if (Data?.Items != null && Data.Items.Any())
 {
-    <div class="analysis-card-list">
-        @foreach (var item in Data.Items)
-        {
-            <div class="analysis-pass-card">
-                @* بخش هدر اصلی *@
-                <div class="card-header">
-                    <div class="header-info">
-                        <div class="commodity-name">@item.CommodityName</div>
-                        <div class="supplier-info">تحلیل عملکرد کالا</div>
+    <div class="widget-container">
+        <div class="section-header">
+            <h3 class="section-title">تحلیل عملکرد کالاها</h3>
+        </div>
+        <div class="horizontal-scroll-container">
+            @foreach (var item in Data.Items)
+            {
+                <div class="commodity-analysis-card">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="bi bi-clipboard-data"></i></div>
+                        <h4 class="card-title">@item.CommodityName</h4>
                     </div>
-                    <div class="header-icon">
-                        <i class="bi bi-bar-chart-line-fill"></i>
-                    </div>
-                </div>
-
-                @* بخش میانی کارت با متریک‌های اصلی *@
-                <div class="card-body">
-                    <div class="metric-item">
-                        <span class="value">@item.OfferFrequency</span>
-                        <span class="label">تناوب عرضه</span>
-                    </div>
-                    <div class="metric-item">
-                        <span class="value">@item.AverageOfferVolume</span>
-                        <span class="label">حجم متوسط عرضه</span>
-                    </div>
-                </div>
-
-                @* بخش فوتر برای باز و بسته کردن جزئیات *@
-                <div class="card-footer">
-                    <div class="details-toggle" @onclick="() => ToggleDetails(item.CommodityId)">
-                        <span>@(_expandedItems.Contains(item.CommodityId) ? "بستن جزئیات" : "مشاهده جزئیات")</span>
-                        <i class="bi @(_expandedItems.Contains(item.CommodityId) ? "bi-chevron-up" : "bi-chevron-down")"></i>
-                    </div>
-                </div>
-
-                @* پنل جزئیات که به صورت شرطی نمایش داده می‌شود *@
-                @if (_expandedItems.Contains(item.CommodityId))
-                {
-                    <div class="details-panel">
-                        <div class="detail-item">
-                            <span class="label">نرخ موفقیت</span>
-                            <div class="progress-bar-container" title="@($"{item.SuccessRate:F0}%")">
-                                <div class="progress-bar-fill" style="width: @(item.SuccessRate)%;"></div>
+                    <div class="card-body">
+                        <div class="stat-item">
+                            <span class="stat-label">تناوب عرضه</span>
+                            <span class="stat-value">@item.OfferFrequency</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">حجم متوسط عرضه</span>
+                            <span class="stat-value">@item.AverageOfferVolume</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">نرخ موفقیت</span>
+                            <div class="success-rate-indicator @GetSuccessRateClass(item.SuccessRate)">
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
                             </div>
                         </div>
-                        <div class="detail-item">
-                            <span class="label">میانگین رقابت</span>
-                            <span class="value">@($"{item.AverageCompetition:F1}%")</span>
+                    </div>
+                    <div class="card-footer">
+                        @{
+                            var competitionVisuals = GetCompetitionVisuals(item.AverageCompetition);
+                        }
+                        <div class="footer-stat-item" title="میانگین رقابت: @($"{item.AverageCompetition:F1}%")">
+                            <i class="bi bi-people-fill"></i>
+                            <span class="footer-stat-value @(competitionVisuals.CssClass)">@(competitionVisuals.Text)</span>
                         </div>
-                        <div class="detail-item">
-                            <span class="label">وضعیت فروش</span>
-                            <span class="value">@item.SellThroughStatus</span>
+
+                        @{
+                            var sellThroughPercent = GetSellThroughPercentage(item.SellThroughStatus);
+                        }
+                        <div class="footer-stat-item" title="وضعیت فروش">
+                            <i class="bi bi-cart-check-fill"></i>
+                            <span class="footer-stat-value @GetSellThroughColorClass(sellThroughPercent)">@item.SellThroughStatus</span>
                         </div>
-                        <div class="detail-item">
-                            <span class="label">مقایسه با رقبا</span>
-                            <span class="value">
-                                <span class="price-comparison-badge @GetPriceStatusClass(item.CompetitorPriceStatus)">
-                                    @item.CompetitorPriceComparison
-                                </span>
-                            </span>
+
+                        <div class="footer-stat-item" title="مقایسه با رقبا">
+                            <i class="bi bi-tag-fill"></i>
+                            <span class="footer-stat-value @GetPriceStatusColorClass(item.CompetitorPriceStatus)">@item.CompetitorPriceComparison</span>
                         </div>
                     </div>
-                }
-            </div>
-        }
+                </div>
+            }
+        </div>
     </div>
 }
 else
 {
-    <div class="card">
-        <div class="card-body">
-            <p class="text-center mb-0">اطلاعاتی برای تحلیل وجود ندارد.</p>
+    <div class="widget-container">
+        <div class="section-header">
+            <h3 class="section-title">تحلیل عملکرد کالاها</h3>
+        </div>
+        <div class="empty-state">
+            <p>اطلاعاتی برای تحلیل وجود ندارد.</p>
         </div>
     </div>
 }
@@ -83,25 +77,43 @@ else
     [Parameter]
     public SupplierCommodityAnalysisData? Data { get; set; }
 
-    private HashSet<int> _expandedItems = new();
-
-    private void ToggleDetails(int commodityId)
+    private string GetSuccessRateClass(double successRate)
     {
-        if (_expandedItems.Contains(commodityId))
-        {
-            _expandedItems.Remove(commodityId);
-        }
-        else
-        {
-            _expandedItems.Add(commodityId);
-        }
+        if (successRate > 75) return "rate-high";
+        if (successRate > 25) return "rate-medium";
+        return "rate-low";
     }
 
-    private string GetPriceStatusClass(PriceComparisonStatus status) => status switch
+    private string GetPriceStatusColorClass(PriceComparisonStatus status) => status switch
     {
         PriceComparisonStatus.Higher => "status-higher",
         PriceComparisonStatus.Lower => "status-lower",
-        PriceComparisonStatus.Similar => "status-similar",
-        _ => "status-na"
+        _ => "status-neutral"
     };
+
+    private double GetSellThroughPercentage(string status) => status switch
+    {
+        "تقریبا همیشه تمام می‌شود" => 100,
+        "معمولا تمام می‌شود" => 85,
+        "اغلب باقی‌مانده دارد" => 50,
+        "بخش کمی فروش می‌رود" => 20,
+        _ => 0
+    };
+
+    private string GetSellThroughColorClass(double percentage)
+    {
+        if (percentage > 80) return "sell-through-high";
+        if (percentage > 40) return "sell-through-medium";
+        if (percentage > 0) return "sell-through-low";
+        return "status-neutral";
+    }
+
+    private (string Text, string CssClass) GetCompetitionVisuals(double competition)
+    {
+        if (competition > 10) return ("رقابت بالا", "competition-high");
+        if (competition > 3) return ("رقابت متوسط", "competition-medium");
+        if (competition > 0) return ("رقابت کم", "competition-low");
+        if (competition == 0) return ("بدون رقابت", "competition-low");
+        return ("زیر قیمت پایه", "status-neutral"); // For negative values
+    }
 }
