@@ -2,7 +2,6 @@
 @using SpotMarket.WebAssembly.Helpers
 @using SpotMarket.WebAssembly.Services.Presentation
 @inject IOfferDetailsService DataService
-<PageTitle>اطلاعیه عرضه @offer.CommodityName</PageTitle>
 <div class="page-container">
     @if (offer == null)
     {
@@ -10,6 +9,7 @@
     }
     else
     {
+        <PageTitle>اطلاعیه عرضه @offer?.CommodityName</PageTitle>
         <OfferHeader Ring="@offer.OfferRing" CommodityName="@offer.CommodityName" Symbol="@offer.Symbol" />
         <OfferHierarchy HierarchyItems="@offer.HierarchyItems" />
         <OfferConditionsWidget Data="OfferMetrics" />
