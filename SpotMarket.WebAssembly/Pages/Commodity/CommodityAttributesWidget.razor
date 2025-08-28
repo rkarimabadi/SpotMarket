@@ -1,10 +1,9 @@
-﻿@using SpotMarket.WebAssembly.Models.Presentation
-
+﻿@inject ICommodityService CommodityService
 <div class="attributes-widget">
-    @if (Data != null && Data.Items.Any())
+    @if (data != null && data.Items.Any())
     {
         <div class="attributes-list">
-            @foreach (var item in Data.Items)
+            @foreach (var item in data.Items)
             {
                 <div class="attribute-item @(item.IsAlert ? "alert-state" : "") @(selectedItem == item ? "expanded" : "")" @onclick="() => ToggleItem(item)">
                     <div class="item-main">
@@ -55,13 +54,17 @@
     {
         if (selectedItem == item)
         {
-            selectedItem = null; // Close if already open
+            selectedItem = null;
         }
         else
         {
-            selectedItem = item; // Open the selected item
+            selectedItem = item;
         }
     }
-    [Parameter]
-    public CommodityAttributesData? Data { get; set; }
+    [Parameter] public int CommodityId { get; set; }
+    private CommodityAttributesData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await CommodityService.GetCommodityAttributesAsync(CommodityId);
+    }
 }

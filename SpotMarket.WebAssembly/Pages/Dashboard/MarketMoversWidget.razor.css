@@ -1,0 +1,206 @@
+﻿/*
+ * این بخش برای مدیریت نمایش کامپوننت MarketMoversWidget در حالت های مختلف
+ * مانند بارگذاری، خطا و نبود اطلاعات است.
+ * هدف اصلی، جلوگیری از پرش محتوای صفحه (CLS) با تنظیم ارتفاع ثابت برای
+ * placeholders است.
+*/
+
+/*
+* استایل برای کانتینر اصلی ویجت
+*/
+.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+/*
+* استایل برای بخش هدر
+*/
+.section-header {
+    margin-bottom: 1rem;
+}
+
+/*
+* استایل برای عنوان بخش
+*/
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+/*
+* استایل برای کنترل سگمنتی (دکمه های تب)
+*/
+.segmented-control {
+    display: flex;
+    padding: 3px;
+    background-color: var(--gray-200);
+    border-radius: 0.625rem;
+    margin: 0 0 1rem 0;
+}
+
+    .segmented-control button {
+        flex: 1;
+        padding: 0.5rem;
+        border: none;
+        background-color: transparent;
+        border-radius: 0.5rem;
+        color: var(--text-secondary-color);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .segmented-control button.active {
+            background-color: var(--card-background-color);
+            color: var(--text-primary-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+/*
+* استایل برای کارت داده
+*/
+.data-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+/*
+* استایل برای هر آیتم در لیست داده
+*/
+.data-list-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+    .data-list-item:last-child {
+        border-bottom: none;
+    }
+
+/*
+* استایل برای رتبه آیتم
+*/
+.item-rank {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+    width: 20px;
+    text-align: center;
+}
+
+/*
+* استایل برای اطلاعات اصلی آیتم
+*/
+.item-main-info {
+    min-width: 0;
+}
+
+    .item-main-info .title {
+        font-weight: 600;
+        color: var(--text-primary-color);
+    }
+
+    .item-main-info .subtitle {
+        font-size: 0.875rem;
+        color: var(--text-secondary-color);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+/*
+* استایل برای کانتینر مقدار و لیبل
+*/
+.item-stat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* راست‌چین کردن محتوا */
+    gap: 0.1rem;
+}
+
+.item-value {
+    font-size: 1.1rem; /* کمی بزرگتر برای تاکید */
+    font-weight: 700;
+}
+
+.item-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+.item-value.positive {
+    color: var(--success-color);
+}
+
+.item-value.negative {
+    color: var(--danger-color);
+}
+
+.item-value.neutral {
+    color: var(--text-primary-color);
+}
+
+/*
+* استایل برای نمایش جایگزین (placeholder) در حالت های بارگذاری و خطا
+*/
+.data-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--text-secondary-color);
+    /* ارتفاع ثابت برای جلوگیری از پرش محتوا */
+    min-height: 80px;
+}
+
+/*
+* استایل برای حالت نبود داده
+*/
+.data-card .p-4 {
+    min-height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*
+* انیمیشن چرخش برای آیکون بارگذاری
+*/
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin-fast {
+    animation: spin 1s linear infinite;
+}
+
+/*
+* تنظیمات برای حالت تاریک
+*/
+[data-bs-theme="dark"] .segmented-control {
+    background-color: var(--gray-900);
+}
+
+[data-bs-theme="dark"] .data-card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .data-list-item {
+    border-color: var(--gray-700);
+}

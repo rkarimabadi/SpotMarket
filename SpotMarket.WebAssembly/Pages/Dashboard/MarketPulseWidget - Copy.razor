@@ -1,12 +1,13 @@
 ﻿@using SpotMarket.WebAssembly.Models.Presentation
-@if (Data != null && Data.Items.Any())
+@inject IDashboardService DashboardService
+@if (data != null && data.Items.Any())
 {
     <div class="widget-container">
         <div class="section-header">
             <h2 class="section-title">@Title</h2>
         </div>
         <div class="market-pulse-grid">
-            @foreach (var item in Data.Items)
+            @foreach (var item in data.Items)
             {
                 <div class="pulse-card">
                     <div class="pulse-title">@item.Title</div>
@@ -25,8 +26,12 @@
 @code {
     [Parameter]
     public string Title { get; set; } = "نبض بازار";
-    [Parameter]
-    public MarketPulseData? Data { get; set; }
+
+    private MarketPulseData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await DashboardService.GetMarketPulse();
+    }
 
     private string GetChangeCssClass(ValueState state)
     {

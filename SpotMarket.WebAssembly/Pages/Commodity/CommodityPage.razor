@@ -6,103 +6,41 @@
 @inject ICommodityService CommodityService
 @inject NavStateService NavState
 
-<PageTitle>تحلیل کالای @_headerData?.CommodityName</PageTitle>
-@if (_isLoading)
-{
-    <div class="page-loader">
-        <p>در حال بارگذاری اطلاعات کالا...</p>
-    </div>
-}
-else if (_headerData != null) // چک می‌کنیم که حداقل داده هدر موجود باشد
-{
-    <CommodityHeader Data="_headerData" />
-    <CommodityHierarchy Data="_hierarchyData" />
-    <PriceTrends Data="_priceTrends" />
-    <MarketAbsorptionWidget Data="_marketAbsorption" />
-    <CommodityOffersWidget Data="_offerHistory" Title="" />
-    <CommodityMainPlayersWidget Data="_mainPlayers" />
-    <CommodityAttributesWidget Data="_attributes" />
-    <DistributedAttributesWidget Data="_distributedAttributes" />
-    <DistributedAttributesWidget Data="_playerDistribution" />
-
-}
-else
-{
-    <div class="alert alert-danger">
-        اطلاعاتی برای این کالا یافت نشد.
-    </div>
-}
-
-
+<PageTitle>@pageTitle</PageTitle>
+<CommodityHeader CommodityId="commodityId" OnDataReceived="OnDataReceived" />
+<CommodityHierarchy CommodityId="commodityId" OnDataReceived="FillNav" />
+<PriceTrends CommodityId="commodityId" />
+<MarketAbsorptionWidget CommodityId="commodityId" />
+<CommodityOffersWidget CommodityId="commodityId" Title="" />
+<CommodityMainPlayersWidget CommodityId="commodityId" />
+<CommodityAttributesWidget CommodityId="commodityId" />
+<DistributedAttributesWidget CommodityId="commodityId" />
+<DistributedAttributesWidget CommodityId="commodityId" />
 @code {
     [Parameter] public int mainGroupId { get; set; }
     [Parameter] public int groupId { get; set; }
     [Parameter] public int subGroupId { get; set; }
     [Parameter] public int commodityId { get; set; }
-
-    private bool _isLoading = true;
-
-    // Data holders for each widget
-    private CommodityHeaderData? _headerData;
-    private List<HierarchyItem>? _hierarchyData;
-    private PriceViewModel? _priceTrends;
-    private MarketAbsorptionData? _marketAbsorption;
-    private CommodityAttributesData? _attributes;
-    private IEnumerable<MainPlayer>? _mainPlayers;
-    private DistributedAttributesData? _distributedAttributes;
-    private DistributedAttributesData? _playerDistribution;
-    private UpcomingOffersData? _offerHistory;
-
-    protected override async Task OnParametersSetAsync()
+    private string? pageTitle;
+    private List<HierarchyItem>? hierarchyData;
+    private void OnDataReceived(CommodityHeaderData? _commodityData)
     {
-        if (commodityId > 0)
+        if (_commodityData != null)
         {
-            await LoadCommodityData();
+            pageTitle = $"تحلیل کالای {_commodityData.CommodityName}";
+            SetNavParams();
         }
     }
-
-    private async Task LoadCommodityData()
+    private void FillNav(List<HierarchyItem>? _hierarchyData)
     {
-        _isLoading = true;
-
-        // Fetch all data in parallel for maximum efficiency
-        var headerTask = CommodityService.GetCommodityHeaderAsync(commodityId);
-        var priceTrendsTask = CommodityService.GetPriceTrendsAsync(commodityId);
-        var marketAbsorptionTask = CommodityService.GetMarketAbsorptionAsync(commodityId);
-        var attributesTask = CommodityService.GetCommodityAttributesAsync(commodityId);
-        var mainPlayersTask = CommodityService.GetMainPlayersAsync(commodityId);
-        var distributedAttributesTask = CommodityService.GetDistributedAttributesAsync(commodityId);
-        var playerDistributionTask = CommodityService.GetPlayerDistributionAsync(commodityId);
-        var hierarchyTask = CommodityService.GetCommodityHierarchyAsync(commodityId);
-        var offerHistoryTask = CommodityService.GetOfferHistoryAsync(commodityId);
-        await Task.WhenAll(
-            headerTask,
-            priceTrendsTask,
-            marketAbsorptionTask,
-            attributesTask,
-            mainPlayersTask,
-            hierarchyTask,
-            distributedAttributesTask,
-            playerDistributionTask,
-            offerHistoryTask
-        );
-
-        _headerData = headerTask.Result;
-        _priceTrends = priceTrendsTask.Result;
-        _marketAbsorption = marketAbsorptionTask.Result;
-        _attributes = attributesTask.Result;
-        _mainPlayers = mainPlayersTask.Result;
-        _distributedAttributes = distributedAttributesTask.Result;
-        _playerDistribution = playerDistributionTask.Result;
-        _hierarchyData = hierarchyTask.Result;
-        _offerHistory = offerHistoryTask.Result;
-        _isLoading = false;
-
-        // Update navigation state after header data is loaded
-        if (_headerData != null && _hierarchyData != null && _hierarchyData.Any())
+        hierarchyData = _hierarchyData;
+        SetNavParams();
+    }
+    private void SetNavParams()
+    {
+        if(hierarchyData!= null && hierarchyData.Count > 0)
         {
-            var pageTitle = $"تحلیل کالای {_headerData.CommodityName}";
-            NavState.SetNavState(pageTitle, true, $"/markets/{_hierarchyData?.FirstOrDefault(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{_hierarchyData?.FirstOrDefault(x => x.Type == "Group")?.Id ?? groupId}/{_hierarchyData?.FirstOrDefault(x => x.Type == "SubGroup")?.Id ?? subGroupId}");
+            NavState.SetNavState((!string.IsNullOrEmpty(pageTitle) ? pageTitle : hierarchyData?.FirstOrDefault(x => x.Type == "Commodity")?.Name ?? "..."), true, $"/markets/{hierarchyData?.FirstOrDefault(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{hierarchyData?.FirstOrDefault(x => x.Type == "Group")?.Id ?? groupId}/{hierarchyData?.FirstOrDefault(x => x.Type == "SubGroup")?.Id ?? subGroupId}");
         }
     }
 }

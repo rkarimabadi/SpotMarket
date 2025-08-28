@@ -6,70 +6,27 @@
 @inject IMainGroupService MainGroupService
 @inject IGroupService GroupService
 @inject ISubGroupService SubGroupService
-<PageTitle>زیرگروه کالای @subGroupHeaderData?.GroupName</PageTitle>
+<PageTitle>@pageTitle</PageTitle>
 <div class="page-container">
 
-    <SubGroupHeaderWidget Data="subGroupHeaderData" />
+    <SubGroupHeaderWidget SubGroupId="@subGroupId" />
 
-    <SubGroupHierarchyWidget HierarchyItems="subGroupHierarchyData" />
+    <SubGroupHierarchyWidget SubGroupId="@subGroupId" OnDataReceived="OnHierarchyRecived" />
 
-    @if (_isLoading)
-    {
-        <p><em>در حال بارگذاری اطلاعات زیرگروه...</em></p>
-    }  else {
-        if (subGroupActivityStatus == GroupActivityStatus.Inactive)
-        {
-            <NoActivityWidget />
-        }
-
-        <ExpandableSubGroupListWidget Data="commodityListData" Unit="کالا" Title="کالاهای فعال" UrlPrefix="@urlprefix" />
-
-        <SubGroupOffersWidget Data="upcomingOffersData" />
-    }
+    <SubGroupListContainerWidget SubGroupId="subGroupId" UrlPrefix="@urlprefix" />
+    <SubGroupOffersWidget SubGroupId="subGroupId" />
 
 </div>
 @code {
     [Parameter] public int? mainGroupId { get; set; }
     [Parameter] public int? groupId { get; set; }
     [Parameter] public int subGroupId { get; set; }
-
-    private GroupListData? commodityListData;
-    private GroupActivityStatus subGroupActivityStatus;
-    private UpcomingOffersData? upcomingOffersData;
-    private SubGroupHeaderData? subGroupHeaderData;
-    private List<HierarchyItem>? subGroupHierarchyData;
-
-    private string urlprefix => $"{mainGroupId}/{groupId}/{subGroupId}/";
-    private bool _isLoading = true;
-
-    protected override async Task OnInitializedAsync()
+    private string? pageTitle;
+    private string? urlprefix;
+    private void OnHierarchyRecived(List<HierarchyItem> subGroupHierarchyData)
     {
-        await LoadDate();
-        base.OnInitialized();
-
-    }
-
-    private async Task LoadDate()
-    {
-        try
-        {
-            subGroupHeaderData = await SubGroupService.GetSubGroupHeaderDataAsync(subGroupId);
-            subGroupHierarchyData = await SubGroupService.GetSubGroupHierarchyAsync(subGroupId);
-
-            var pageTitle = $"تحلیل زیرگروه {subGroupHeaderData?.SubGroupName}";
-            NavState.SetNavState(pageTitle, true, $"/markets/{subGroupHierarchyData?.First(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{subGroupHierarchyData?.First(x => x.Type == "Group")?.Id ?? groupId}");
-            commodityListData = await SubGroupService.GetActiveCommoditiesAsync(subGroupId);
-            subGroupActivityStatus = commodityListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : commodityListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
-            upcomingOffersData = await SubGroupService.GetOfferHistoryAsync(subGroupId);
-        }
-        catch (Exception ex)
-        {
-            // لاگ کردن خطا
-            Console.WriteLine($"Error loading main group data: {ex.Message}");
-        }
-        finally
-        {
-            _isLoading = false;
-        }
+        pageTitle = $"زیرگروه {subGroupHierarchyData?.First(x => x.Type == "SubGroup")?.Name}";
+        NavState.SetNavState(pageTitle, true, $"/markets/{subGroupHierarchyData?.First(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{subGroupHierarchyData?.First(x => x.Type == "Group")?.Id ?? groupId}");
+        urlprefix = $"{subGroupHierarchyData?.First(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{subGroupHierarchyData?.First(x => x.Type == "Group")?.Id ?? groupId}/{subGroupHierarchyData?.First(x => x.Type == "SubGroup")?.Id ?? subGroupId}/";
     }
 }

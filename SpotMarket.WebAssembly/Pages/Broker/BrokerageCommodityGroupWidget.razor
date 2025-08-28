@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
+@inject IBrokerService BrokerService
 
-@if (Data != null && Data.Any())
+@if (data != null && data.Any())
 {
     <div class="commodity-group-widget">
         <div class="widget-header">
@@ -12,7 +13,7 @@
                     <circle class="chart-background" cx="18" cy="18" r="15.9155"></circle>
                     @{
                         double cumulativePercentage = 0;
-                        foreach (var item in Data)
+                        foreach (var item in data)
                         {
                             <circle class="chart-segment"
                                     cx="18" cy="18" r="15.9155"
@@ -29,7 +30,7 @@
                 </div>
             </div>
             <div class="legend-container">
-                @foreach (var item in Data)
+                @foreach (var item in data)
                 {
                     <div class="legend-item">
                         <span class="legend-dot" style="background-color: @item.Color;"></span>
@@ -47,6 +48,10 @@
     public string Title { get; set; } = "عملکرد در گروه‌های کالایی";
     [Parameter]
     public string ChartCenterTitle { get; set; } = "بر اساس ارزش";
-    [Parameter]
-    public List<CommodityGroupShareItem>? Data { get; set; }
+    [Parameter] public int BrokerId { get; set; }
+    private List<CommodityGroupShareItem>? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await BrokerService.GetCommodityGroupShareAsync(BrokerId);
+    }
 }

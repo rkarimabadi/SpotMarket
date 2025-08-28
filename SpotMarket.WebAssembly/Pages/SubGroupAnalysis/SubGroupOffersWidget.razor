@@ -1,6 +1,6 @@
 ﻿@using SpotMarket.WebAssembly.Models.Presentation
 @inject NavigationManager NavManager
-
+@inject ISubGroupService SubGroupService
 <div class="widget-container">
     <div class="widget-header">
         <h3 class="widget-title">@Title</h3>
@@ -84,12 +84,15 @@
 @code {
     [Parameter]
     public string Title { get; set; } = "اطلاعیه عرضه‌ها";
-    [Parameter]
-    public UpcomingOffersData? Data { get; set; }
-
+    [Parameter] public int SubGroupId { get; set; }
+    private UpcomingOffersData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await SubGroupService.GetOfferHistoryAsync(SubGroupId);
+    }
     private const int MaxInitialItems = 5;
     private const int MaxPastItems = 10;
-    private string selectedTab = "today"; // تب پیش‌فرض
+    private string selectedTab = "today";
 
     private List<UpcomingOfferItem> PastOffers = new();
     private List<UpcomingOfferItem> TodayOffers = new();
@@ -112,11 +115,11 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        if (Data != null && Data.Items.Any())
+        if (data != null && data.Items.Any())
         {
-            PastOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
-            TodayOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
-            FutureOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
+            PastOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
+            TodayOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
+            FutureOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
         }
     }
 

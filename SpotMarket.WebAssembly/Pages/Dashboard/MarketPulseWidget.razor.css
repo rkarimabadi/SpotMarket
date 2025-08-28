@@ -1,0 +1,84 @@
+﻿.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+.section-header {
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+.market-pulse-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.pulse-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+    .pulse-card .pulse-title {
+        font-size: 0.875rem;
+        color: var(--text-secondary-color);
+    }
+
+    .pulse-card .pulse-value {
+        font-size: clamp(1.3rem, 5vw,1.75rem);
+        font-weight: 700;
+        color: var(--text-primary-color);
+        margin-bottom: auto;
+    }
+
+.pulse-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.pulse-card .pulse-change {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--success-color);
+}
+
+    .pulse-card .pulse-change.negative {
+        color: var(--danger-color);
+    }
+
+.pulse-card .pulse-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+.pulse-card.data-placeholder {
+    min-height: 12.5rem; /* ارتفاع کارت‌ها در حالت نمایش داده را در نظر می‌گیرد */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+[data-bs-theme="dark"] .pulse-card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .pulse-stat {
+    border-color: var(--gray-700);
+}

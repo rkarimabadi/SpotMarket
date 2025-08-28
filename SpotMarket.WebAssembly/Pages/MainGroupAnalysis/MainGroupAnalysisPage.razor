@@ -3,86 +3,28 @@
 @inject NavStateService NavState
 @inject IMarketsService MarketService
 @inject IMainGroupService MainGroupService
-<PageTitle>گروه اصلی کالای @groupName?.Title</PageTitle>
+<PageTitle>@pageTitle</PageTitle>
 <div class="page-container">
-    <MainGroupHeaderWidget Data="@groupName" />
-    <MainGroupHierarchyWidget HierarchyItems="mainGroupHierarchyDate" />
-    @if (_isLoading)
-    {
-        <p><em>در حال بارگذاری اطلاعات گروه اصلی...</em></p>
-    }  else {
-        if (groupListData is not null &&  groupListData.Items.Any(x => x.Status == GroupActivityStatus.HasOfferToday))
-        {
-            <MainGroupStatsRowWidget FirstData="marketStatsData" SecondData="tradeStatsData" Title="شرایط بازار" Subtitle="" />
-            @* <MainGroupStatsRowWidget Data="tradeStatsData" Title="تحقق اهداف" Subtitle="براساس آمار معاملات روز جاری" /> *@
-@*             <MarketConditionsWidget Data="groupActivitiesData" Subtitle="براساس آمار معاملات روز جاری" /> *@
-            
-        }
+    <MainGroupHeaderWidget MainGroupId="@mainGroupId" OnDataReceived="OnGroupNameRecived"/>
+    <MainGroupHierarchyWidget MainGroupId="@mainGroupId" />
+    <MainGroupStatsRowWidget MainGroupId="@mainGroupId" Title="شرایط بازار" Subtitle="" />
 
-@*         @switch (groupActivityStatus)
-        {
-            case GroupActivityStatus.HasUpcomingOffer:
-                <UpcomingOffersWidget Data="upcomingOffersData" />
-                break;
-            case GroupActivityStatus.Inactive:
-                <NoActivityWidget />
-                break;
-            default:
-                break;
-        } *@
-        <ExpandableSubGroupListWidget Data="groupListData" UrlPrefix="@urlprefix" />
-    }
+    <MainGroupListContainerWidget MainGroupId="@mainGroupId" UrlPrefix="@urlprefix"/>
+        
+    <MainGroupOffersWidget MainGroupId="@mainGroupId" />
+    <MainGroupConditionsWidget MainGroupId="@mainGroupId" Subtitle="براساس آمار معاملات روز جاری" />
 
 </div>
 @code {
     [Parameter]
     public int mainGroupId { get; set; }
-    private MarketShortcutItem? groupName;
-    private MarketShortcutsData groupList = new();
-    private GroupListData? groupListData;
-    private GroupActivityStatus groupActivityStatus;
-    private GroupActivityData? activeGroupData;
-    private UpcomingOffersData? upcomingOffersData;
-    private MarketConditionsData? groupActivitiesData;
-    private MarketStatsData? marketStatsData;
-    private MarketStatsData? tradeStatsData;
-    private List<HierarchyItem> mainGroupHierarchyDate = new();
+
+    private string? pageTitle;
     private string urlprefix => $"{mainGroupId}/";
-    private bool _isLoading = true;
 
-    protected override async Task OnInitializedAsync()
+    private void OnGroupNameRecived(string groupName)
     {
-        await LoadDate();
-        base.OnInitialized();
-
-    }
-
-    private async Task LoadDate()
-    {
-        try
-        {
-            groupList = await MarketService.GetMarketShortcutsData();
-            groupName = groupList.Items.FirstOrDefault(g => g.Code == mainGroupId);
-            var pageTitle = $"تحلیل گروه اصلی {groupName?.Title}";
-            NavState.SetNavState(pageTitle, true, "/markets");
-            mainGroupHierarchyDate.Add( new HierarchyItem {  Id = mainGroupId, Name = groupName.Title, IsActive = false, Type= "MainGroup"});
-            groupListData = await MainGroupService.GetActiveGroupsAsync(groupName.Code);
-
-            groupActivityStatus = groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
-
-            upcomingOffersData = await MainGroupService.GetUpcomingOffersAsync(groupName.Code);
-            groupActivitiesData = await MainGroupService.GetGroupActivitiesAsync(groupName.Code);
-            marketStatsData = await MainGroupService.GetMarketShareAsync(groupName.Code);
-            tradeStatsData = await MainGroupService.GetTradeShareAsync(groupName.Code);
-        }
-        catch (Exception ex)
-        {
-            // لاگ کردن خطا
-            Console.WriteLine($"Error loading main group data: {ex.Message}");
-        }
-        finally
-        {
-            _isLoading = false;
-        }
+        pageTitle = $"گروه اصلی {groupName}";
+        NavState.SetNavState(pageTitle, true, "/markets");
     }
 }

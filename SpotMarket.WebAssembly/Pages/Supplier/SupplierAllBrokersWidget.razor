@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager NavManager
-@if (Data != null && Data.Any())
+@inject ISupplierService SupplierService
+@if (data != null && data.Any())
 {
     <div class="all-suppliers-widget">
         <div class="expandable-container @(_isExpanded ? "expanded" : "")">
@@ -9,7 +10,7 @@
                 </div>
                 <div class="item-info">
                     <span class="info-title">تمام کارگزاران</span>
-                    <span class="info-subtitle ms-2">@Data.Count کارگزار</span>
+                    <span class="info-subtitle ms-2">@data.Count کارگزار</span>
                 </div>
                 <div class="item-chevron">
                     <i class="bi bi-chevron-down"></i>
@@ -18,7 +19,7 @@
 
             <div class="suppliers-list-card">
                 <div class="suppliers-grid">
-                    @foreach (var supplier in Data)
+                    @foreach (var supplier in data)
                     {
                         <div class="supplier-tag" @onclick="() => OnSupplierClick(supplier)">
                             @supplier.Name
@@ -31,9 +32,12 @@
 }
 
 @code {
-    [Parameter]
-    public List<SupplierItem>? Data { get; set; }
-
+    [Parameter] public int SupplierId { get; set; }
+    private List<SupplierItem>? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await SupplierService.GetAllBrokersAsync(SupplierId);
+    }
     private bool _isExpanded = false;
 
     private void ToggleExpand()

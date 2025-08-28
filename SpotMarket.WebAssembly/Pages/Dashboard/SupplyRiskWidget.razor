@@ -1,0 +1,129 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject IDashboardService DashboardService
+@inject NavigationManager NavigationManager
+
+<div class="widget-container">
+    <div class="section-header">
+        <h3 class="section-title">@Title</h3>
+    </div>
+    @if (_isLoading)
+    {
+        <div class="data-card">
+            <div class="data-list-item">
+                <div class="item-rank">
+                    <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+                </div>
+                <div class="item-main-info  data-placeholder">
+                    <OctopusLoader />
+                </div>
+                <div class="item-value neutral">&nbsp;</div>
+            </div>
+            <div class="data-list-item">
+                <div class="item-rank">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                </div>
+                <div class="item-main-info  data-placeholder">
+                    <OctopusLoader />
+                </div>
+                <div class="item-value neutral">&nbsp;</div>
+            </div>
+        </div>
+    }
+    else if (_hasError)
+    {
+        <div class="data-card data-placeholder">
+            <HasError/>
+        </div>
+    }
+    else if (data != null && data.Items.Any())
+    {
+        <div class="data-card">
+            @foreach (var item in data.Items)
+            {
+                <div class="data-list-item" @onclick="() => GoTo(item)">
+                    <div class="item-rank">
+                        <i class="@GetIconClass(item.RiskLevel)"></i>
+                    </div>
+                    <div class="item-main-info">
+                        <div class="title">@item.Title</div>
+                        <div class="subtitle">@item.Subtitle</div>
+                    </div>
+                    <div class="item-value neutral">@item.Value</div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="data-card">
+            <div class="data-list-item">
+                <div class="item-rank">
+                    <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+                </div>
+                <div class="item-main-info  data-placeholder">
+                    <NoData />
+                </div>
+                <div class="item-value neutral">&nbsp;</div>
+            </div>
+            <div class="data-list-item">
+                <div class="item-rank">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                </div>
+                <div class="item-main-info  data-placeholder">
+                    <NoData />
+                </div>
+                <div class="item-value neutral">&nbsp;</div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "ریسک تمرکز عرضه";
+
+    private SupplyRiskData? data;
+    private bool _isLoading = false;
+    private bool _hasError = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+        _hasError = false;
+        try
+        {
+            data = await DashboardService.GetSupplyRisk();
+            if (data == null)
+            {
+                data = new SupplyRiskData { Items = Enumerable.Empty<SupplyRiskItem>() };
+            }
+        }
+        catch (Exception)
+        {
+            _hasError = true;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private string GetIconClass(RiskLevel risk)
+    {
+        return risk switch
+        {
+            RiskLevel.High => "bi bi-exclamation-triangle-fill text-danger",
+            RiskLevel.Medium => "bi bi-exclamation-diamond-fill text-warning",
+            RiskLevel.Low => "bi bi-check-circle-fill text-success",
+            _ => "bi bi-question-circle-fill"
+        };
+    }
+
+    private void GoTo(SupplyRiskItem item)
+    {
+        if (item.CommodityId > 0)
+        {
+            NavigationManager.NavigateTo($"/commodity-tree/commodities/{item.CommodityId}");
+        }
+    }
+}

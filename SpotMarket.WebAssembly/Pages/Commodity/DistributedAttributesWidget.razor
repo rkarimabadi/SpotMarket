@@ -1,10 +1,10 @@
-﻿@using SpotMarket.WebAssembly.Models.Presentation
+﻿@inject ICommodityService CommodityService
 
 <div class="dist-attributes-widget">
-    @if (Data != null && Data.Items.Any())
+    @if (data != null && data.Items.Any())
     {
         <div class="attributes-grid">
-            @foreach (var item in Data.Items)
+            @foreach (var item in data.Items)
             {
                 <div class="attribute-card @(item.IsAlert ? "alert-state" : "")">
                     <div class="card-header">
@@ -46,6 +46,10 @@
 </div>
 
 @code {
-    [Parameter]
-    public DistributedAttributesData? Data { get; set; }
+    [Parameter] public int CommodityId { get; set; }
+    private DistributedAttributesData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await CommodityService.GetDistributedAttributesAsync(CommodityId);
+    }
 }

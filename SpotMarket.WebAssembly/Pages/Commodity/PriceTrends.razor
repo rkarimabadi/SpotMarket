@@ -1,21 +1,21 @@
 ﻿@using System.Globalization
 @using System.Text
-
+@inject ICommodityService CommodityService
 <div class="widget-container">
-    @if (Data != null && Data.PriceHistory.Any())
+    @if (data != null && data.PriceHistory.Any())
     {
     <div class="trend-chart-card">
         <div class="widget-header">
             <div class="price-info">
-                <div class="current-price">@Data.CurrentPrice.ToString("N0", new CultureInfo("fa-IR"))</div>
+                <div class="current-price">@data.CurrentPrice.ToString("N0", new CultureInfo("fa-IR"))</div>
             </div>
 
-            <div class="date-info @(Data.IsOutdated ? "outdated" : "")">
-                @if (Data.IsOutdated)
+            <div class="date-info @(data.IsOutdated ? "outdated" : "")">
+                @if (data.IsOutdated)
                 {
                     <i class="bi bi-clock-history"></i>
                 }
-                <span>@Data.DateLabel</span>
+                <span>@data.DateLabel</span>
             </div>
         </div>
 @*         <div class="price-info d-flex mb-2">
@@ -24,35 +24,35 @@
             </div>
             <div class="ms-1 price-change-context">@Data.ChangeContext</div>
         </div> *@
-        <div class="price-change-container @(Data.ChangeAmount >= 0 ? "positive" : "negative") mb-2">
+        <div class="price-change-container @(data.ChangeAmount >= 0 ? "positive" : "negative") mb-2">
             <div class="change-indicator">
-                <i class="bi @(Data.ChangeAmount >= 0 ? "bi-arrow-up-short" : "bi-arrow-down-short")"></i>
-                <span class="prcent">@($"{Data.ChangePercentage:F2}%")</span>
-                <span class="change-value">@($"{Math.Abs(Data.ChangeAmount):N0}")</span>
+                <i class="bi @(data.ChangeAmount >= 0 ? "bi-arrow-up-short" : "bi-arrow-down-short")"></i>
+                <span class="prcent">@($"{data.ChangePercentage:F2}%")</span>
+                <span class="change-value">@($"{Math.Abs(data.ChangeAmount):N0}")</span>
             </div>
-            <div class="change-context">@Data.ChangeContext</div>
+            <div class="change-context">@data.ChangeContext</div>
         </div>
 
         <div class="bar-chart-container">
-            @if (Data.PriceHistory.Any())
+            @if (data.PriceHistory.Any())
             {
                 <svg width="100%" height="100%" viewBox="0 0 350 110">
                     @{
-                        var maxPrice = Data.PriceHistory.Max(d => d.Price);
-                        var minPrice = Data.PriceHistory.Min(d => d.Price);
+                        var maxPrice = data.PriceHistory.Max(d => d.Price);
+                        var minPrice = data.PriceHistory.Min(d => d.Price);
                         var priceRange = maxPrice - minPrice;
                         if (priceRange == 0) priceRange = 1;
 
-                        var barWidthPercentage = (100.0 / Data.PriceHistory.Count) * 0.5;
+                        var barWidthPercentage = (100.0 / data.PriceHistory.Count) * 0.5;
 
-                        for (int i = 0; i < Data.PriceHistory.Count; i++)
+                        for (int i = 0; i < data.PriceHistory.Count; i++)
                         {
-                            var item = Data.PriceHistory[i];
+                            var item = data.PriceHistory[i];
                             var barHeight = ((double)(item.Price - minPrice) / (double)priceRange) * 80 + 20; // % height (20% min)
-                            var x = (100.0 / Data.PriceHistory.Count) * (i + 0.5);
+                            var x = (100.0 / data.PriceHistory.Count) * (i + 0.5);
                             var y = 90 - barHeight;
 
-                            <rect x="@((x - barWidthPercentage / 2).ToString(CultureInfo.InvariantCulture))%" y="90" width="@(barWidthPercentage.ToString(CultureInfo.InvariantCulture))%" height="0" class="@(i == Data.PriceHistory.Count - 1 ? "latest" : "historical")" rx="4" ry="4">
+                            <rect x="@((x - barWidthPercentage / 2).ToString(CultureInfo.InvariantCulture))%" y="90" width="@(barWidthPercentage.ToString(CultureInfo.InvariantCulture))%" height="0" class="@(i == data.PriceHistory.Count - 1 ? "latest" : "historical")" rx="4" ry="4">
                                 <animate attributeName="height" from="0" to="@(barHeight.ToString(CultureInfo.InvariantCulture))" dur="0.5s" begin="@($"{i * 0.1}s")" fill="freeze" />
                                 <animate attributeName="y" from="90" to="@(y.ToString(CultureInfo.InvariantCulture))" dur="0.5s" begin="@($"{i * 0.1}s")" fill="freeze" />
                             </rect>
@@ -66,7 +66,7 @@
     </div>
 
     <div class="highlights-container">
-        @foreach (var highlight in Data.Highlights)
+        @foreach (var highlight in data.Highlights)
         {
             <div class="highlight-card">
                 <div class="item-header">
@@ -97,11 +97,12 @@
 </div>
 
 @code {
-
-
-    [Parameter]
-    public PriceViewModel Data { get; set; }
-
+    [Parameter] public int CommodityId { get; set; }
+    private PriceViewModel? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await CommodityService.GetPriceTrendsAsync(CommodityId);
+    }
     private MarkupString GenerateSvgTextLabel(PriceHistoryPoint item, double x)
     {
         var xFormatted = x.ToString(CultureInfo.InvariantCulture);

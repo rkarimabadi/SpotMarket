@@ -1,5 +1,4 @@
-﻿@* الهام گرفته از ویجت‌های برنامه Contacts و FaceTime اپل *@
-@using SpotMarket.WebAssembly.Models.Presentation
+﻿@inject IMarketsService MarketService
 @inject NavigationManager NavigationManager
 
 <div class="contacts-widget">
@@ -7,10 +6,10 @@
         <h3 class="widget-title">@Title</h3>
         <h4 class="widget-subtitle">@Subtitle</h4>
     </div>
-    @if (Data != null && Data.Items.Any())
+    @if (data != null && data.Items.Any())
     {
-        <div class="contacts-grid" style="grid-template-columns: repeat(@Data.Items.Count, 1fr);">
-            @foreach (var item in Data.Items)
+        <div class="contacts-grid" style="grid-template-columns: repeat(@data.Items.Count, 1fr);">
+            @foreach (var item in data.Items)
             {
                 <div class="contact-card" @onclick="() => GoTo(item.UrlName)">
                     <div class="contact-avatar @item.AvatarCssClass">
@@ -27,7 +26,11 @@
 @code {
     [Parameter] public string Title { get; set; } = "بازارهای منتخب";
     [Parameter] public string Subtitle { get; set; } = "بر اساس ارزش کل عرضه‌ها";
-    [Parameter] public MarketContactsData? Data { get; set; }
+    private MarketContactsData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await MarketService.GetMarketContacts();
+    }
     private void GoTo(string id)
     {
         NavigationManager.NavigateTo($"/markets/{id}");

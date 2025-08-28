@@ -1,4 +1,4 @@
-﻿@using SpotMarket.WebAssembly.Models.Presentation
+﻿@inject ISupplierService SupplierService
 @inject NavigationManager NavManager
 
 <div class="widget-container">
@@ -63,8 +63,12 @@
 @code {
     [Parameter]
     public string Title { get; set; } = "اطلاعیه عرضه‌های عرضه‌کننده";
-    [Parameter]
-    public UpcomingOffersData? Data { get; set; }
+    [Parameter] public int SupplierId { get; set; }
+    private UpcomingOffersData? data;
+    protected override async Task OnParametersSetAsync()
+    {
+        data = await SupplierService.GetSupplierOffersAsync(SupplierId);
+    }
 
     private const int MaxInitialItems = 5;
     private const int MaxPastItems = 10;
@@ -85,11 +89,11 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        if (Data != null && Data.Items.Any())
+        if (data != null && data.Items.Any())
         {
-            PastOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
-            TodayOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
-            FutureOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
+            PastOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
+            TodayOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
+            FutureOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
         }
     }
 

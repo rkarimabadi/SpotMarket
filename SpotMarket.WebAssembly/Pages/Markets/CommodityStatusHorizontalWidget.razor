@@ -1,14 +1,14 @@
-﻿@using SpotMarket.WebAssembly.Models.Presentation
+﻿@inject IMarketsService MarketService
 
 <div class="widget-container">
     <div class="section-header">
         <h3 class="section-title">@Title</h3>
         <h4 class="section-subtitle">@Subtitle</h4>
     </div>
-    @if (Data != null && Data.Items.Any())
+    @if (data != null && data.Items.Any())
     {
         <div class="horizontal-scroll-container">
-            @foreach (var item in Data.Items)
+            @foreach (var item in data.Items)
             {
                 <div class="wallet-card @GetThemeClass(item.MainGroupName)">
                     <div class="card-header px-1">
@@ -46,9 +46,11 @@
     public string Title { get; set; } = "وضعیت گروه‌های کالایی";
     [Parameter]
     public string Subtitle { get; set; } = "براساس تعداد اطلاعیه عرضه";
-    [Parameter]
-    public CommodityStatusData? Data { get; set; }
-
+    private CommodityStatusData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await MarketService.GetIndexGroups();
+    }
     private string GetThemeClass(string mainGroupName) => mainGroupName switch
     {
         "صنعتی" => "theme-industrial",

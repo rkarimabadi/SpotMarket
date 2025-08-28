@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager NavigationManager
+@inject ISubGroupService SubGroupService
 @if (HierarchyItems is not null && HierarchyItems.Any())
 {
 <div class="breadcrumb-hierarchy">
@@ -21,8 +22,14 @@
 @code {
 
 
-    [Parameter]
-    public List<HierarchyItem>? HierarchyItems { get; set; }
+    [Parameter] public int SubGroupId { get; set; }
+    [Parameter] public EventCallback<List<HierarchyItem>> OnDataReceived { get; set; }
+    private List<HierarchyItem>? HierarchyItems;
+    protected override async Task OnInitializedAsync()
+    {
+        HierarchyItems = await SubGroupService.GetSubGroupHierarchyAsync(SubGroupId);
+        await OnDataReceived.InvokeAsync(HierarchyItems);
+    }
     private HierarchyItem home = new HierarchyItem { Type = "market", Id = 1, IsActive = true };
     private void GoTo(HierarchyItem item)
     {

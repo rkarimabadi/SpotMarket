@@ -1,0 +1,189 @@
+﻿/* استایل برای ویجت کارت‌های تالار معاملاتی */
+.widget-container {
+    padding: 1rem 0;
+}
+
+.section-header {
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+}
+
+.horizontal-scroll-container {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding: 0 1rem 0 1rem; /* فضا برای اسکرول و سایه */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    scroll-snap-type: x mandatory;
+}
+
+    .horizontal-scroll-container::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+
+.trading-hall-card {
+    flex: 0 0 220px; /* عرض ثابت برای هر کارت */
+    padding: 1rem;
+    border-radius: 1.25rem;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scroll-snap-align: start;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.hall-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+    .hall-icon.industrial {
+        background-color: var(--gray-600); /* صنعتی و سیمان */
+    }
+
+    .hall-icon.petro {
+        background-color: var(--success-color); /* پتروشیمی */
+    }
+
+    .hall-icon.agri {
+        background-color: #e67e22; /* کشاورزی */
+    }
+
+
+    .hall-icon.oil-prod {
+        background-color: #34495e; /* فرآورده های نفتی */
+    }
+
+    .hall-icon.auto {
+        background-color: #9b59b6; /* خودرو */
+    }
+
+    .hall-icon.gold {
+        background-color: #f1c40f; /* طلا */
+    }
+
+    .hall-icon.export {
+        background-color: #3498db; /* صادراتی */
+    }
+
+    .hall-icon.auction {
+        background-color: var(--danger-color); /* حراج */
+    }
+
+    .hall-icon.real-estate {
+        background-color: #1abc9c; /* املاک */
+    }
+
+    .hall-icon.premium {
+        background-color: #8e44ad; /* پریمیوم */
+    }
+
+    .hall-icon.tender {
+        background-color: #2c3e50; /* مناقصه */
+    }
+
+    .hall-icon.other {
+        background-color: var(--text-secondary-color); /* سایر */
+    }
+
+.hall-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+    margin: 0;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+/* استایل جدید برای نمایشگر نسبت فروش به عرضه (طراحی افقی) */
+.ratio-indicator {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* سه بخش مساوی */
+    gap: 4px;
+    height: 8px; /* ارتفاع ثابت و کم */
+    width: 100%; /* تمام عرض کارت را اشغال می‌کند */
+}
+
+    .ratio-indicator .bar {
+        background-color: var(--border-color);
+        border-radius: 4px;
+        height: 100%; /* ارتفاع کامل والد خود را می‌گیرد */
+    }
+
+    /* حالت کم: یک بخش از سه بخش روشن می‌شود */
+    .ratio-indicator.ratio-low .bar:nth-child(1) {
+        background-color: var(--danger-color);
+    }
+
+    /* حالت متوسط: دو بخش از سه بخش روشن می‌شود */
+    .ratio-indicator.ratio-medium .bar:nth-child(1),
+    .ratio-indicator.ratio-medium .bar:nth-child(2) {
+        background-color: var(--warning-color);
+    }
+
+    /* حالت زیاد: هر سه بخش روشن می‌شود */
+    .ratio-indicator.ratio-high .bar:nth-child(1),
+    .ratio-indicator.ratio-high .bar:nth-child(2),
+    .ratio-indicator.ratio-high .bar:nth-child(3) {
+        background-color: var(--success-color);
+    }
+
+/* Placeholder for loading and no-data states */
+.trading-hall-card.data-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 12.5rem;
+    padding: 2rem;
+}
+
+/* حالت تیره */
+[data-bs-theme="dark"] .trading-hall-card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .ratio-indicator .bar {
+    background-color: var(--gray-700); /* رنگ پس‌زمینه برای بخش‌های خاموش */
+}

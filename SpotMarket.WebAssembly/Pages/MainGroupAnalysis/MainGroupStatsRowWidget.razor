@@ -1,6 +1,4 @@
-﻿@* الهام گرفته از ویجت‌های Control Center و Lock Screen اپل
-    طراحی این کامپوننت برای داشتن حداقل ارتفاع، بازنگری شده است
-*@
+﻿@inject IMainGroupService MainGroupService
 @using SpotMarket.WebAssembly.Models.Presentation
 
 <div class="stats-row-widget">
@@ -14,7 +12,7 @@
     </div>
     <div class="stats-container">
         @{
-            var itemsToShow = selectedMoverTab == "first" ? FirstData : SecondData;
+            var itemsToShow = selectedMoverTab == "first" ? marketStatsData : tradeStatsData;
         }
         @if (itemsToShow?.Items.Any() == true )
         {
@@ -44,6 +42,7 @@
 @code {
     [Parameter]
     public string Title { get; set; } = "آمار فوری بازار";
+    [Parameter] public int MainGroupId { get; set; }
     [Parameter]
     public string FirstTabTitle { get; set; } = "سهم از بازار";
     [Parameter]
@@ -51,15 +50,14 @@
     [Parameter]
     public string Subtitle { get; set; } = "براساس اطلاعیه‌عرضه‌های روز جاری";
 
-    [Parameter]
-    public MarketStatsData? FirstData { get; set; }
-    [Parameter]
-    public MarketStatsData? SecondData { get; set; }    
-
+    private MarketStatsData? marketStatsData;
+    private MarketStatsData? tradeStatsData;
+    protected override async Task OnInitializedAsync()
+    {
+        marketStatsData = await MainGroupService.GetMarketShareAsync(MainGroupId);
+        tradeStatsData = await MainGroupService.GetTradeShareAsync(MainGroupId);
+    }
     private string selectedMoverTab = "first";
-    /// <summary>
-    /// کلاس CSS را بر اساس وضعیت مقدار (مثبت، منفی یا خنثی) برمی‌گرداند
-    /// </summary>
     private string GetValueStateCssClass(ValueState state) => state switch
     {
         ValueState.Positive => "positive",

@@ -14,7 +14,7 @@
     </div>
     @if (marketSettings != null && marketSettings.VisibleInfoWidgets.Exists( x => x == MarketInfoWidgetType.ProgressRings))
     {
-        <MarketProgressRingsWidget Data="marketActivityItems" />
+        <MarketProgressRingsWidget />
     }
     @if (settingsLoaded)
     {
@@ -22,13 +22,13 @@
         @switch (marketSettings?.MainView)
         {
             case MarketMainViewType.List:
-                <MarketListWidget Data="marketInfoItems" />
+                <MarketListWidget/>
                 break;
             case MarketMainViewType.Heatmap:
-                <MarketHeatmapWidget Data="marketHeatmapData" Subtitle="براساس میانگین وزنی قیمت" />
+                <MarketHeatmapWidget Subtitle="براساس میانگین وزنی قیمت" />
                 break;
             case MarketMainViewType.Shortcuts:
-                <AdvancedMarketShortcutsWidget Data="marketShortcutsData" Subtitle="" Title="" />
+                <AdvancedMarketShortcutsWidget Subtitle="" Title="" />
                 break;
         }
 
@@ -40,10 +40,10 @@
                 @switch (widgetType)
                 {
                     case MarketInfoWidgetType.SelectedCommodity:
-                        <MarketContactsWidget Data="marketContactsData" Title="کالاهای پرطرفدار" Subtitle="براساس تعدد عرضه" />
+                        <MarketContactsWidget Title="کالاهای پرطرفدار" Subtitle="براساس تعدد عرضه" />
                         break;
                     case MarketInfoWidgetType.TodayGroups:
-                        <CommodityStatusHorizontalWidget Data="commodityStatusData" Title="گروه‌های منتخب" Subtitle="براساس تعداد اطلاعیه عرضه" />
+                        <CommodityStatusHorizontalWidget Title="گروه‌های منتخب" Subtitle="براساس تعداد اطلاعیه عرضه" />
                         break;
                 }
             }
@@ -58,14 +58,6 @@
 @code {
     private MarketSettings? marketSettings;
     private bool settingsLoaded = false;
-    private bool _isLoading = true;
-
-    private CommodityStatusData? commodityStatusData;
-    private MarketContactsData? marketContactsData;
-    private MarketHeatmapData? marketHeatmapData;
-    private MarketShortcutsData? marketShortcutsData;
-    private List<MarketInfo>? marketInfoItems;
-    private List<MarketActivity>? marketActivityItems;
 
     protected override async Task OnInitializedAsync()
     {
@@ -73,40 +65,6 @@
         var settings = await SettingsService.LoadSettingsAsync() ?? SettingsService.GetDefaultSettings();
         marketSettings = settings.MarketPageLayout;
         settingsLoaded = true;
-        await LoadDataAsync();
     }
-    private async Task LoadDataAsync()
-    {
-        try
-        {
-            _isLoading = true;
-            var commodityStatusTask = MarketService.GetIndexGroups();
-            var marketInfoTask = MarketService.GetMainGroupsData();
-            var marketActivityTask = MarketService.GetMarketActivities();
-            var marketContactsTask = MarketService.GetMarketContacts();
-            var marketHeatmapTask = MarketService.GetMarketHeatmapData();
-            var marketShortcutsTask = MarketService.GetMarketShortcutsData();
-
-            await Task.WhenAll(
-                commodityStatusTask, marketInfoTask, marketActivityTask, marketContactsTask, marketHeatmapTask, marketShortcutsTask
-            );
-
-            commodityStatusData = await commodityStatusTask;
-            marketInfoItems = await marketInfoTask;
-            marketActivityItems = await marketActivityTask;
-            marketContactsData = await marketContactsTask;
-            marketHeatmapData = await marketHeatmapTask;
-            marketShortcutsData = await marketShortcutsTask;
-        }
-        catch (Exception ex)
-        {
-            // لاگ کردن خطا
-            Console.WriteLine($"Error loading markets data: {ex.Message}");
-        }
-        finally
-        {
-            _isLoading = false;
-        }
-    }
-
+  
 }

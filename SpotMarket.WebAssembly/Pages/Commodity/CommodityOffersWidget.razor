@@ -1,4 +1,4 @@
-﻿@using SpotMarket.WebAssembly.Models.Presentation
+﻿@inject ICommodityService CommodityService
 @inject NavigationManager NavManager
 
 <div class="widget-container">
@@ -63,37 +63,38 @@
 @code {
     [Parameter]
     public string Title { get; set; } = "اطلاعیه عرضه‌ها";
-    [Parameter]
-    public UpcomingOffersData? Data { get; set; }
-
+    [Parameter] public int CommodityId { get; set; }
+    private UpcomingOffersData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await CommodityService.GetOfferHistoryAsync(CommodityId);
+    }
     private const int MaxInitialItems = 5;
     private const int MaxPastItems = 10;
 
-    private string selectedTab = "today"; // تب پیش‌فرض
+    private string selectedTab = "today";
 
     private List<UpcomingOfferItem> PastOffers = new();
     private List<UpcomingOfferItem> TodayOffers = new();
     private List<UpcomingOfferItem> FutureOffers = new();
 
-    // برای نگهداری وضعیت "نمایش بیشتر" برای هر تب
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (data != null && data.Items.Any())
+        {
+            PastOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
+            TodayOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
+            FutureOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
+        }
+    }
+
     private Dictionary<string, bool> _expandedStates = new()
     {
         { "past", false },
         { "today", false },
         { "future", false }
     };
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-        if (Data != null && Data.Items.Any())
-        {
-            PastOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
-            TodayOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
-            FutureOffers = Data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
-        }
-    }
-
     private List<UpcomingOfferItem> GetCurrentList()
     {
         return selectedTab switch
@@ -111,12 +112,10 @@
             "future" => "روزهای آینده",
             _ => "این دسته"
         };
-
     private bool IsCategoryExpanded(string category)
     {
         return _expandedStates.TryGetValue(category, out var isExpanded) && isExpanded;
     }
-
     private void ToggleExpand(string category)
     {
         if (_expandedStates.ContainsKey(category))
@@ -124,7 +123,6 @@
             _expandedStates[category] = true;
         }
     }
-
     private void GoToOffer(UpcomingOfferItem item)
     {
         if (item.Type == UpcomingOfferType.Commodity)

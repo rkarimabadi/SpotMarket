@@ -1,9 +1,9 @@
 ﻿@using System.Text.RegularExpressions
-
-@if (Data != null && Data.Any())
+@inject ISupplierService SupplierService
+@if (data != null && data.Any())
 {
-    var keyPlayerItems = Data.Where(i => i.Title.Contains("بازیگر کلیدی")).ToList();
-    var otherRankingItems = Data.Where(i => !i.Title.Contains("بازیگر کلیدی")).ToList();
+    var keyPlayerItems = data.Where(i => i.Title.Contains("بازیگر کلیدی")).ToList();
+    var otherRankingItems = data.Where(i => !i.Title.Contains("بازیگر کلیدی")).ToList();
 
     @* بخش رتبه‌بندی‌های عمومی *@
     @if (otherRankingItems.Any())
@@ -70,8 +70,12 @@
     [Parameter]
     public string Title { get; set; } = "جایگاه در بازار";
 
-    [Parameter]
-    public List<RankingItem>? Data { get; set; }
+    [Parameter] public int SupplierId { get; set; }
+    private List<RankingItem>? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await SupplierService.GetSupplierRankingAsync(SupplierId);
+    }
 
     private bool _showAllKeyPlayers = false;
 

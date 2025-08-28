@@ -1,10 +1,10 @@
-﻿@using SpotMarket.WebAssembly.Models.Presentation
-@inject NavigationManager NavManager
-@if (Data?.Any() == true)
+﻿@inject NavigationManager NavManager
+@inject ICommodityService CommodityService
+@if (data?.Any() == true)
 {
     <div class="widget-container">
-        <div class="players-grid" style="grid-template-columns: repeat(@Data.Count(), 1fr);">
-            @foreach (var player in Data)
+        <div class="players-grid" style="grid-template-columns: repeat(@data.Count(), 1fr);">
+            @foreach (var player in data)
             {
                 <div class="player-card" @onclick="() => GoToPlayer(player)">
                     <div class="player-icon"><i class="@player.IconCssClass"></i></div>
@@ -22,8 +22,12 @@
 
 @code {
 
-    [Parameter]
-    public IEnumerable<MainPlayer>? Data { get; set; }
+    [Parameter] public int CommodityId { get; set; }
+    private IEnumerable<MainPlayer>? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await CommodityService.GetMainPlayersAsync(CommodityId);
+    }
     private string PlayerType(MainPlayerType type) => type switch
     {
         MainPlayerType.Broker => "کارگزار فروشنده",

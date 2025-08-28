@@ -18,7 +18,7 @@
     /// </summary>
     public class MarketPulseData
     {
-        public List<PulseCardItem> Items { get; set; } = new();
+        public IEnumerable<PulseCardItem> Items { get; set; } = new List<PulseCardItem>();
     }
 
     public class MarketMetricData

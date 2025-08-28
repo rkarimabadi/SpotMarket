@@ -1,11 +1,12 @@
-﻿@if (Data != null && Data.Any())
+﻿@inject IBrokerService BrokerService
+@if (data != null && data.Any())
 {
     <div class="strategic-performance-widget">
         <div class="widget-header">
             <h3 class="widget-title">@Title</h3>
         </div>
         <div class="performance-list-card">
-            @foreach (var item in Data)
+            @foreach (var item in data)
             {
                 <div class="performance-item">
                     <span class="commodity-name">@item.CommodityName</span>
@@ -52,12 +53,13 @@
 @code {
     [Parameter]
     public string Title { get; set; } = "تخصص در کالاهای استراتژیک";
-    [Parameter]
-    public List<StrategicPerformanceItem>? Data { get; set; }
+    [Parameter] public int BrokerId { get; set; }
+    private List<StrategicPerformanceItem>? data;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        if (Data == null)
+        data = await BrokerService.GetStrategicPerformanceAsync(BrokerId);
+        if (data == null)
         {
             LoadSampleData();
         }
@@ -65,7 +67,7 @@
 
     private void LoadSampleData()
     {
-        Data = new List<StrategicPerformanceItem>
+        data = new List<StrategicPerformanceItem>
         {
             new StrategicPerformanceItem { CommodityName = "شمش فولادی", ValuePerformance = PerformanceStatus.Strong, VolumePerformance = PerformanceStatus.Strong },
             new StrategicPerformanceItem { CommodityName = "کاتد مس", ValuePerformance = PerformanceStatus.Strong, VolumePerformance = PerformanceStatus.Weak },

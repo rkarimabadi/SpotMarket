@@ -1,9 +1,5 @@
-﻿@* الهام گرفته از ویجت‌های برنامه Shortcuts و Home اپل
-    این ویجت اکنون دو حالت نمایش دارد: خلاصه و کامل
-*@
-
-@using System.Linq
-@using SpotMarket.WebAssembly.Models.Presentation
+﻿@using System.Linq
+@inject IMarketsService MarketService
 @inject NavigationManager NavigationManager
 
 <div class="shortcuts-widget">
@@ -11,7 +7,7 @@
         <h3 class="widget-title">@Title</h3>
         <h4 class="widget-subtitle">@Subtitle</h4>
     </div>
-    @if (Data != null && Data.Items.Any())
+    @if (data != null && data.Items.Any())
     {
         <div class="shortcuts-grid">
             @if (!_isExpanded)
@@ -37,7 +33,7 @@
             else
             {
                 // حالت کامل: نمایش تمام آیتم‌ها
-                @foreach (var item in Data.Items)
+                @foreach (var item in data.Items)
                 {
                     <div class="shortcut-tile @item.ThemeCssClass" @onclick="() => GoTo(item.Code)">
                         <div class="tile-icon"><i class="@item.IconCssClass"></i></div>
@@ -54,32 +50,31 @@
     public string Title { get; set; } = "میان‌برها";
     [Parameter]
     public string Subtitle { get; set; } = "بر اساس ارزش کل عرضه‌ها";
-    [Parameter]
-    public MarketShortcutsData? Data { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        data = await MarketService.GetMarketShortcutsData();
+    }
+    private MarketShortcutsData? data;
 
-    // وضعیت نمایش ویجت (خلاصه یا کامل)
     private bool _isExpanded = false;
     private List<MarketShortcutItem> InitialItems
     {
         get
         {
-            if (Data?.Items == null) return new List<MarketShortcutItem>();
+            if (data?.Items == null) return new List<MarketShortcutItem>();
 
-            var primaryItems = Data.Items.Where(i => i.ThemeCssClass != "secondary");
-            var secondaryItems = Data.Items.Where(i => i.ThemeCssClass == "secondary");
+            var primaryItems = data.Items.Where(i => i.ThemeCssClass != "secondary");
+            var secondaryItems = data.Items.Where(i => i.ThemeCssClass == "secondary");
 
             return primaryItems.Concat(secondaryItems).Take(3).ToList();
         }
     }
-    // آیتم‌های اصلی (غیر ثانویه)
     private List<MarketShortcutItem> PrimaryItems =>
-        Data?.Items.Where(i => i.ThemeCssClass != "secondary").ToList() ?? new List<MarketShortcutItem>();
+        data?.Items.Where(i => i.ThemeCssClass != "secondary").ToList() ?? new List<MarketShortcutItem>();
 
-    // بررسی اینکه آیا آیتم‌های بیشتری برای نمایش وجود دارد یا خیر
     private bool HasMoreItems =>
-        (Data?.Items.Count ?? 0) > 3;
+        (data?.Items.Count ?? 0) > 3;
 
-    // متد برای تغییر وضعیت به حالت کامل
     private void ExpandView()
     {
         _isExpanded = true;
@@ -87,7 +82,6 @@
 
     private void GoTo(int id)
     {
-        // جلوگیری از ناوبری برای تایل "سایر گروه‌ها" که کد مشخصی ندارد
         if (id > 0)
         {
             NavigationManager.NavigateTo($"/markets/{id}");

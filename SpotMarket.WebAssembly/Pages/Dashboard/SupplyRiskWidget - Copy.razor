@@ -1,13 +1,14 @@
 ﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject IDashboardService DashboardService
 @inject NavigationManager NavigationManager
-@if (Data != null && Data.Items.Any())
+@if (data != null && data.Items.Any())
 {
     <div class="widget-container">
         <div class="section-header">
             <h3 class="section-title">@Title</h3>
         </div>
         <div class="data-card">
-            @foreach (var item in Data.Items)
+            @foreach (var item in data.Items)
             {
                 <div class="data-list-item" @onclick="() => GoTo(item)">
                     <div class="item-rank">
@@ -27,8 +28,11 @@
 @code {
     [Parameter]
     public string Title { get; set; } = "ریسک تمرکز عرضه";
-    [Parameter]
-    public SupplyRiskData? Data { get; set; }
+    private SupplyRiskData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await DashboardService.GetSupplyRisk();
+    }
 
     private string GetIconClass(RiskLevel risk)
     {

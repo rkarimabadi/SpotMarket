@@ -1,10 +1,10 @@
-﻿@using SpotMarket.WebAssembly.Models.Presentation
+﻿@inject ISupplierService SupplierService
 
-@if (Data?.Metrics != null && Data.Metrics.Any())
+@if (data?.Metrics != null && data.Metrics.Any())
 {
 <div class="health-widget">
         <div class="cards-container">
-            @foreach (var metric in Data.Metrics)
+            @foreach (var metric in data.Metrics)
             {
                 <div class="card health-card">
                     <div class="card-body health-card-content">
@@ -24,6 +24,10 @@
 }
 
 @code {
-    [Parameter]
-    public MarketMetricData? Data { get; set; }
+    [Parameter] public int SupplierId { get; set; }
+    private MarketMetricData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await SupplierService.GetMarketMetricAsync(SupplierId);
+    }
 }

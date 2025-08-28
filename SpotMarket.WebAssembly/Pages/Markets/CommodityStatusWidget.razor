@@ -1,0 +1,52 @@
+﻿@inject IMarketsService MarketService
+
+<div class="widget-container">
+    <div class="section-header">
+        <h3 class="section-title">@Title</h3>
+    </div>
+    <div class="data-card">
+        @if (data != null && data.Items.Any())
+        {
+            foreach (var item in data.Items)
+            {
+                <div class="commodity-item">
+                    <div class="item-info">
+                        <div class="title">@item.Name</div>
+                        <div class="subtitle">@item.MainGroupName</div>
+                    </div>
+                    <div class="item-stat">
+                        <span class="offer-count">@item.OfferCount اطلاعیه</span>
+                        <div class="demand-indicator @GetDemandStatusCssClass(item.DemandStatus)">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="p-4 text-center text-secondary">داده‌ای برای نمایش وجود ندارد.</div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "وضعیت گروه‌های کالایی";
+
+    private CommodityStatusData? data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await MarketService.GetIndexGroups();
+    }
+
+    private string GetDemandStatusCssClass(DemandStatus status) => status switch
+    {
+        DemandStatus.High => "status-high",
+        DemandStatus.Low => "status-low",
+        _ => "status-medium"
+    };
+}

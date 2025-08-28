@@ -1,29 +1,44 @@
-﻿@inject NavigationManager NavigationManager
+﻿@inject IMainGroupService MainGroupService
+@inject IMarketsService MarketService
+@inject NavigationManager NavigationManager
 @if (HierarchyItems is not null && HierarchyItems.Any())
 {
-<div class="breadcrumb-hierarchy">
-    <span class="breadcrumb-item active" style="cursor: pointer" @onclick="() => GoTo(home)"><i class="bi bi-house-fill"></i></span>
-    <span class="breadcrumb-separator">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.707 17.707L14.293 19.121L8.172 13L14.293 6.879L15.707 8.293L11.001 13L15.707 17.707Z"></path></svg>
-    </span>
-    @foreach (var item in HierarchyItems)
-    {
-        <span class="breadcrumb-item @(item.IsActive ? "active" : "")" style="cursor:@(item.IsActive ? "pointer" : "unset")" @onclick="() => GoTo(item)">@item.Name</span>
-        @if (!item.IsLast)
+    <div class="breadcrumb-hierarchy">
+        <span class="breadcrumb-item active" style="cursor: pointer" @onclick="() => GoTo(home)"><i class="bi bi-house-fill"></i></span>
+        <span class="breadcrumb-separator">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.707 17.707L14.293 19.121L8.172 13L14.293 6.879L15.707 8.293L11.001 13L15.707 17.707Z"></path></svg>
+        </span>
+        @foreach (var item in HierarchyItems)
         {
-            <span class="breadcrumb-separator">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.707 17.707L14.293 19.121L8.172 13L14.293 6.879L15.707 8.293L11.001 13L15.707 17.707Z"></path></svg>
-            </span>
+            <span class="breadcrumb-item @(item.IsActive ? "active" : "")" style="cursor:@(item.IsActive ? "pointer" : "unset")" @onclick="() => GoTo(item)">@item.Name</span>
+            @if (!item.IsLast)
+            {
+                <span class="breadcrumb-separator">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.707 17.707L14.293 19.121L8.172 13L14.293 6.879L15.707 8.293L11.001 13L15.707 17.707Z"></path></svg>
+                </span>
+            }
         }
-    }
-</div>
+    </div>
 }
 @code {
+    [Parameter] public int MainGroupId { get; set; }
+    private List<HierarchyItem>? HierarchyItems = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var mainGroupList = await MarketService.GetMarketShortcutsData();
+        if (mainGroupList is not null && mainGroupList.Items.Any())
+        {
+            var mainGroup = mainGroupList.Items.FirstOrDefault(g => g.Code == MainGroupId);
+            if (mainGroup is not null)
+            {
+                HierarchyItems = new() {
+                    new HierarchyItem { Id = MainGroupId, Name = mainGroup.Title, IsActive = false, Type = "MainGroup" }
+                };
+            }
+        }
+    }
 
-
-    [Parameter]
-    public List<HierarchyItem>? HierarchyItems { get; set; }
-    private HierarchyItem home = new HierarchyItem { Type = "market", Id = 1, IsActive= true  };
+    private HierarchyItem home = new HierarchyItem { Type = "market", Id = 1, IsActive = true };
     private void GoTo(HierarchyItem item)
     {
         if (item.Id > 0 && item.IsActive)
@@ -32,9 +47,9 @@
             {
                 "Ring" => $"{item.Id}",
                 "MainGroup" => $"{item.Id}",
-                "Group" => $"{HierarchyItems.First(x => x.Type == "MainGroup").Id}/{item.Id}",
-                "SubGroup" => $"{HierarchyItems.First(x => x.Type == "MainGroup").Id}/{HierarchyItems.First(x => x.Type == "Group").Id}/{item.Id}",
-                "Commodity" => $"{HierarchyItems.First(x => x.Type == "MainGroup").Id}/{HierarchyItems.First(x => x.Type == "Group").Id}/{HierarchyItems.First(x => x.Type == "SubGroup").Id}/{item.Id}",
+                "Group" => $"{HierarchyItems?.FirstOrDefault(x => x.Type == "MainGroup")?.Id}/{item.Id}",
+                "SubGroup" => $"{HierarchyItems?.FirstOrDefault(x => x.Type == "MainGroup")?.Id}/{HierarchyItems?.FirstOrDefault(x => x.Type == "Group")?.Id}/{item.Id}",
+                "Commodity" => $"{HierarchyItems?.FirstOrDefault(x => x.Type == "MainGroup")?.Id}/{HierarchyItems?.FirstOrDefault(x => x.Type == "Group")?.Id}/{HierarchyItems?.FirstOrDefault(x => x.Type == "SubGroup")?.Id}/{item.Id}",
                 _ => ""
             };
             NavigationManager.NavigateTo($"/markets/{urlName}");

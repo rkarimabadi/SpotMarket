@@ -1,68 +1,26 @@
 ﻿@page "/markets/{mainGroupId:int}/{groupId:int}"
+@page "/commodity-tree/group/{groupId:int}"
 @using SpotMarket.WebAssembly.Services.Presentation
 @inject NavStateService NavState
 @inject IMarketsService MarketService
 @inject IMainGroupService MainGroupService
 @inject IGroupService GroupService
-<PageTitle>گروه کالای @groupHeaderData?.GroupName</PageTitle>
+<PageTitle>@pageTitle</PageTitle>
 <div class="page-container">
-    <GroupHeaderWidget Data="@groupHeaderData" />
-    <GroupHierarchyWidget HierarchyItems="@groupHierarchyData"/>
-    @if (_isLoading)
-    {
-        <p><em>در حال بارگذاری اطلاعات گروه اصلی...</em></p>
-    }  else
-    {
-        if (groupActivityStatus == GroupActivityStatus.Inactive)
-        {
-            <NoActivityWidget />
-        }
-
-        <ExpandableSubGroupListWidget Data="groupListData" Unit="زیرگروه" Title="زیرگرو‌ه های فعال" UrlPrefix="@urlprefix" />
-    }
-
+    <GroupHeaderWidget GroupId="@groupId" />
+    <GroupHierarchyWidget GroupId="@groupId" OnDataReceived="OnHierarchyRecived"/>
+    <GroupListContainerWidget GroupId="@groupId" UrlPrefix="@urlprefix"/>
 </div>
 @code {
     [Parameter] public int mainGroupId { get; set; }
     [Parameter] public int groupId { get; set; }
 
-    private GroupListData? groupListData;
-    private GroupActivityStatus groupActivityStatus;
-    private GroupActivityData? activeGroupData;
-    private List<HierarchyItem>? groupHierarchyData;
-    private GroupHeaderData? groupHeaderData;
-
-    private string urlprefix => $"{mainGroupId}/{groupId}/";
-    private bool _isLoading = true;
-
-    protected override async Task OnInitializedAsync()
+    private string? urlprefix;
+    private string? pageTitle;
+    private void OnHierarchyRecived(List<HierarchyItem> goupHierarchyData)
     {
-        await LoadDate();
-        base.OnInitialized();
-
-    }
-
-    private async Task LoadDate()
-    {
-        try
-        {
-            groupHierarchyData = await GroupService.GetGroupHierarchyAsync(groupId);
-            groupHeaderData = await GroupService.GetGroupHeaderDataAsync(groupId);
-
-            var pageTitle = $"تحلیل گروه {groupHeaderData?.GroupName}";
-
-            NavState.SetNavState(pageTitle, true, $"/markets/{groupHierarchyData?.First(x => x.Type == "MainGroup")?.Id ?? mainGroupId}");
-            groupListData = await GroupService.GetActiveSubGroupsAsync(groupId);
-            groupActivityStatus = groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
-        }
-        catch (Exception ex)
-        {
-            // لاگ کردن خطا
-            Console.WriteLine($"Error loading main group data: {ex.Message}");
-        }
-        finally
-        {
-            _isLoading = false;
-        }
+        pageTitle = $"گروه {goupHierarchyData?.First(x => x.Type == "Group").Name ?? "..."}";
+        NavState.SetNavState(pageTitle, true, $"/markets/{goupHierarchyData?.First(x => x.Type == "MainGroup")?.Id ?? mainGroupId}");
+        urlprefix = $"{goupHierarchyData?.First(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{goupHierarchyData?.First(x => x.Type == "Group")?.Id ?? groupId}/";
     }
 }

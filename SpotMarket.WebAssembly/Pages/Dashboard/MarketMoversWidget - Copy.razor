@@ -1,18 +1,19 @@
 ﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject IDashboardService DashboardService
 @inject NavigationManager NavigationManager
-@if (Data != null)
+@if (data != null)
 {
     <div class="widget-container">
         <div class="section-header">
             <h3 class="section-title">@Title</h3>
         </div>
         <div class="segmented-control">
-            <button class="@(selectedMoverTab == "competition" ? "active" : "")" @onclick='() => selectedMoverTab = "competition"'>@Data.CompetitionTabTitle</button>
-            <button class="@(selectedMoverTab == "demand" ? "active" : "")" @onclick='() => selectedMoverTab = "demand"'>@Data.DemandTabTitle</button>
+            <button class="@(selectedMoverTab == "competition" ? "active" : "")" @onclick='() => selectedMoverTab = "competition"'>@data.CompetitionTabTitle</button>
+            <button class="@(selectedMoverTab == "demand" ? "active" : "")" @onclick='() => selectedMoverTab = "demand"'>@data.DemandTabTitle</button>
         </div>
         <div class="data-card">
             @{
-                var itemsToShow = selectedMoverTab == "competition" ? Data.CompetitionItems : Data.DemandItems;
+                var itemsToShow = selectedMoverTab == "competition" ? data.CompetitionItems : data.DemandItems;
             }
             @if (itemsToShow?.Any() == true)
             {
@@ -35,7 +36,7 @@
             }
             else
             {
-                <div class="p-4 text-center text-secondary">داده‌ای برای نمایش وجود ندارد.</div>
+                <div class="p-4 text-center text-secondary"><NoData/></div>
             }
         </div>
     </div>
@@ -44,8 +45,13 @@
 @code {
     [Parameter]
     public string Title { get; set; } = "پویایی بازار";
-    [Parameter]
-    public MarketMoversData? Data { get; set; }
+
+    private MarketMoversData? data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await DashboardService.GetMarketMovers();
+    }
 
     private string selectedMoverTab = "competition";
 

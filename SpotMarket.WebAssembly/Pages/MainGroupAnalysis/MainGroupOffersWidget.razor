@@ -1,0 +1,46 @@
+﻿@inject IMainGroupService MainGroupService
+@inject NavigationManager NavManager
+
+@if (data != null && data.Items.Any())
+{
+    <div class="widget-container">
+        <div class="widget-header">
+            <h3 class="widget-title">@Title</h3>
+        </div>
+        <div class="upcoming-widget">
+            <div class="schedule-list">
+                @foreach (var item in data.Items.Take(Take))
+                {
+                    <div class="schedule-item" @onclick="() => GoToOffer(item)">
+                        <div class="date-marker">
+                            <span class="day">@item.DayOfWeek</span>
+                            <span class="date">@item.DayOfMonth</span>
+                        </div>
+                        <div class="info d-flex flex-column">
+                            <span class="title">@item.Title</span>
+                            <span class="subtitle">@item.Subtitle</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string Title { get; set; } = "برنامه عرضه‌های آینده";
+    [Parameter] public int MainGroupId { get; set; }
+    [Parameter] public int Take { get; set; } = 10;
+    private UpcomingOffersData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await MainGroupService.GetUpcomingOffersAsync(MainGroupId);
+    }
+    private void GoToOffer(UpcomingOfferItem item)
+    {
+        if (item.Type == UpcomingOfferType.Commodity)
+        {
+            NavManager.NavigateTo($"/offers/{item.UrlName}");
+        }
+    }
+}

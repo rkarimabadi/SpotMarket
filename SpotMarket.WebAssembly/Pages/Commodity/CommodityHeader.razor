@@ -1,25 +1,27 @@
-﻿<div class="header-container">
-    <div class="header-icon @GetHallVisuals(Data.Ring).IconBgCssClass">
-        <i class="bi @GetHallVisuals(Data.Ring).IconCssClass"></i>
+﻿@inject ICommodityService CommodityService
+<div class="header-container">
+    <div class="header-icon @GetHallVisuals(data?.Ring).IconBgCssClass">
+        <i class="bi @GetHallVisuals(data?.Ring).IconCssClass"></i>
     </div>
     <div class="header-info">
-        <h1>@Data.CommodityName</h1>
-        <p class="symbol">@Data.Symbol</p>
+        <h1>@data?.CommodityName</h1>
+        <p class="symbol">@data?.Symbol</p>
     </div>
 </div>
 
 @code {
-    [Parameter]
-    public CommodityHeaderData Data { get; set; }
-    [Parameter]
-    public string CommodityName { get; set; } = "میلگرد";
-    [Parameter]
-    public string Symbol { get; set; } = "SMGRI601";
-    [Parameter]
-    public string Ring { get; set; } = "other";
-
-    private (string IconCssClass, string IconBgCssClass) GetHallVisuals(string hallName)
+    [Parameter] public int CommodityId { get; set; }
+    [Parameter] public EventCallback<CommodityHeaderData> OnDataReceived { get; set; }
+    private CommodityHeaderData? data;
+    protected override async Task OnInitializedAsync()
     {
+        data = await CommodityService.GetCommodityHeaderAsync(CommodityId);
+        await OnDataReceived.InvokeAsync(data);
+    }
+
+    private (string IconCssClass, string IconBgCssClass) GetHallVisuals(string? hallName)
+    {
+        if( hallName is null) return ("bi bi-grid-fill", "other");
         if (hallName.Contains("صنعتی")) return ("bi bi-building", "industrial");
         if (hallName.Contains("پتروشیمی")) return ("bi bi-droplet-fill", "petro");
         if (hallName.Contains("کشاورزی")) return ("bi bi-tree-fill", "agri");
@@ -32,8 +34,6 @@
         if (hallName.Contains("املاک")) return ("bi bi-house-door-fill", "real-estate");
         if (hallName.Contains("پریمیوم")) return ("bi bi-gem", "premium");
         if (hallName.Contains("مناقصه")) return ("bi bi-file-earmark-text-fill", "tender");
-
-        // مقدار پیش‌فرض برای سایر تالارها
         return ("bi bi-grid-fill", "other");
     }
 }

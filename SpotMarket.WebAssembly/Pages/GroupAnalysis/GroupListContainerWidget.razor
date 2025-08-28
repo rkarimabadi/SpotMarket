@@ -1,0 +1,27 @@
+﻿@inject IGroupService GroupService
+
+@if (groupActivityStatus == GroupActivityStatus.Inactive)
+{
+    <NoActivityWidget />
+}
+
+<ExpandableSubGroupListWidget Data="subGroupListData" Unit="زیرگروه" Title="زیرگرو‌ه های فعال" UrlPrefix="@UrlPrefix" />
+
+@code {
+    [Parameter] public int GroupId { get; set; }
+    [Parameter] public string? UrlPrefix { get; set; }
+    private GroupListData? subGroupListData;
+    private GroupActivityStatus groupActivityStatus;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            subGroupListData = await GroupService.GetActiveSubGroupsAsync(GroupId);
+            groupActivityStatus = subGroupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : subGroupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading main group data: {ex.Message}");
+        }
+    }
+}

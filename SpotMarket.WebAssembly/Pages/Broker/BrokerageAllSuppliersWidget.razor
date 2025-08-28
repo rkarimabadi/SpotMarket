@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager NavManager
-@if (Data != null && Data.Any())
+@inject IBrokerService BrokerService
+@if (data != null && data.Any())
 {
     <div class="all-suppliers-widget">
         <div class="expandable-container @(_isExpanded ? "expanded" : "")">
@@ -9,7 +10,7 @@
                 </div>
                 <div class="item-info">
                     <span class="info-title">تمام عرضه‌کنندگان</span>
-                    <span class="info-subtitle ms-2">@Data.Count عرضه‌کننده</span>
+                    <span class="info-subtitle ms-2">@data.Count عرضه‌کننده</span>
                 </div>
                 <div class="item-chevron">
                     <i class="bi bi-chevron-down"></i>
@@ -18,7 +19,7 @@
 
             <div class="suppliers-list-card">
                 <div class="suppliers-grid">
-                    @foreach (var supplier in Data)
+                    @foreach (var supplier in data)
                     {
                         <div class="supplier-tag" @onclick="() => OnSupplierClick(supplier)">
                             @supplier.Name
@@ -31,8 +32,12 @@
 }
 
 @code {
-    [Parameter]
-    public List<SupplierItem>? Data { get; set; }
+    [Parameter] public int BrokerId { get; set; }
+    private List<SupplierItem>? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await BrokerService.GetAllSuppliersAsync(BrokerId);
+    }
 
     private bool _isExpanded = false;
 

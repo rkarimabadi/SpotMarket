@@ -1,14 +1,25 @@
-﻿@if(Data is not null)
+﻿@inject IMarketsService MarketService
+@if (data is not null)
 {
     <div class="group-header-container">
         <div class="group-title-section">
-            <div class="group-icon @Data.ThemeCssClass"><i class="@Data.IconCssClass"></i></div>
-            <h1 class="group-title">@Data.Title</h1>
+            <div class="group-icon @data.ThemeCssClass"><i class="@data.IconCssClass"></i></div>
+            <h1 class="group-title">@data.Title</h1>
         </div>
     </div>
 }
 
 @code {
-    [Parameter]
-    public MarketShortcutItem? Data { get; set; }
+    [Parameter] public int MainGroupId { get; set; }
+    [Parameter] public EventCallback<string> OnDataReceived { get; set; }
+    private MarketShortcutItem? data;
+    protected override async Task OnInitializedAsync()
+    {
+        var mainGroupList = await MarketService.GetMarketShortcutsData();
+        if (mainGroupList is not null && mainGroupList.Items.Any())
+        {
+            data = mainGroupList.Items.FirstOrDefault(g => g.Code == MainGroupId);
+            await OnDataReceived.InvokeAsync(data?.Title);
+        }
+    }
 }

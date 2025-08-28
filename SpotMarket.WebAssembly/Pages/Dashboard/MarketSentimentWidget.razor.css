@@ -1,0 +1,66 @@
+﻿.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+.section-header {
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+.section-subtitle {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    margin: 0;
+}
+
+.data-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    /* این خط برای هماهنگی ارتفاع placeholder با حالت داده اضافه شده است */
+    min-height: 8rem;
+}
+
+    .data-card.data-placeholder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+.sentiment-bar {
+    display: flex;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+
+.sentiment-bar-segment {
+    height: 100%;
+}
+
+.sentiment-legend {
+    display: flex;
+    justify-content: space-around;
+    font-size: 0.875rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}

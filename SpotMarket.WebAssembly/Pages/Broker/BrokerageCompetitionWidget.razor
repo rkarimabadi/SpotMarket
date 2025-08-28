@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
+@inject IBrokerService BrokerService
 
-@if (Data != null)
+@if (data != null)
 {
     <div class="widget-container">
         <div class="competition-widget">
@@ -11,16 +12,16 @@
                         <path d="M 10 50 A 40 40 0 0 1 90 50" class="gauge-value" style="stroke-dashoffset: @CalculateStrokeOffset();" />
                     </svg>
                     <div class="gauge-text-container">
-                        <span class="value">@Data.Percentage.ToString("F1")%</span>
+                        <span class="value">@data.Percentage.ToString("F1")%</span>
                     </div>
                 </div>
                 <div class="gauge-label">
-                    @Data.Label
+                    @data.Label
                 </div>
             </div>
             <div class="competition-info">
-                <h4 class="title">@Data.Title</h4>
-                <p class="subtitle">@Data.Description</p>
+                <h4 class="title">@data.Title</h4>
+                <p class="subtitle">@data.Description</p>
             </div>
         </div>
     </div>
@@ -29,14 +30,18 @@
 @code {
     [Parameter]
     public string Title { get; set; } = "قدرت فروش";
-    [Parameter]
-    public CompetitionData? Data { get; set; }
+    [Parameter] public int BrokerId { get; set; }
+    private CompetitionData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await BrokerService.GetCompetitionRatioAsync(BrokerId);
+    }
 
     private const double ArcLength = 125.66;
 
     private string CalculateStrokeOffset()
     {
-        var percentage = Math.Max(0, Math.Min(100, Data?.Percentage ?? 0));
+        var percentage = Math.Max(0, Math.Min(100, data?.Percentage ?? 0));
         var offset = ArcLength * (1 - (percentage / 100));
         return offset.ToString(CultureInfo.InvariantCulture);
     }

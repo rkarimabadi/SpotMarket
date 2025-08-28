@@ -1,0 +1,26 @@
+﻿@inject IMainGroupService MainGroupService
+
+@if (mainGroupActivityStatus == GroupActivityStatus.Inactive)
+{
+    <NoActivityWidget />
+}
+<ExpandableSubGroupListWidget Data="groupListData" UrlPrefix="@UrlPrefix" />
+
+@code {
+    [Parameter] public int MainGroupId { get; set; }
+    [Parameter] public string? UrlPrefix { get; set; }
+    private GroupListData? groupListData;
+    private GroupActivityStatus mainGroupActivityStatus;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            groupListData = await MainGroupService.GetActiveGroupsAsync(MainGroupId);
+            mainGroupActivityStatus = groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasOfferToday) ? GroupActivityStatus.HasOfferToday : groupListData.Items.Exists(x => x.Status == GroupActivityStatus.HasUpcomingOffer) ? GroupActivityStatus.HasUpcomingOffer : GroupActivityStatus.Inactive;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading main group data: {ex.Message}");
+        }
+    }
+}

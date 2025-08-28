@@ -10,46 +10,41 @@
 <div class="dashboard-container">
 
     <DashboardHeader />
-    @if (_isLoading)
+    @if (widgetLayout != null)
     {
-        <p><em>در حال بارگذاری اطلاعات داشبورد...</em></p>
-    } else {
-        if (widgetLayout != null)
+        @foreach (var widgetConfig in widgetLayout)
         {
-            @foreach (var widgetConfig in widgetLayout)
+            @if (widgetConfig.IsVisible)
             {
-                @if (widgetConfig.IsVisible)
+                @switch (widgetConfig.Type)
                 {
-                    @switch (widgetConfig.Type)
-                    {
-                        case DashboardWidgetType.MarketProgress:
-                            <MarketAdvanceProgressBarWidget Data="marketProgressData" />
-                            break;
-                        case DashboardWidgetType.TradingHalls:
-                            <TradingHallsWidget Data="tradingHallsData" />
-                            break;
-                        case DashboardWidgetType.MarketMovers:
-                            <MarketMoversWidget Data="marketMoversData" />
-                            break;
-                        case DashboardWidgetType.MainPlayers:
-                            <MainPlayersWidget Players="mainPlayersData" />
-                            break;
-                        case DashboardWidgetType.MarketExcitement:
-                            <MarketExcitementWidget Data="marketExcitementData" />
-                            break;
-                        case DashboardWidgetType.MarketPulse:
-                            <MarketPulseWidget Data="marketPulseData" />
-                            break;
-                        case DashboardWidgetType.MarketSentiment:
-                            <MarketSentimentWidget Data="marketSentimentData" />
-                            break;
-                        case DashboardWidgetType.SupplyRisk:
-                            <SupplyRiskWidget Data="supplyRiskData" />
-                            break;
-                        case DashboardWidgetType.SpotNotifictions:
-                            <SpotNotifictionsWidget Data="spotNotificationData" />
-                            break;
-                    }
+                    case DashboardWidgetType.MarketProgress:
+                        <MarketAdvanceProgressBarWidget />
+                        break;
+                    case DashboardWidgetType.TradingHalls:
+                        <TradingHallsWidget/>
+                        break;
+                    case DashboardWidgetType.MarketMovers:
+                        <MarketMoversWidget/>
+                        break;
+                    case DashboardWidgetType.MainPlayers:
+                        <MainPlayersWidget/>
+                        break;
+                    case DashboardWidgetType.MarketExcitement:
+                        <MarketExcitementWidget/>
+                        break;
+                    case DashboardWidgetType.MarketPulse:
+                        <MarketPulseWidget/>
+                        break;
+                    case DashboardWidgetType.MarketSentiment:
+                        <MarketSentimentWidget />
+                        break;
+                    case DashboardWidgetType.SupplyRisk:
+                        <SupplyRiskWidget/>
+                        break;
+                    case DashboardWidgetType.SpotNotifictions:
+                        <SpotNotifictionsWidget/>
+                        break;
                 }
             }
         }
@@ -63,60 +58,8 @@
         NavState.SetNavState("کالا نما", false);
         var settings = await SettingsService.LoadSettingsAsync();
         widgetLayout = settings?.DashboardLayout;
-        await LoadDataAsync();
     }
-
     private List<DashboardWidgetConfig> widgetLayout = new();
 
-    private bool _isLoading = true;
-    private IEnumerable<MainPlayer> mainPlayersData = new List<MainPlayer>();
-    private MarketExcitementData? marketExcitementData;
-    private MarketMoversData? marketMoversData;
-    private MarketPulseData? marketPulseData;
-    private MarketSentimentData? marketSentimentData;
-    private SpotNotificationData? spotNotificationData;
-    private SupplyRiskData? supplyRiskData;
-    private TradingHallsData? tradingHallsData;
-    private MarketProgressData? marketProgressData;
 
-    private async Task LoadDataAsync()
-    {
-        try
-        {
-            // فراخوانی همزمان تمام سرویس‌ها برای بهبود پرفورمنس
-            var pulseTask = DashboardService.GetMarketPulse();
-            var sentimentTask = DashboardService.GetMarketSentiment();
-            var excitementTask = DashboardService.GetMarketExcitement();
-            var supplyRiskTask = DashboardService.GetSupplyRisk();
-            var moversTask = DashboardService.GetMarketMovers();
-            var playersTask = DashboardService.GetMainPlayers();
-            var hallsTask = DashboardService.GetTradingHalls();
-            var spotNotificationTask = DashboardService.GetspotNotifications();
-            var progressTask = DashboardService.GetMarketProgressData();
-
-            await Task.WhenAll(
-                pulseTask, sentimentTask, excitementTask, supplyRiskTask,
-                moversTask, playersTask, hallsTask, spotNotificationTask
-            );
-
-            marketPulseData = await pulseTask;
-            marketSentimentData = await sentimentTask;
-            marketExcitementData = await excitementTask;
-            supplyRiskData = await supplyRiskTask;
-            marketMoversData = await moversTask;
-            mainPlayersData = await playersTask;
-            tradingHallsData = await hallsTask;
-            spotNotificationData = await spotNotificationTask;
-            marketProgressData = await progressTask;
-        }
-        catch (Exception ex)
-        {
-            // لاگ کردن خطا
-            Console.WriteLine($"Error loading dashboard data: {ex.Message}");
-        }
-        finally
-        {
-            _isLoading = false;
-        }
-    }
 }

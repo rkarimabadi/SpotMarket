@@ -1,124 +1,30 @@
 ﻿@page "/players/suppliers/{supplierId:int}"
 
-@using SpotMarket.WebAssembly.Models.Presentation
-@using SpotMarket.WebAssembly.Services.Presentation
-@inject ISupplierService SupplierService
+@inject NavStateService NavState
 
-<PageTitle>تحلیل عملکرد @_headerData?.SupplierName</PageTitle>
-@if (_isLoading)
-{
-    <div class="page-loader">
-        <p><em>در حال بارگذاری اطلاعات عرضه‌کننده...</em></p>
-    </div>
-}
-else
-{
-    <SupplierHeader Data="_headerData" />
-    @* <SupplierHierarchy Data="_hierarchyData" /> *@
-    <SupplierRanking Data="_rankingData" />
-    <SupplierMainPlayers Data="_mainPlayers" />
-    <SupplierCommodityGroup Data="_marketShare" />
-    <SupplierMetrics Data="_marketMetricData"/>
-    <SupplierCompetition Data="_stabilityData" />
-    <SupplierSeasonalActivity Data="_seasonalActivityData" />
-    <SupplierCommodityAnalysis Data="_supplierCommodityAnalysisTableData"/>
-    <SupplierAllBrokersWidget Data="_supplierAllBrokersData"/>
-    <SupplierOffers Data="_supplierOffersData" Title=""/>
+<PageTitle>@pageTitle</PageTitle>
+<SupplierHeader SupplierId="SupplierId" OnDataReceived="OnDataReceived" />
+<SupplierRanking SupplierId="SupplierId" />
+<SupplierMainPlayers SupplierId="SupplierId" />
+<SupplierCommodityGroup SupplierId="SupplierId" />
+<SupplierMetrics SupplierId="SupplierId" />
+<SupplierCompetition SupplierId="SupplierId" />
+<SupplierSeasonalActivity SupplierId="SupplierId" />
+<SupplierCommodityAnalysis SupplierId="SupplierId" />
+<SupplierAllBrokersWidget SupplierId="SupplierId" />
+<SupplierOffers SupplierId="SupplierId" Title="" />
 
-    <!-- Other widgets will be added here later -->
-}
 
 @code {
     [Parameter]
     public int SupplierId { get; set; }
-
-    private bool _isLoading = true;
-    private int _previousSupplierId;
-
-    // Data holders for each component
-    private SupplierHeaderData? _headerData;
-    private CompetitionData? _stabilityData;
-    private List<HierarchyItem>? _hierarchyData;
-    private List<RankingItem>? _rankingData;
-    private IEnumerable<MainPlayer>? _mainPlayers;
-    private List<CommodityGroupShareItem>? _marketShare;
-    private SeasonalActivityData? _seasonalActivityData;
-    private MarketMetricData? _marketMetricData;
-    private SupplierCommodityAnalysisData? _supplierCommodityAnalysisTableData;
-    private List<SupplierItem>? _supplierAllBrokersData;
-    private UpcomingOffersData? _supplierOffersData;
-
-    protected override async Task OnParametersSetAsync()
+    private string? pageTitle;
+    private void OnDataReceived(SupplierHeaderData data)
     {
-        // Fetch data only if the supplierId has changed
-        if (SupplierId > 0 && SupplierId != _previousSupplierId)
+        if (data != null && !string.IsNullOrEmpty(data.SupplierName))
         {
-            _isLoading = true;
-            _previousSupplierId = SupplierId;
-
-            // Load all necessary data in parallel
-            await Task.WhenAll(
-                LoadSupplierHeader(),
-                LoadSupplierRanking(),
-                LoadSupplierMainPlayers(),
-                LoadSupplierHierarchy(),
-                LoadSupplierStability(),
-                LoadSeasonalActivity(),
-                LoadMarketMetric(),
-                LoadCommodityAnalysis(),
-                LoadSupplierAllBrokers(),
-                LoadSupplierOffers(),
-                LoadSupplierMarketShare()
-            );
-
-            _isLoading = false;
+            pageTitle = $"تحلیل عملکرد {data.SupplierName}";
+            NavState.SetNavState(pageTitle, true);
         }
-    }
-
-    private async Task LoadSupplierHeader()
-    {
-        _headerData = await SupplierService.GetSupplierHeaderAsync(SupplierId);
-    }
-
-    private async Task LoadSupplierHierarchy()
-    {
-        _hierarchyData = await SupplierService.GetSupplierHierarchyAsync(SupplierId);
-    }
-
-    private async Task LoadSupplierRanking()
-    {
-        _rankingData = await SupplierService.GetSupplierRankingAsync(SupplierId);
-    }
-    private async Task LoadSupplierMainPlayers()
-    {
-        _mainPlayers = await SupplierService.GetMainPlayersAsync(SupplierId);
-    }
-    private async Task LoadSupplierMarketShare()
-    {
-        _marketShare = await SupplierService.GetMarketShareAsync(SupplierId);
-    }
-    private async Task LoadSupplierStability()
-    {
-        _stabilityData = await SupplierService.GetCompetitionRatioAsync(SupplierId);
-    }
-    private async Task LoadSeasonalActivity()
-    {
-        _seasonalActivityData = await SupplierService.GetSeasonalActivityAsync(SupplierId);
-    }
-    private async Task LoadMarketMetric()
-    {
-        _marketMetricData = await SupplierService.GetMarketMetricAsync(SupplierId);
-    }
-    private async Task LoadCommodityAnalysis()
-    {
-        _supplierCommodityAnalysisTableData = await SupplierService.GetSupplierCommodityAnalysisAsync(SupplierId);
-    }
-    private async Task LoadSupplierAllBrokers()
-    {
-        _supplierAllBrokersData = await SupplierService.GetAllBrokersAsync(SupplierId);
-    }
-    private async Task LoadSupplierOffers()
-    {
-        _supplierOffersData = await SupplierService.GetSupplierOffersAsync(SupplierId);
     }
 }

@@ -1,7 +1,8 @@
-﻿@inject NavigationManager NavigationManager
+﻿@inject IMarketsService MarketService
+@inject NavigationManager NavigationManager
 <div class="market-list-container">
     <div class="market-list">
-        @foreach (var market in Data)
+        @foreach (var market in data)
         {
             <div class="market-list-item" @onclick="() => GoTo(market.Code)">
                 <div class="market-icon @market.IconContainerClass"><i class="bi @market.IconClass"></i></div>
@@ -19,17 +20,15 @@
 </div>
 
 @code {
-    [Parameter] public List<MarketInfo> Data { get; set; }
-
+    private List<MarketInfo>? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await MarketService.GetMainGroupsData();
+    }
     private void GoTo(int id)
     {
         NavigationManager.NavigateTo($"/markets/{id}");
     }
     private List<MarketInfo> MarketItems { get; set; } = new();
-
-    protected override void OnInitialized()
-    {
-
-    }
 
 }

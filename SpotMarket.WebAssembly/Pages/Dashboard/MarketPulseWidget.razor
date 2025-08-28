@@ -1,0 +1,110 @@
+﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject IDashboardService DashboardService
+@if (_isLoading)
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h2 class="section-title">@Title</h2>
+        </div>
+        <div class="market-pulse-grid">
+            @for (var i = 0; i < 2; i++)
+            {
+                <div class="pulse-card data-placeholder">
+                    <BarLoader />
+                </div>
+            }
+        </div>
+    </div>
+}
+else if (_hasError)
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h2 class="section-title">@Title</h2>
+        </div>
+        <div class="market-pulse-grid">
+            <div class="pulse-card data-placeholder" style="width: 100%;">
+                <HasError />
+            </div>
+        </div>
+    </div>
+}
+else if (data != null && data.Items.Any())
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h2 class="section-title">@Title</h2>
+        </div>
+        <div class="market-pulse-grid">
+            @foreach (var item in data.Items)
+            {
+                <div class="pulse-card">
+                    <div class="pulse-title">@item.Title</div>
+                    <div class="pulse-value">@item.Value</div>
+
+                    <div class="pulse-stat">
+                        <div class="pulse-change @GetChangeCssClass(item.ChangeState)">@item.Change</div>
+                        <div class="pulse-label">@item.ChangeLabel</div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h2 class="section-title">@Title</h2>
+        </div>
+        <div class="market-pulse-grid">
+            @for (var i = 0; i < 2; i++)
+            {
+                <div class="pulse-card data-placeholder">
+                    <NoData />
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "نبض بازار";
+
+    private MarketPulseData? data;
+    private bool _isLoading = false;
+    private bool _hasError = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+        _hasError = false;
+        try
+        {
+            data = await DashboardService.GetMarketPulse();
+            if (data == null)
+            {
+                data = new MarketPulseData { Items = Enumerable.Empty<PulseCardItem>() };
+            }
+        }
+        catch (Exception)
+        {
+            _hasError = true;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private string GetChangeCssClass(ValueState state)
+    {
+        return state switch
+        {
+            ValueState.Positive => "",
+            ValueState.Negative => "negative",
+            _ => "neutral"
+        };
+    }
+}

@@ -1,4 +1,5 @@
-﻿@if(Data is not null)
+﻿@inject IGroupService GroupService
+@if(Data is not null)
 {
     <div class="group-header-container">
         <div class="group-title-section">
@@ -9,9 +10,12 @@
 }
 
 @code {
-    [Parameter]
-    public GroupHeaderData? Data { get; set; }
-
+    [Parameter] public int GroupId { get; set; }
+    private GroupHeaderData? Data;
+    protected override async Task OnInitializedAsync()
+    {
+        Data = await GroupService.GetGroupHeaderDataAsync(GroupId);
+    }
     private string themeCssClass(string iconCssClass) => iconCssClass switch
     {
         "bi bi-building" => "industrial",

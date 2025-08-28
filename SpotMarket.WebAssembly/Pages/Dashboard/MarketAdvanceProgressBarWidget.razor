@@ -1,7 +1,6 @@
 ﻿@using SpotMarket.WebAssembly.Models.Presentation
+@inject IDashboardService DashboardService
 
-@if (Data != null && Data.Items.Any())
-{
     <div class="widget-container">
     <div class="progress-card-widget">
         <div class="widget-header">
@@ -9,13 +8,23 @@
                 <h3 class="widget-title">@Title</h3>
                 <span class="widget-subtitle">@Subtitle</span>
             </div>
-            <div class="header-stat">@($"{Data.TotalProgressPercentage:F0}%")</div>
+            <div class="header-stat">
+                    @if (data is null || data.TotalProgressPercentage == 0)
+                    {
+                        <span class="small">فعلاً خبری نیست!</span>
+                    } else
+                    {
+                        @($"{data.TotalProgressPercentage:F0}%")
+                    }
+            </div>
         </div>
+@if (data != null && data.Items.Any())
+{
         <div class="progress-bar-container">
-            <div class="progress-bar-fill" style="width: @($"{Data.TotalProgressPercentage}%");"></div>
+            <div class="progress-bar-fill" style="width: @($"{data.TotalProgressPercentage}%");"></div>
         </div>
         <div class="widget-footer">
-            <span>@Data.TotalTradedOffers از @Data.TotalOffers @Unit معامله شد</span>
+            <span>@data.TotalTradedOffers از @data.TotalOffers @Unit معامله شد</span>
             <div class="details-toggle" @onclick="ToggleDetails">
                 <span>@(_detailsVisible ? "بستن جزئیات" : "نمایش جزئیات")</span>
                 <i class="bi @(_detailsVisible ? "bi-chevron-up" : "bi-chevron-down")"></i>
@@ -25,7 +34,7 @@
         @if (_detailsVisible)
         {
             <div class="details-container">
-                @foreach (var market in Data.Items)
+                @foreach (var market in data.Items)
                 {
                     <div class="detail-item">
                         <div class="detail-header">
@@ -39,9 +48,9 @@
                 }
             </div>
         }
-    </div>
-    </div>
 }
+    </div>
+    </div>
 
 
 @code {
@@ -53,8 +62,13 @@
     public string Subtitle { get; set; } = "بر اساس تعداد عرضه";    
     [Parameter]
     public string Unit { get; set; } = "عرضه";
-    [Parameter]
-    public MarketProgressData? Data { get; set; }
+
+    private MarketProgressData? data;
+
+    protected override async Task OnInitializedAsync()
+    {
+         data = await DashboardService.GetMarketProgressData();
+    }
 
     private void ToggleDetails()
     {

@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
-@using SpotMarket.WebAssembly.Models.Presentation
+@inject ISupplierService SupplierService
 
-@if (Data != null && Data.SeasonActivities.Any())
+@if (data != null && data.SeasonActivities.Any())
 {
     <div class="seasonal-activity-widget">
         <div class="widget-header">
@@ -14,9 +14,9 @@
                     <circle cx="60" cy="60" r="50" class="track-circle" />
 
                     <!-- Season Arcs -->
-                    @for (var i = 0; i < Data.SeasonActivities.Count; i++)
+                    @for (var i = 0; i < data.SeasonActivities.Count; i++)
                     {
-                        var season = Data.SeasonActivities[i];
+                        var season = data.SeasonActivities[i];
                         var startAngle = i * 90;
                         var endAngle = startAngle + 90;
                         <path d="@DescribeArc(60, 60, 50, startAngle, endAngle)"
@@ -26,11 +26,11 @@
                 </svg>
                 <div class="chart-center-text">
                     <span class="center-title">فصل اوج</span>
-                    <span class="center-value">@Data.PeakSeasonName</span>
+                    <span class="center-value">@data.PeakSeasonName</span>
                 </div>
             </div>
             <div class="legend-container">
-                @foreach (var season in Data.SeasonActivities)
+                @foreach (var season in data.SeasonActivities)
                 {
                     <div class="legend-item">
                         <span class="legend-dot season-@(GetSeasonIndex(season.SeasonName))"></span>
@@ -44,9 +44,12 @@
 }
 
 @code {
-    [Parameter]
-    public SeasonalActivityData? Data { get; set; }
-
+    [Parameter] public int SupplierId { get; set; }
+    private SeasonalActivityData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await SupplierService.GetSeasonalActivityAsync(SupplierId);
+    }
     private int GetSeasonIndex(string seasonName) => seasonName switch
     {
         "بهار" => 0,
@@ -55,8 +58,6 @@
         "زمستان" => 3,
         _ => 0
     };
-
-    // Helper function to convert polar coordinates to Cartesian for SVG path
     private (double X, double Y) PolarToCartesian(double centerX, double centerY, double radius, double angleInDegrees)
     {
         var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
@@ -65,8 +66,6 @@
             centerY + (radius * Math.Sin(angleInRadians))
         );
     }
-
-    // Helper function to create an SVG arc path
     private string DescribeArc(double x, double y, double radius, double startAngle, double endAngle)
     {
         var start = PolarToCartesian(x, y, radius, endAngle);

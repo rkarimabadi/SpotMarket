@@ -1,6 +1,6 @@
-﻿@using SpotMarket.WebAssembly.Models.Presentation
+﻿@inject IMarketsService MarketService
 @inject NavigationManager NavigationManager
-@if (Data != null && Data.Items.Any())
+@if (data != null && data.Items.Any())
 {
     <div class="widget-container">
         <div class="section-header">
@@ -9,10 +9,10 @@
         </div>
         <div class="heatmap-grid">
             @{
-                var highItems = Data.Items.Where(i => i.Rank == MarketHeatRank.High).ToList();
-                var mediumItems = Data.Items.Where(i => i.Rank == MarketHeatRank.Medium).ToList();
-                var lowItems = Data.Items.Where(i => i.Rank == MarketHeatRank.Low).ToList();
-                var neutralItems = Data.Items.Where(i => i.Rank == MarketHeatRank.Neutral).ToList();
+                var highItems = data.Items.Where(i => i.Rank == MarketHeatRank.High).ToList();
+                var mediumItems = data.Items.Where(i => i.Rank == MarketHeatRank.Medium).ToList();
+                var lowItems = data.Items.Where(i => i.Rank == MarketHeatRank.Low).ToList();
+                var neutralItems = data.Items.Where(i => i.Rank == MarketHeatRank.Neutral).ToList();
             }
 
             <!-- جایگاه‌های رتبه High -->
@@ -76,9 +76,11 @@
 @code {
     [Parameter] public string Title { get; set; } = "نقشه حرارتی بازار";
     [Parameter] public string Subtitle { get; set; } = "برحسب داده‌های عرضه";
-    [Parameter]
-    public MarketHeatmapData? Data { get; set; }
-
+    private MarketHeatmapData? data;
+    protected override async Task OnInitializedAsync()
+    {
+       data = await MarketService.GetMarketHeatmapData();
+    }
     private void GoTo(int name)
     {
         NavigationManager.NavigateTo($"/markets/{name}");

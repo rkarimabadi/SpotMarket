@@ -1,10 +1,10 @@
-﻿@using SpotMarket.WebAssembly.Models.Presentation
+﻿@inject ISupplierService SupplierService
 @inject NavigationManager NavigationManager
 
-@if (Data != null && Data.Any())
+@if (data != null && data.Any())
 {
     <div class="breadcrumb-hierarchy">
-        @foreach (var item in Data)
+        @foreach (var item in data)
         {
             <span class="breadcrumb-item @(item.IsActive ? "active" : "")" @onclick="() => GoTo(item)">
                 @item.Name
@@ -20,9 +20,12 @@
 }
 
 @code {
-    [Parameter]
-    public List<HierarchyItem>? Data { get; set; }
-
+    [Parameter] public int SupplierId { get; set; }
+    private List<HierarchyItem>? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await SupplierService.GetSupplierHierarchyAsync(SupplierId);
+    }
     private void GoTo(HierarchyItem item)
     {
         if (item.IsActive && item.Id > 0)

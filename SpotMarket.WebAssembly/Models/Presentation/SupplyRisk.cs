@@ -27,6 +27,6 @@
     /// </summary>
     public class SupplyRiskData
     {
-        public List<SupplyRiskItem> Items { get; set; } = new();
+        public IEnumerable<SupplyRiskItem> Items { get; set; } = new List<SupplyRiskItem>();
     }
 }

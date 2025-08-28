@@ -1,6 +1,8 @@
 ﻿@using System.Globalization
 @inject NavigationManager NavManager
-@if (Data.ByVolume != null && Data.ByValue != null && Data.ByCount != null)
+@inject IBrokerService BrokerService
+
+@if (data is not null && data.ByVolume != null && data.ByValue != null && data.ByCount != null)
 {
     <div class="top-suppliers-widget">
         <div class="widget-header">
@@ -17,9 +19,9 @@
             @{
                 var itemsToShow = selectedTab switch
                 {
-                    "volume" => Data.ByVolume,
-                    "count" => Data.ByCount,
-                    _ => Data.ByValue
+                    "volume" => data.ByVolume,
+                    "count" => data.ByCount,
+                    _ => data.ByValue
                 };
                 var maxVal = itemsToShow.Any() ? itemsToShow.Max(i => i.Value) : 1;
             }
@@ -49,8 +51,12 @@
     [Parameter]
     public string Title { get; set; } = "بزرگترین عرضه‌کنندگان";
 
-    [Parameter] public TopSuppliersData Data { get; set; }
-
+    [Parameter] public int BrokerId { get; set; }
+    private TopSuppliersData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await BrokerService.GetTopSuppliersAsync(BrokerId);
+    }
     private string selectedTab = "value";
     private void GoToSupplier(SupplierPerformanceItem item)
     {
