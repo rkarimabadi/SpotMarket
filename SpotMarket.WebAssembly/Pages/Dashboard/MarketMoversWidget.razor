@@ -8,25 +8,19 @@
     </div>
     @if (_isLoading)
     {
+        <div class="segmented-control">
+            <button class="@(selectedMoverTab == "competition" ? "active" : "")" @onclick='() => selectedMoverTab = "competition"'>رقابت</button>
+            <button class="@(selectedMoverTab == "demand" ? "active" : "")" @onclick='() => selectedMoverTab = "demand"'>تقاضا</button>
+        </div>
         <div class="data-card">
-            <div class="data-list-item">
-                <div class="item-rank">
-                    <i class="bi bi-arrow-clockwise animate-spin-fast text-secondary"></i>
-                </div>
-                <div class="item-main-info data-placeholder">
-                    <OctopusLoader />
-                </div>
-                <div class="item-value neutral">&nbsp;</div>
+
+            <div class="data-list-item data-placeholder">
+                <OctopusLoader />
             </div>
-            <div class="data-list-item">
-                <div class="item-rank">
-                    <i class="bi bi-arrow-clockwise animate-spin-fast text-secondary"></i>
-                </div>
-                <div class="item-main-info data-placeholder">
-                    <OctopusLoader />
-                </div>
-                <div class="item-value neutral">&nbsp;</div>
+            <div class="data-list-item data-placeholder">
+                <OctopusLoader />
             </div>
+
         </div>
     }
     else if (_hasError)
@@ -66,7 +60,10 @@
             }
             else
             {
-                <div class="p-4 text-center text-secondary">
+                <div class="data-list-item data-placeholder">
+                    <NoData />
+                </div>
+                <div class="data-list-item data-placeholder">
                     <NoData />
                 </div>
             }
