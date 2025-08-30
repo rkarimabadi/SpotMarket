@@ -31,14 +31,20 @@
 
     .nav-section.left {
         justify-content: flex-start;
+        max-width:2rem;
     }
 
     .nav-section.center {
         justify-content: center;
+        flex-grow: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .nav-section.right {
         justify-content: flex-end;
+        max-width: 1rem;
     }
 
 /* New style for the app logo container */

@@ -2,7 +2,8 @@
     background-color: var(--card-background-color);
     border-radius: 1.25rem;
     border: 1px solid var(--border-color);
-    padding: 2rem;
+    padding: 1rem 2rem;
+    margin: 1rem 0 0 0;
     text-align: center;
     display: flex;
     flex-direction: column;

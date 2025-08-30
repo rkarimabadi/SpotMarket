@@ -9,7 +9,7 @@
         public List<HierarchyItem> HierarchyItems { get; set; } = new List<HierarchyItem>();
         public string ContractType { get; set; } = string.Empty;
         public string Supplier { get; set; } = string.Empty;
-        public int SupplierId { get; internal set; }
+        public int SupplierId { get; set; }
         public string Manufacturer { get; set; } = string.Empty;
         public string Broker { get; set; } = string.Empty;
         public int BrokerId { get; set; }
