@@ -2,19 +2,44 @@
 @inject NavigationManager NavigationManager
 <div class="market-list-container">
     <div class="market-list">
-        @foreach (var market in data)
+        @if(true)
         {
-            <div class="market-list-item" @onclick="() => GoTo(market.Code)">
-                <div class="market-icon @market.IconContainerClass"><i class="bi @market.IconClass"></i></div>
+            <div class="market-list-item data-placeholder">
+                <div class="market-icon secondary"><i class="bi bi-shop"></i></div>
                 <div class="market-info">
-                    <div class="title">@market.Title</div>
-                    <div class="subtitle">@market.Subtitle</div>
-                </div>
-                <div class="market-heat-indicator">
-                    <div class="heat-bar @market.HeatLevel"></div>
-                    <div class="heat-label">@market.HeatLabel</div>
+                    <OctopusLoader/>
                 </div>
             </div>
+            <div class="market-list-item data-placeholder">
+                <div class="market-icon secondary"><i class="bi bi-shop"></i></div>
+                <div class="market-info">
+                    <OctopusLoader/>
+                </div>
+            </div>
+            <div class="market-list-item data-placeholder">
+                <div class="market-icon secondary"><i class="bi bi-shop"></i></div>
+                <div class="market-info">
+                    <OctopusLoader/>
+                </div>
+            </div>
+
+        } else 
+        {
+            @foreach (var market in data)
+            {
+                <div class="market-list-item" @onclick="() => GoTo(market.Code)">
+                    <div class="market-icon @market.IconContainerClass"><i class="bi @market.IconClass"></i></div>
+                    <div class="market-info">
+                        <div class="title">@market.Title</div>
+                        <div class="subtitle">@market.Subtitle</div>
+                    </div>
+                    <div class="market-heat-indicator">
+                        <div class="heat-bar @market.HeatLevel"></div>
+                        <div class="heat-label">@market.HeatLabel</div>
+                    </div>
+                </div>
+            }
+
         }
     </div>
 </div>

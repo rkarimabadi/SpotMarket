@@ -113,6 +113,17 @@
     font-weight: 500;
     color: var(--text-secondary-color);
 }
+.data-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--text-secondary-color);
+}
+    .data-placeholder .market-info {
+        flex-grow: 1;
+        justify-items: center;
+    }
 /* Dark Theme Adjustments */
 [data-bs-theme="dark"] .market-list {
     background-color: var(--gray-800);
