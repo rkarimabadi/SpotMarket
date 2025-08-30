@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 <div class="market-list-container">
     <div class="market-list">
-        @if(true)
+        @if(data == null || data.Count == 0)
         {
             <div class="market-list-item data-placeholder">
                 <div class="market-icon secondary"><i class="bi bi-shop"></i></div>
