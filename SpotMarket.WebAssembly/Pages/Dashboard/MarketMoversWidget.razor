@@ -9,8 +9,8 @@
     @if (_isLoading)
     {
         <div class="segmented-control">
-            <button class="@(selectedMoverTab == "competition" ? "active" : "")" @onclick='() => selectedMoverTab = "competition"'>رقابت</button>
-            <button class="@(selectedMoverTab == "demand" ? "active" : "")" @onclick='() => selectedMoverTab = "demand"'>تقاضا</button>
+            <button class="@(selectedMoverTab == "competition" ? "active" : "")" @onclick='() => selectedMoverTab = "competition"'>داغ‌ترین رقابت‌ها</button>
+            <button class="@(selectedMoverTab == "demand" ? "active" : "")" @onclick='() => selectedMoverTab = "demand"'>بیشترین تقاضا</button>
         </div>
         <div class="data-card">
 
