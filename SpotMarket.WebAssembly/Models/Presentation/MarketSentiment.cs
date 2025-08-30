@@ -9,6 +9,6 @@
 
     public class MarketSentimentData
     {
-        public IEnumerable<SentimentItem> Items { get; set; } = new List<SentimentItem>();
+        public IEnumerable<SentimentItem> Items { get; set; } = Enumerable.Empty<SentimentItem>();
     }
 }
