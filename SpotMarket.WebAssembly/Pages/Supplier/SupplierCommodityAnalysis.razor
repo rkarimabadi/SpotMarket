@@ -1,6 +1,6 @@
 ﻿@inject ISupplierService SupplierService
 @using System.Text.RegularExpressions
-
+@inject NavigationManager NavManager
 @if (data?.Items != null && data.Items.Any())
 {
     <div class="widget-container">
@@ -10,7 +10,7 @@
         <div class="horizontal-scroll-container">
             @foreach (var item in data.Items)
             {
-                <div class="commodity-analysis-card">
+                <div class="commodity-analysis-card" @onclick="() => GoToCommodity(item)">
                     <div class="card-header">
                         <div class="card-icon"><i class="bi bi-clipboard-data"></i></div>
                         <h4 class="card-title">@item.CommodityName</h4>
@@ -114,5 +114,12 @@ else
         if (competition > 0) return ("رقابت کم", "competition-low");
         if (competition == 0) return ("بدون رقابت", "competition-low");
         return ("زیر قیمت پایه", "status-neutral"); // For negative values
+    }
+    private void GoToCommodity(SupplierCommodityAnalysisItem item)
+    {
+        if (item.CommodityId != 0)
+        {
+            NavManager.NavigateTo($"/commodity-tree/commodities/{item.CommodityId}");
+        }
     }
 }

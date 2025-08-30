@@ -40,12 +40,15 @@
     gap: 1rem;
     scroll-snap-align: start;
     transition: transform 0.2s ease-in-out;
+    max-width: 18rem;
+    min-width: 18rem;
 }
 
 .card-header {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    padding: 1rem 0.5rem 1rem 0;
 }
 
 .card-icon {

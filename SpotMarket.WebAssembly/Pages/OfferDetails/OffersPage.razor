@@ -1,5 +1,6 @@
 ﻿@page "/offers/{offerId:int}"
 @inject IOfferDetailsService DataService
+@inject NavStateService NavState
 <div class="page-container">
     @if (offer == null)
     {
@@ -25,6 +26,7 @@
     protected override async Task OnInitializedAsync()
     {
         offer = await DataService.GetOfferByIdAsync(offerId);
+        NavState.SetNavState((!string.IsNullOrEmpty(pageTitle) ? pageTitle : hierarchyData?.FirstOrDefault(x => x.Type == "Commodity")?.Name ?? "..."), true, $"/markets/{hierarchyData?.FirstOrDefault(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{hierarchyData?.FirstOrDefault(x => x.Type == "Group")?.Id ?? groupId}/{hierarchyData?.FirstOrDefault(x => x.Type == "SubGroup")?.Id ?? subGroupId}");
     }
     private string deliveryDue
     {
