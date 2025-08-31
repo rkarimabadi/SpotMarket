@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Symbol { get; set; } = string.Empty;
         public string CommodityName { get; set; } = string.Empty;
+        public int CommodityId { get; set; }
         public string OfferRing { get; set; } = string.Empty;
         public List<HierarchyItem> HierarchyItems { get; set; } = new List<HierarchyItem>();
         public string ContractType { get; set; } = string.Empty;
