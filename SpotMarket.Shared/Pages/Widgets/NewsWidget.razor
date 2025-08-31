@@ -1,0 +1,52 @@
+﻿
+@if (Data != null && Data.Items.Any())
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h2 class="section-title">@Title</h2>
+            @if (!string.IsNullOrEmpty(Data.ActionLink))
+            {
+                <a href="@Data.ActionLink" class="section-action">@Data.ActionText</a>
+            }
+        </div>
+        <div class="data-card">
+            @foreach (var item in Data.Items)
+            {
+                <div class="news-item">
+                    <div class="news-icon-container @GetIconBgClass(item.MarketGroup)">
+                        <i class="@GetIconClass(item.MarketGroup)"></i>
+                    </div>
+                    <div class="news-content">
+                        <div class="news-source">@item.Source</div>
+                        <div class="news-title">@item.Title</div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "آخرین اخبار و اطلاعیه‌ها";
+    [Parameter]
+    public NewsData? Data { get; set; }
+
+    private string GetIconClass(MarketGroup group) => group switch
+    {
+        MarketGroup.Steel => "bi bi-building",
+        MarketGroup.Petrochemical => "bi bi-droplet-fill",
+        MarketGroup.Cement => "bi bi-cone-striped",
+        MarketGroup.Agriculture => "bi bi-tree-fill",
+        _ => "bi bi-newspaper"
+    };
+
+    private string GetIconBgClass(MarketGroup group) => group switch
+    {
+        MarketGroup.Steel => "industrial",
+        MarketGroup.Petrochemical => "petro",
+        MarketGroup.Cement => "cement",
+        MarketGroup.Agriculture => "agri",
+        _ => "general"
+    };
+}

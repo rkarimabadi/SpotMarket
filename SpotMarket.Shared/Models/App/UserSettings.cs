@@ -1,0 +1,12 @@
+﻿namespace SpotMarket.Shared.Models.App
+{
+    /// <summary>
+    /// مدل اصلی برای نگهداری تمام تنظیمات کاربر
+    /// </summary>
+    public class UserSettings
+    {
+        public List<DashboardWidgetConfig> DashboardLayout { get; set; } = new();
+        public MarketSettings MarketPageLayout { get; set; } = new();
+    }
+
+}

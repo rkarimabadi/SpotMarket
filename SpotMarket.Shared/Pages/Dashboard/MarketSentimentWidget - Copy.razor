@@ -1,0 +1,40 @@
+﻿
+@inject IDashboardService DashboardService
+@if (data != null && data.Items.Any())
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h3 class="section-title">@Title</h3>
+            <h4 class="section-subtitle">بر اساس ارزش کل عرضه‌ها</h4>
+        </div>
+        <div class="data-card">
+            <div class="card-body">
+                <div class="sentiment-bar">
+                    @foreach (var item in data.Items)
+                    {
+                        <div class="sentiment-bar-segment" style="width: @(item.Percentage)%; background-color: @item.ColorCssVariable;"></div>
+                    }
+                </div>
+                <div class="sentiment-legend">
+                    @foreach (var item in data.Items)
+                    {
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background-color: @item.ColorCssVariable;"></span>
+                            @item.Name
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@code {
+    [Parameter] public string Title { get; set; } = "احساسات بازار";
+    private MarketSentimentData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await DashboardService.GetMarketSentiment();
+    }
+}

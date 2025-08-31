@@ -1,0 +1,77 @@
+﻿
+@inject IDashboardService DashboardService
+    <div class="widget-container">
+        <div class="section-header">
+            <h3 class="section-title">@Title</h3>
+            <h4 class="section-subtitle">بر اساس ارزش کل عرضه‌ها</h4>
+        </div>
+@if (_isLoading)
+{
+        <div class="data-card data-placeholder">
+            <BarLoader />
+        </div>
+}
+else if (_hasError)
+{
+        <div class="data-card data-placeholder">
+            <HasError />
+        </div>
+}
+else if (data != null && data.Items.Any())
+{
+    <div class="data-card">
+        <div class="card-body">
+            <div class="sentiment-bar">
+                @foreach (var item in data.Items)
+                {
+                    <div class="sentiment-bar-segment" style="width: @(item.Percentage)%; background-color: @item.ColorCssVariable;"></div>
+                }
+            </div>
+            <div class="sentiment-legend">
+                @foreach (var item in data.Items)
+                {
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background-color: @item.ColorCssVariable;"></span>
+                        @item.Name
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="data-card data-placeholder">
+        <NoData />
+    </div>
+}
+    </div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "احساسات بازار";
+    private MarketSentimentData? data;
+    private bool _isLoading = false;
+    private bool _hasError = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+        _hasError = false;
+        try
+        {
+            data = await DashboardService.GetMarketSentiment();
+            if (data == null)
+            {
+                data = new MarketSentimentData { Items = Enumerable.Empty<SentimentItem>() };
+            }
+        }
+        catch (Exception)
+        {
+            _hasError = true;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+}

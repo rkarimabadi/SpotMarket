@@ -1,0 +1,124 @@
+﻿@page "/settings/dashboard-layout"
+@inject NavStateService NavState
+@inject SettingsService SettingsService
+<PageTitle>چیدمان داشبورد</PageTitle>
+<div class="page-container">
+    <div class="page-header">
+        <h1 class="page-title-large">چیدمان داشبورد</h1>
+    </div>
+
+    @if (widgetLayout != null)
+    {
+        <div class="settings-group">
+            @for (int i = 0; i < widgetLayout.Count; i++)
+            {
+                var widget = widgetLayout[i];
+                <div class="settings-item draggable-item" 
+                     draggable="true"
+                     @ondragstart="() => HandleDragStart(widget)"
+                     @ondragover="() => HandleDragOver(widget)"
+                     @ondrop="HandleDrop"
+                     style="@(draggedWidget == widget ? "opacity: 0.5;" : "")">
+
+                    <div class="drag-controls">
+                        @* دستگیره برای جابجایی با ماوس در دسکتاپ *@
+                        <i class="bi bi-list drag-handle-desktop"></i>
+
+                        @* دکمه‌ها برای جابجایی با لمس در موبایل *@
+                        <div class="drag-handle-mobile">
+                            <button @onclick="() => MoveUp(widget)" disabled="@(i == 0)" class="move-btn" aria-label="Move Up">
+                                <i class="bi bi-chevron-up"></i>
+                            </button>
+                            <button @onclick="() => MoveDown(widget)" disabled="@(i == widgetLayout.Count - 1)" class="move-btn" aria-label="Move Down">
+                                <i class="bi bi-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-label">@widget.GetDisplayName()</div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" @bind="widget.IsVisible" @bind:after="SaveChanges">
+                    </div>
+                </div>
+            }
+        </div>
+        <p class="settings-footer">برای تغییر ترتیب، آیتم‌ها را جابجا کنید.</p>
+    }
+    else
+    {
+        <p>در حال بارگذاری تنظیمات...</p>
+    }
+</div>
+
+@code {
+    private List<DashboardWidgetConfig>? widgetLayout;
+    private DashboardWidgetConfig? draggedWidget;
+
+    protected override async Task OnInitializedAsync()
+    {
+        NavState.SetNavState("چیدمان داشبورد", true, "/account");
+        var settings = await SettingsService.LoadSettingsAsync();
+        widgetLayout = settings?.DashboardLayout;
+    }
+
+    // --- Mouse Drag & Drop Handlers ---
+    private void HandleDragStart(DashboardWidgetConfig widget)
+    {
+        draggedWidget = widget;
+    }
+
+    private void HandleDragOver(DashboardWidgetConfig targetWidget)
+    {
+        if (draggedWidget == null || draggedWidget == targetWidget || widgetLayout == null) return;
+
+        var oldIndex = widgetLayout.IndexOf(draggedWidget);
+        var newIndex = widgetLayout.IndexOf(targetWidget);
+
+        widgetLayout.RemoveAt(oldIndex);
+        widgetLayout.Insert(newIndex, draggedWidget);
+
+        StateHasChanged();
+    }
+
+    private async Task HandleDrop()
+    {
+        draggedWidget = null;
+        await SaveChanges();
+    }
+
+    // --- Touch Move Handlers ---
+    private async Task MoveUp(DashboardWidgetConfig widget)
+    {
+        if (widgetLayout == null) return;
+        var index = widgetLayout.IndexOf(widget);
+        if (index > 0)
+        {
+            widgetLayout.RemoveAt(index);
+            widgetLayout.Insert(index - 1, widget);
+            await SaveChanges();
+        }
+    }
+
+    private async Task MoveDown(DashboardWidgetConfig widget)
+    {
+        if (widgetLayout == null) return;
+        var index = widgetLayout.IndexOf(widget);
+        if (index < widgetLayout.Count - 1)
+        {
+            widgetLayout.RemoveAt(index);
+            widgetLayout.Insert(index + 1, widget);
+            await SaveChanges();
+        }
+    }
+
+    // --- Common Save Method ---
+    private async Task SaveChanges()
+    {
+        if (widgetLayout != null)
+        {
+            var settings = await SettingsService.LoadSettingsAsync() ?? SettingsService.GetDefaultSettings();
+            settings.DashboardLayout = widgetLayout;
+            await SettingsService.SaveSettingsAsync(settings);
+        }
+    }
+}

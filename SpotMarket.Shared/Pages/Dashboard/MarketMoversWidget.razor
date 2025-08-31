@@ -1,0 +1,130 @@
+﻿
+@inject IDashboardService DashboardService
+@inject NavigationManager NavigationManager
+
+<div class="widget-container">
+    <div class="section-header">
+        <h3 class="section-title">@Title</h3>
+    </div>
+    @if (_isLoading)
+    {
+        <div class="segmented-control">
+            <button class="@(selectedMoverTab == "competition" ? "active" : "")" @onclick='() => selectedMoverTab = "competition"'>داغ‌ترین رقابت‌ها</button>
+            <button class="@(selectedMoverTab == "demand" ? "active" : "")" @onclick='() => selectedMoverTab = "demand"'>بیشترین تقاضا</button>
+        </div>
+        <div class="data-card">
+
+            <div class="data-list-item data-placeholder">
+                <OctopusLoader />
+            </div>
+            <div class="data-list-item data-placeholder">
+                <OctopusLoader />
+            </div>
+
+        </div>
+    }
+    else if (_hasError)
+    {
+        <div class="data-card data-placeholder">
+            <HasError />
+        </div>
+    }
+    else if (data != null)
+    {
+        <div class="segmented-control">
+            <button class="@(selectedMoverTab == "competition" ? "active" : "")" @onclick='() => selectedMoverTab = "competition"'>@data.CompetitionTabTitle</button>
+            <button class="@(selectedMoverTab == "demand" ? "active" : "")" @onclick='() => selectedMoverTab = "demand"'>@data.DemandTabTitle</button>
+        </div>
+        <div class="data-card">
+            @{
+                var itemsToShow = selectedMoverTab == "competition" ? data.CompetitionItems : data.DemandItems;
+            }
+            @if (itemsToShow?.Any() == true)
+            {
+                foreach (var item in itemsToShow)
+                {
+                    <div class="data-list-item" @onclick="() => GoTo(item)">
+                        <div class="item-rank">@item.Rank</div>
+                        <div class="item-main-info">
+                            <div class="title">@item.Title</div>
+                            <div class="subtitle">@item.Subtitle</div>
+                        </div>
+                        <div class="item-stat-container">
+                            <div class="item-value ltr @GetValueCssClass(item.ValueState)">@item.Value</div>
+                            <div class="item-label">
+                                @(selectedMoverTab == "competition" ? "قیمت پایه" : "موجودی")
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="data-list-item data-placeholder">
+                    <NoData />
+                </div>
+                <div class="data-list-item data-placeholder">
+                    <NoData />
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "پویایی بازار";
+
+    private MarketMoversData? data;
+    private bool _isLoading = false;
+    private bool _hasError = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+        _hasError = false;
+        try
+        {
+            data = await DashboardService.GetMarketMovers();
+            if (data == null)
+            {
+                // Ensure data is not null to avoid null reference exceptions later
+                // and to correctly display NoData component.
+                data = new MarketMoversData
+                {
+                    CompetitionItems = Enumerable.Empty<MarketMoverItem>(),
+                    DemandItems = Enumerable.Empty<MarketMoverItem>(),
+                    CompetitionTabTitle = "رقابت",
+                    DemandTabTitle = "تقاضا"
+                };
+            }
+        }
+        catch (Exception)
+        {
+            _hasError = true;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private string selectedMoverTab = "competition";
+
+    private string GetValueCssClass(ValueState state)
+    {
+        return state switch
+        {
+            ValueState.Positive => "positive",
+            ValueState.Negative => "negative",
+            _ => "neutral"
+        };
+    }
+    private void GoTo(MarketMoverItem item)
+    {
+        if (item.CommodityId > 0)
+        {
+            NavigationManager.NavigateTo($"/commodity-tree/commodities/{item.CommodityId}");
+        }
+    }
+}

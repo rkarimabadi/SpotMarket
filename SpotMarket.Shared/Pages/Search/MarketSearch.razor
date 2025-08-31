@@ -1,0 +1,179 @@
+﻿@using System.Timers
+
+@inject ISearchService SearchService
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+<div class="search-container @(isFocused ? "is-searching" : "")">
+    <div class="search-bar-wrapper">
+        <div class="search-input-wrapper">
+            <i class="bi bi-search search-icon"></i>
+            <input @ref="searchInput"
+                   type="search"
+                   class="search-input"
+                   placeholder="جستجوی بازار یا گروه کالایی"
+                   value="@searchTerm"
+                   @oninput="OnSearchTermChanged"
+                   @onfocus="ActivateSearch" />
+        </div>
+        <button class="cancel-button" @onclick="DeactivateSearch">لغو</button>
+    </div>
+
+    <div class="search-results-container">
+        @if (isLoading)
+        {
+            <div class="text-center p-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">در حال بارگذاری...</span>
+                </div>
+            </div>
+        }
+        else if (searchResults?.Any() == true)
+        {
+            <div class="search-results-list">
+                @foreach (var result in searchResults)
+                {
+                    <div class="result-item" @onclick="() => NavigateToResult(result)">
+                        <div class="result-icon @result.IconCssClass"><i class="bi @result.Icon"></i></div>
+                        <div class="result-info">
+                            <div class="title">@result.Title</div>
+                            <div class="subtitle">@result.Subtitle</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(searchTerm))
+        {
+            <div class="no-results">
+                <p>نتیجه‌ای برای «@searchTerm» یافت نشد.</p>
+            </div>
+        }
+        else
+        {
+            <div class="no-results">
+                <p class="text-secondary">بازارها، گروه‌ها و کالاها را جستجو کنید.</p>
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    private ElementReference searchInput;
+    private string searchTerm = string.Empty;
+    private bool isFocused;
+    private bool isLoading;
+    private List<SearchResult> searchResults = new();
+    private Timer? debounceTimer;
+    // لیست کلمات کلیدی کسب‌وکار که طول کمی دارند
+    private readonly HashSet<string> specialSearchTerms = new() { "مس", "روی", "فولاد", "قیر", "سیمان" };
+
+    [Parameter]
+    public EventCallback<bool> OnSearchStateChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+        debounceTimer = new Timer(300);
+        debounceTimer.Elapsed += OnTimerElapsed;
+        debounceTimer.AutoReset = false;
+    }
+
+    private async Task HandleSearchInput()
+    {
+        searchResults.Clear();
+        isFocused = !string.IsNullOrWhiteSpace(searchTerm);
+
+        if (!isFocused)
+        {
+            isLoading = false;
+            debounceTimer?.Stop();
+            return;
+        }
+
+        // اگر کلمه جستجو شده جزو کلمات خاص باشد، بلافاصله جستجو کن
+        if (specialSearchTerms.Contains(searchTerm))
+        {
+            debounceTimer?.Stop();
+            await PerformSearch();
+        }
+        else // در غیر این صورت، تایمر را برای جستجوی تاخیری فعال کن
+        {
+            debounceTimer?.Stop();
+            debounceTimer?.Start();
+        }
+    }
+
+    private async Task PerformSearch()
+    {
+        isLoading = true;
+        StateHasChanged();
+
+        try
+        {
+            var apiResults = await SearchService.GlobalSearchAsync(searchTerm);
+            searchResults = apiResults.Items.Select(item => item.ToViewModel()).ToList();
+        }
+        catch (Exception ex)
+        {
+            // Log error
+            searchResults.Clear();
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+    private async Task ActivateSearch()
+    {
+        isFocused = true;
+        await OnSearchStateChanged.InvokeAsync(true);
+    }
+
+    private async Task DeactivateSearch()
+    {
+        searchTerm = string.Empty;
+        searchResults.Clear();
+        isFocused = false;
+        await OnSearchStateChanged.InvokeAsync(false);
+    }
+
+    private async Task OnSearchTermChanged(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString();
+        // debounceTimer?.Stop();
+        // debounceTimer?.Start();
+        await HandleSearchInput();
+    }
+
+    private async void OnTimerElapsed(object? sender, ElapsedEventArgs e)
+    {
+        if (searchTerm.Length >= 3)
+        {
+            await InvokeAsync(PerformSearch);
+        }
+        else
+        {
+            await InvokeAsync(() =>
+            {
+                searchResults.Clear();
+                isLoading = false;
+                StateHasChanged();
+            });
+        }
+    }
+
+    private void NavigateToResult(SearchResult item)
+    {
+        isFocused = false;
+        searchTerm = string.Empty;
+        searchResults.Clear();
+        NavigationManager.NavigateTo(item.NavigationUrl);
+    }
+
+    public void Dispose()
+    {
+        debounceTimer?.Dispose();
+    }
+}

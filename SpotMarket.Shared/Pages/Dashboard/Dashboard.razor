@@ -1,0 +1,65 @@
+﻿@page "/"
+
+
+
+@inject NavStateService NavState
+@inject SettingsService SettingsService
+@inject IDashboardService DashboardService
+
+<PageTitle>داشبورد</PageTitle>
+<div class="dashboard-container">
+
+    <DashboardHeader />
+    @if (widgetLayout != null)
+    {
+        @foreach (var widgetConfig in widgetLayout)
+        {
+            @if (widgetConfig.IsVisible)
+            {
+                @switch (widgetConfig.Type)
+                {
+                    case DashboardWidgetType.MarketProgress:
+                        <MarketAdvanceProgressBarWidget />
+                        break;
+                    case DashboardWidgetType.TradingHalls:
+                        <TradingHallsWidget/>
+                        break;
+                    case DashboardWidgetType.MarketMovers:
+                        <MarketMoversWidget/>
+                        break;
+                    case DashboardWidgetType.MainPlayers:
+                        <MainPlayersWidget/>
+                        break;
+                    case DashboardWidgetType.MarketExcitement:
+                        <MarketExcitementWidget/>
+                        break;
+                    case DashboardWidgetType.MarketPulse:
+                        <MarketPulseWidget/>
+                        break;
+                    case DashboardWidgetType.MarketSentiment:
+                        <MarketSentimentWidget />
+                        break;
+                    case DashboardWidgetType.SupplyRisk:
+                        <SupplyRiskWidget/>
+                        break;
+                    case DashboardWidgetType.SpotNotifictions:
+                        <SpotNotifictionsWidget/>
+                        break;
+                }
+            }
+        }
+    }
+
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        NavState.SetNavState("کالا نما", false);
+        var settings = await SettingsService.LoadSettingsAsync();
+        widgetLayout = settings?.DashboardLayout;
+    }
+    private List<DashboardWidgetConfig> widgetLayout = new();
+
+
+}

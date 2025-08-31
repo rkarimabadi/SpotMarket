@@ -1,0 +1,75 @@
+﻿@inject IDashboardService DashboardService
+    <div class="widget-container">
+    <div class="progress-card-widget">
+        <div class="widget-header">
+            <div class="header-info">
+                <h3 class="widget-title">@Title</h3>
+                <span class="widget-subtitle">@Subtitle</span>
+            </div>
+            <div class="header-stat">
+                    @if (data is null || data.TotalProgressPercentage == 0)
+                    {
+                        <span class="small">فعلاً خبری نیست!</span>
+                    } else
+                    {
+                        @($"{data.TotalProgressPercentage:F0}%")
+                    }
+            </div>
+        </div>
+@if (data != null && data.Items.Any())
+{
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: @($"{data.TotalProgressPercentage}%");"></div>
+        </div>
+        <div class="widget-footer">
+            <span>@data.TotalTradedOffers از @data.TotalOffers @Unit معامله شد</span>
+            <div class="details-toggle" @onclick="ToggleDetails">
+                <span>@(_detailsVisible ? "بستن جزئیات" : "نمایش جزئیات")</span>
+                <i class="bi @(_detailsVisible ? "bi-chevron-up" : "bi-chevron-down")"></i>
+            </div>
+        </div>
+
+        @if (_detailsVisible)
+        {
+            <div class="details-container">
+                @foreach (var market in data.Items)
+                {
+                    <div class="detail-item">
+                        <div class="detail-header">
+                            <span class="detail-title">@market.Name</span>
+                            <span class="detail-stat">@market.TradedOffers / @market.TotalOffers</span>
+                        </div>
+                        <div class="progress-bar-container detail-progress">
+                            <div class="progress-bar-fill @market.CssClass" style="width: @($"{market.ProgressPercentage}%");"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+}
+    </div>
+    </div>
+
+
+@code {
+    private bool _detailsVisible = false;
+
+    [Parameter]
+    public string Title { get; set; } = "پیشرفت کل بازار";
+    [Parameter]
+    public string Subtitle { get; set; } = "بر اساس تعداد عرضه";    
+    [Parameter]
+    public string Unit { get; set; } = "عرضه";
+
+    private MarketProgressData? data;
+
+    protected override async Task OnInitializedAsync()
+    {
+         data = await DashboardService.GetMarketProgressData();
+    }
+
+    private void ToggleDetails()
+    {
+        _detailsVisible = !_detailsVisible;
+    }
+}

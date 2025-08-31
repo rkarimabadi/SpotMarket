@@ -1,0 +1,195 @@
+﻿
+@inject NavigationManager NavManager
+@inject ISubGroupService SubGroupService
+<div class="widget-container">
+    <div class="widget-header">
+        <h3 class="widget-title">@Title</h3>
+    </div>
+
+    <div class="segmented-control">
+        <button class="@(selectedTab == "past" ? "active" : "")" @onclick='() => selectedTab = "past"'>گذشته</button>
+        <button class="@(selectedTab == "today" ? "active" : "")" @onclick='() => selectedTab = "today"'>امروز</button>
+        <button class="@(selectedTab == "future" ? "active" : "")" @onclick='() => selectedTab = "future"'>آینده</button>
+    </div>
+
+    <div class="offers-content">
+        @if (IsCategoryExpanded(selectedTab))
+        {
+            <div class="search-container">
+                <i class="bi bi-search"></i>
+                <input type="text"
+                       placeholder="جستجو در @selectedTabInPersian..."
+                       @bind="_searchTerms[selectedTab]"
+                       @bind:event="oninput" />
+                @if (!string.IsNullOrEmpty(_searchTerms[selectedTab]))
+                {
+                    <i class="bi bi-x-circle-fill clear-button" @onclick="() => ClearSearch(selectedTab)"></i>
+                }
+            </div>
+        }
+
+        @{
+            var itemsToShow = FilteredAndPaginatedItems;
+            var totalItemCountInCurrentTab = GetCurrentList().Count;
+            var shouldShowExpandButton = totalItemCountInCurrentTab > MaxInitialItems && !IsCategoryExpanded(selectedTab);
+        }
+
+        @if (itemsToShow.Any())
+        {
+            <div class="schedule-list-card">
+                <div class="schedule-list">
+                    @foreach (var item in itemsToShow)
+                    {
+                        <div class="schedule-item" @onclick="() => GoToOffer(item)">
+                            <div class="date-marker">
+                                <span class="day">@item.DayOfWeek</span>
+                                <span class="date">@item.DayOfMonth</span>
+                            </div>
+                            <div class="info d-flex flex-column">
+                                <span class="title">@item.Title</span>
+                                <span class="subtitle">@item.Subtitle</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (shouldShowExpandButton)
+                {
+                    <div class="expand-button-container">
+                        <button class="expand-button" @onclick="() => ToggleExpand(selectedTab)">
+                            نمایش @(totalItemCountInCurrentTab - MaxInitialItems) مورد دیگر
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-data-container">
+                <div class="no-data-content">
+                    <i class="bi bi-calendar-x"></i>
+                    @if (!string.IsNullOrEmpty(_searchTerms[selectedTab]))
+                    {
+                        <span>موردی با عبارت جستجوی شما یافت نشد.</span>
+                    }
+                    else
+                    {
+                        <span>هیچ اطلاعیه‌عرضه‌ای در @selectedTabInPersian وجود ندارد.</span>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "اطلاعیه عرضه‌ها";
+    [Parameter] public int SubGroupId { get; set; }
+    private UpcomingOffersData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await SubGroupService.GetOfferHistoryAsync(SubGroupId);
+    }
+    private const int MaxInitialItems = 5;
+    private const int MaxPastItems = 10;
+    private string selectedTab = "today";
+
+    private List<UpcomingOfferItem> PastOffers = new();
+    private List<UpcomingOfferItem> TodayOffers = new();
+    private List<UpcomingOfferItem> FutureOffers = new();
+
+    private Dictionary<string, bool> _expandedStates = new()
+    {
+        { "past", false },
+        { "today", false },
+        { "future", false }
+    };
+
+    private Dictionary<string, string> _searchTerms = new()
+    {
+        { "past", string.Empty },
+        { "today", string.Empty },
+        { "future", string.Empty }
+    };
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (data != null && data.Items.Any())
+        {
+            PastOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
+            TodayOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
+            FutureOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
+        }
+    }
+
+    private List<UpcomingOfferItem> FilteredAndPaginatedItems
+    {
+        get
+        {
+            var currentList = GetCurrentList();
+
+            if (!IsCategoryExpanded(selectedTab))
+            {
+                return currentList.Take(MaxInitialItems).ToList();
+            }
+
+            _searchTerms.TryGetValue(selectedTab, out var searchTerm);
+
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return currentList;
+            }
+
+            return currentList.Where(i =>
+                (i.Title?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (i.Subtitle?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false)
+            ).ToList();
+        }
+    }
+
+    private List<UpcomingOfferItem> GetCurrentList() => selectedTab switch
+    {
+        "past" => PastOffers,
+        "today" => TodayOffers,
+        "future" => FutureOffers,
+        _ => new List<UpcomingOfferItem>()
+    };
+
+    private string selectedTabInPersian => selectedTab switch
+    {
+        "past" => "روزهای گذشته",
+        "today" => "روز جاری",
+        "future" => "روزهای آینده",
+        _ => "این دسته"
+    };
+
+    private bool IsCategoryExpanded(string category)
+    {
+        return _expandedStates.TryGetValue(category, out var isExpanded) && isExpanded;
+    }
+
+    private void ToggleExpand(string category)
+    {
+        if (_expandedStates.ContainsKey(category))
+        {
+            _expandedStates[category] = true;
+        }
+    }
+
+    private void ClearSearch(string category)
+    {
+        if (_searchTerms.ContainsKey(category))
+        {
+            _searchTerms[category] = string.Empty;
+        }
+    }
+
+    private void GoToOffer(UpcomingOfferItem item)
+    {
+        if (item.Type == UpcomingOfferType.Commodity && !string.IsNullOrEmpty(item.UrlName))
+        {
+            NavManager.NavigateTo($"/offers/{item.UrlName}");
+        }
+    }
+}

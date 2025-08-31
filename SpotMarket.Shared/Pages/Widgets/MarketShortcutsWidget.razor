@@ -1,0 +1,37 @@
+﻿@* الهام گرفته از ویجت‌های برنامه Shortcuts اپل *@
+
+
+@inject NavigationManager NavigationManager
+
+<div class="shortcuts-widget">
+    <div class="widget-header">
+        <h3 class="widget-title">@Title</h3>
+        <h4 class="widget-subtitle">@Subtitle</h4>
+    </div>
+    @if (Data != null && Data.Items.Any())
+    {
+        <div class="shortcuts-grid">
+            @foreach (var item in Data.Items)
+            {
+                        <div class="shortcut-tile @item.ThemeCssClass" @onclick="() => GoTo(item.Code)">
+                    <div class="tile-icon"><i class="@item.IconCssClass"></i></div>
+                    <span class="title">@item.Title</span>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "میان‌برها";
+    [Parameter]
+    public string Subtitle { get; set; } = "بر اساس ارزش کل عرضه‌ها";
+    [Parameter]
+    public MarketShortcutsData? Data { get; set; }
+
+    private void GoTo(int id)
+    {
+        NavigationManager.NavigateTo($"/markets/{id}");
+    }
+}

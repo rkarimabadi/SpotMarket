@@ -1,0 +1,67 @@
+﻿@inject IMainGroupService MainGroupService
+
+
+<div class="stats-row-widget">
+    <div class="widget-header">
+        <h3 class="widget-title">@Title</h3>
+        <h4 class="widget-subtitle">@Subtitle</h4>
+    </div>
+    <div class="segmented-control">
+        <button class="@(selectedMoverTab == "first" ? "active" : "")" @onclick='() => selectedMoverTab = "first"'>@FirstTabTitle</button>
+        <button class="@(selectedMoverTab == "second" ? "active" : "")" @onclick='() => selectedMoverTab = "second"'>@SecondTabTitle</button>
+    </div>
+    <div class="stats-container">
+        @{
+            var itemsToShow = selectedMoverTab == "first" ? marketStatsData : tradeStatsData;
+        }
+        @if (itemsToShow?.Items.Any() == true )
+        {
+            foreach (var item in itemsToShow.Items)
+            {
+                <div class="stat-box">
+                    <div class="box-info">
+                        <span class="value @GetValueStateCssClass(item.ValueState)">@item.Value</span>
+                        <div class="label-row">
+                            <div class="label-icon @item.ThemeCssClass">
+                                <i class="@item.IconCssClass"></i>
+                            </div>
+                            <span class="label">@item.Label</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="p-4 text-center text-secondary">داده‌ای برای نمایش وجود ندارد.</div>
+        }
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "آمار فوری بازار";
+    [Parameter] public int MainGroupId { get; set; }
+    [Parameter]
+    public string FirstTabTitle { get; set; } = "سهم از بازار";
+    [Parameter]
+    public string SecondTabTitle { get; set; } = "تحقق اهداف";
+    [Parameter]
+    public string Subtitle { get; set; } = "براساس اطلاعیه‌عرضه‌های روز جاری";
+
+    private MarketStatsData? marketStatsData;
+    private MarketStatsData? tradeStatsData;
+    protected override async Task OnInitializedAsync()
+    {
+        marketStatsData = await MainGroupService.GetMarketShareAsync(MainGroupId);
+        tradeStatsData = await MainGroupService.GetTradeShareAsync(MainGroupId);
+    }
+    private string selectedMoverTab = "first";
+    private string GetValueStateCssClass(ValueState state) => state switch
+    {
+        ValueState.Positive => "positive",
+        ValueState.Negative => "negative",
+        _ => ""
+    };
+}

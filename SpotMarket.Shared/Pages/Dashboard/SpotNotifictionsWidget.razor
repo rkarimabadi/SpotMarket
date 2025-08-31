@@ -1,0 +1,69 @@
+﻿
+@inject IDashboardService DashboardService
+@if (data != null && data.Items.Any())
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h2 class="section-title">@Title</h2>
+            @if (!string.IsNullOrEmpty(data.ActionLink))
+            {
+                <a href="@data.ActionLink" class="section-action">@data.ActionText</a>
+            }
+        </div>
+        <div class="data-card">
+            @foreach (var item in data.Items)
+            {
+                <a href="@item.Source" target="_blank" class="news-item-link">
+                    <div class="news-item">
+                        <div class="news-icon-container @GetIconBgClass(item.Category)">
+                            <i class="@GetIconClass(item.Category)"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-source">@GetCategoryDisplayName(item.Category)</div>
+                            <div class="news-title">@item.Title</div>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "آخرین اطلاعیه‌ها";
+    private SpotNotificationData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await DashboardService.GetspotNotifications();
+    }
+    private string GetIconClass(SpotNotificationCategory category) => category switch
+    {
+        SpotNotificationCategory.Announcement => "bi bi-file-earmark-text-fill",
+        SpotNotificationCategory.Amendment => "bi bi-pencil-square",
+        SpotNotificationCategory.ProductAcceptance => "bi bi-box-seam",
+        SpotNotificationCategory.CarAcceptance => "bi bi-car-front",
+        SpotNotificationCategory.LicenseRenewal => "bi bi-patch-check-fill",
+        _ => "bi bi-info-circle-fill"
+    };
+
+    private string GetIconBgClass(SpotNotificationCategory category) => category switch
+    {
+        SpotNotificationCategory.Announcement => "cat-announcement",
+        SpotNotificationCategory.Amendment => "cat-amendment",
+        SpotNotificationCategory.ProductAcceptance => "cat-acceptance",
+        SpotNotificationCategory.CarAcceptance => "cat-car-acceptance",
+        SpotNotificationCategory.LicenseRenewal => "cat-license",
+        _ => "cat-general"
+    };
+
+    private string GetCategoryDisplayName(SpotNotificationCategory category) => category switch
+    {
+        SpotNotificationCategory.Announcement => "ابلاغیه",
+        SpotNotificationCategory.Amendment => "اصلاحیه",
+        SpotNotificationCategory.ProductAcceptance => "پذیرش کالا",
+        SpotNotificationCategory.CarAcceptance => "پذیرش خودرو",
+        SpotNotificationCategory.LicenseRenewal => "تمدید مجوز",
+        _ => "سایر موارد"
+    };
+}

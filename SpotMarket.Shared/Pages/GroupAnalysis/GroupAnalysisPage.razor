@@ -1,0 +1,26 @@
+﻿@page "/markets/{mainGroupId:int}/{groupId:int}"
+@page "/commodity-tree/groups/{groupId:int}"
+
+@inject NavStateService NavState
+@inject IMarketsService MarketService
+@inject IMainGroupService MainGroupService
+@inject IGroupService GroupService
+<PageTitle>@pageTitle</PageTitle>
+<div class="page-container">
+    <GroupHeaderWidget GroupId="@groupId" />
+    <GroupHierarchyWidget GroupId="@groupId" OnDataReceived="OnHierarchyRecived"/>
+    <GroupListContainerWidget GroupId="@groupId" UrlPrefix="@urlprefix"/>
+</div>
+@code {
+    [Parameter] public int mainGroupId { get; set; }
+    [Parameter] public int groupId { get; set; }
+
+    private string? urlprefix;
+    private string? pageTitle;
+    private void OnHierarchyRecived(List<HierarchyItem> goupHierarchyData)
+    {
+        pageTitle = $"گروه {goupHierarchyData?.First(x => x.Type == "Group").Name ?? "..."}";
+        NavState.SetNavState(pageTitle, true, $"/markets/{goupHierarchyData?.First(x => x.Type == "MainGroup")?.Id ?? mainGroupId}");
+        urlprefix = $"{goupHierarchyData?.First(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{goupHierarchyData?.First(x => x.Type == "Group")?.Id ?? groupId}/";
+    }
+}
