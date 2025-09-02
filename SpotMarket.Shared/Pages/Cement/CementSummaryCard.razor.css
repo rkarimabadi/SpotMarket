@@ -1,0 +1,114 @@
+﻿.cement-summary-card-container {
+    padding: 1rem 0;
+    position: relative;
+    font-family: 'peydawebfanum', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+}
+
+.market-summary-card {
+    background-color: var(--gray-800);
+    color: white;
+    border: 1px solid #333;
+    border-radius: 1.5rem;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.main-stats-section {
+    text-align: center;
+}
+
+.main-value-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: -0.5rem;
+}
+
+    .main-value-wrapper .main-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        order: 2;
+    }
+
+    .main-value-wrapper .bi {
+        font-size: 2rem;
+        order: 1;
+    }
+
+.positive-icon {
+    color: var(--success-color);
+}
+
+.negative-icon {
+    color: var(--danger-color);
+    transform: rotate(180deg);
+}
+
+.main-label {
+    font-size: 0.9rem;
+    color: #aaa;
+    order: 3;
+}
+
+.divider {
+    height: 1px;
+    background-color: #444;
+}
+
+.secondary-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem 1rem;
+}
+
+    .secondary-stats-grid .stat-item {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .secondary-stats-grid .stat-item .label {
+            font-size: 0.8rem;
+            color: #aaa;
+            order: 2;
+        }
+
+        .secondary-stats-grid .stat-item .value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.25rem;
+            line-height:1rem;
+            order: 1;
+        }
+
+            .secondary-stats-grid .stat-item .value.text-positive {
+                color: var(--success-color);
+            }
+
+            .secondary-stats-grid .stat-item .value.text-negative {
+                color: var(--danger-color);
+            }
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 250px;
+    gap: 1rem;
+    color: var(--text-secondary-color);
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}

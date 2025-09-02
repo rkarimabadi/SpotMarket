@@ -1,0 +1,52 @@
+﻿@inject ICementService CementService
+<div class="cement-summary-card-container">
+    @if (data == null)
+    {
+        <div class="loading-state">
+            <span class="spinner-border text-primary" role="status"></span>
+            <span>در حال بارگذاری اطلاعات بازار...</span>
+        </div>
+    }
+    else
+    {
+        <div class="market-summary-card">
+            <div class="main-stats-section">
+                <div class="main-value-wrapper">
+                    <i class="bi bi-arrow-up-circle-fill @(data.IsPositive ? "positive-icon" : "negative-icon")"></i>
+                    <span class="main-value">@data.TotalValue</span>
+                </div>
+                <span class="main-label">ارزش کل معاملات</span>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="secondary-stats-grid">
+                <div class="stat-item">
+                    <span class="value @(data.IsPositive ? "text-positive" : "text-negative")">@data.CompetitionValue</span>
+                    <span class="label">شاخص رقابت</span>
+                </div>
+                <div class="stat-item">
+                    <span class="value">@data.DemandValue</span>
+                    <span class="label">ضریب تقاضا</span>
+                </div>
+                <div class="stat-item">
+                    <span class="value">@data.TotalVolume</span>
+                    <span class="label">حجم معاملات</span>
+                </div>
+                <div class="stat-item">
+                    <span class="value">@data.TodayOffersCount</span>
+                    <span class="label">عرضه امروز</span>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private CementMarketSummary? data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await CementService.GetCementMarketSummaryDataAsync();
+    }
+}

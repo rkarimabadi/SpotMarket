@@ -1,0 +1,209 @@
+﻿.group-list-widget {
+    margin: 2rem 0 1rem 0;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    margin: 0 0 1rem 0;
+}
+
+.active-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.active-item-card {
+    background-color: var(--card-background-color);
+    border-radius: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .active-item-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+.card-top-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.status-dial {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+    .status-dial.status-today {
+        background-color: rgba(var(--danger-color-rgb), 0.1);
+        color: var(--danger-color);
+    }
+
+    .status-dial.status-future {
+        background-color: rgba(var(--primary-color-rgb), 0.1);
+        color: var(--primary-color);
+    }
+
+.info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+    .info .title {
+        font-size: 1.0625rem;
+        font-weight: 600;
+        color: var(--text-primary-color);
+    }
+
+    .info .subtitle {
+        font-size: 0.875rem;
+        color: var(--text-secondary-color);
+    }
+
+.item-chevron {
+    color: var(--text-secondary-color);
+}
+
+.card-bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+    .stat-item .value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary-color);
+    }
+
+    .stat-item .label {
+        font-size: 0.75rem;
+        color: var(--text-secondary-color);
+    }
+
+.demand-indicator {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 1.5rem;
+}
+
+    .demand-indicator .bar {
+        width: 4px;
+        border-radius: 2px;
+        background-color: var(--border-color);
+    }
+
+    .demand-indicator.status-low .bar:nth-child(1) {
+        height: 33%;
+        background-color: var(--danger-color);
+    }
+
+    .demand-indicator.status-medium .bar:nth-child(-n+2) {
+        height: 66%;
+        background-color: var(--warning-color);
+    }
+
+    .demand-indicator.status-medium .bar:nth-child(1) {
+        height: 33%;
+    }
+
+    .demand-indicator.status-high .bar {
+        background-color: var(--success-color);
+    }
+
+        .demand-indicator.status-high .bar:nth-child(1) {
+            height: 33%;
+        }
+
+        .demand-indicator.status-high .bar:nth-child(2) {
+            height: 66%;
+        }
+
+        .demand-indicator.status-high .bar:nth-child(3) {
+            height: 100%;
+        }
+
+.inactive-group-section {
+    margin-top: 1.5rem;
+}
+
+.data-card {
+    background-color: var(--card-background-color);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.inactive-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+    .inactive-item:last-child {
+        border-bottom: none;
+    }
+
+    .inactive-item .title {
+        color: var(--text-secondary-color);
+        font-weight: 500;
+    }
+
+.expand-button-container {
+    padding: 0.5rem 0;
+    text-align: center;
+}
+
+.expand-button {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-background-color);
+    border-radius: 0.75rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .expand-button:hover {
+        background-color: rgba(var(--primary-color-rgb), 0.1);
+    }
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    color: var(--text-secondary-color);
+    font-size: 1rem;
+}

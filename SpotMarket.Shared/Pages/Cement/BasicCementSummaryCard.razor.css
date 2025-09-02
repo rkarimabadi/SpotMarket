@@ -1,0 +1,49 @@
+﻿.market-summary-card {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: var(--card-background-color);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+    .market-summary-card::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: -25%;
+        width: 150%;
+        height: 150%;
+        background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        transform: rotate(25deg);
+        pointer-events: none;
+    }
+
+.summary-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
+.summary-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+    line-height: 1;
+    color: var(--mood-unhappy-bg);
+}
+}
+
+.summary-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+.summary-subtitle {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+}

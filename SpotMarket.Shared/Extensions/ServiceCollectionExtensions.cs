@@ -26,6 +26,7 @@ namespace SpotMarket.Shared.Extensions
             services.AddHttpClient<ISearchService, SearchService>(configureClient);
             services.AddHttpClient<IBrokerService, BrokerService>(configureClient);
             services.AddHttpClient<ISupplierService, SupplierService>(configureClient);
+            services.AddHttpClient<ICementService, CementService>(configureClient);
             return services;
         }
     }

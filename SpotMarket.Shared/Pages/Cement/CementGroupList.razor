@@ -1,0 +1,112 @@
+﻿@inject ICementService CementService
+@inject NavigationManager NavigationManager
+
+<div class="group-list-widget">
+    <h2 class="section-title">بررسی گروه‌های سیمان</h2>
+@if(data is not null)
+    {        
+    <div class="active-items-container">
+        @foreach (var item in data?.ActiveGroups ?? new List<CementGroupStatusItem>())
+        {
+            <div class="active-item-card" @onclick="() => NavigateTo(item.UrlName)">
+                <div class="card-top-row">
+                    <div class="status-dial @GetStatusCssClass(item.Status)">
+                        <i class="@GetStatusIconClass(item.Status)"></i>
+                    </div>
+                    <div class="info">
+                        <span class="title">@item.Name</span>
+                        <span class="subtitle">@item.Subtitle</span>
+                    </div>
+                    <i class="bi bi-chevron-left item-chevron"></i>
+                </div>
+                <div class="card-bottom-row">
+                    <div class="stat-item">
+                        <span class="value">@item.OfferCount</span>
+                        <span class="label">اطلاعیه عرضه</span>
+                    </div>
+                    <div class="stat-item">
+                        <div class="demand-indicator @GetDemandStatusCssClass(item.DemandStatus)">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                        <span class="label">وضعیت تقاضا</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (data?.HasInactiveGroups ?? false)
+    {
+        <div class="inactive-group-section">
+            @if (_showAllInactiveGroups)
+            {
+                <div class="data-card">
+                    @foreach (var item in data.InactiveGroups)
+                    {
+                        <div class="inactive-item" @onclick="() => NavigateTo(item.UrlName)">
+                            <span class="title">@item.Name</span>
+                            <i class="bi bi-chevron-left item-chevron"></i>
+                        </div>
+                    }
+                </div>
+            }
+            <div class="expand-button-container">
+                <button class="expand-button" @onclick="ToggleShowAllInactiveGroups">
+                    @(_showAllInactiveGroups ? "نمایش کمتر" : $"نمایش {data.InactiveGroupsCount} نوع سیمان دیگر")
+                </button>
+            </div>
+        </div>
+    }
+
+    }
+</div>
+
+@code {
+    public CementGroupsData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await CementService.GetCementGroupsDataAsync();
+    }
+
+    private bool _showAllInactiveGroups = false;
+
+    protected override void OnParametersSet()
+    {
+        // وقتی داده‌ها دریافت شدند، وضعیت اولیه نمایش را تنظیم می‌کند
+        if (data?.ActiveGroups.Count + data?.InactiveGroups.Count <= 6)
+        {
+            _showAllInactiveGroups = true;
+        }
+    }
+
+    private void ToggleShowAllInactiveGroups()
+    {
+        _showAllInactiveGroups = !_showAllInactiveGroups;
+    }
+
+    private void NavigateTo(string url)
+    {
+        NavigationManager.NavigateTo(url);
+    }
+
+    private string GetStatusCssClass(GroupActivityStatus status) => status switch
+    {
+        GroupActivityStatus.HasOfferToday => "status-today",
+        _ => "status-future"
+    };
+
+    private string GetStatusIconClass(GroupActivityStatus status) => status switch
+    {
+        GroupActivityStatus.HasOfferToday => "bi bi-calendar-check-fill",
+        _ => "bi bi-calendar-event-fill"
+    };
+
+    private string GetDemandStatusCssClass(DemandStatus status) => status switch
+    {
+        DemandStatus.High => "status-high",
+        DemandStatus.Low => "status-low",
+        _ => "status-medium"
+    };
+}

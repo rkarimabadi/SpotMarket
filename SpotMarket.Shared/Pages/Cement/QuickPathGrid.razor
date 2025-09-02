@@ -1,0 +1,31 @@
+﻿@inject ICementService CementService
+@inject NavigationManager NavigationManager
+
+<div class="quick-path-container">
+    <h2 class="section-title">به دنبال سیمان خاصی هستید؟</h2>
+    @if(data is not null && data.Items.Any())
+    {
+    <div class="quick-path-grid">
+        @foreach (var item in data.Items ?? new List<QuickPathItem>())
+        {
+            <div class="quick-path-card @item.ThemeCssClass" @onclick="() => NavigateTo(item.UrlName)">
+                <i class="@item.IconCssClass"></i>
+                <span class="card-title">@item.Title</span>
+            </div>
+        }
+    </div>
+    }
+</div>
+
+@code {
+    private CementQuickPathData? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await CementService.GetCementQuickPathDataAsync();
+    }
+
+    private void NavigateTo(string url)
+    {
+        NavigationManager.NavigateTo(url);
+    }
+}

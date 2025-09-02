@@ -1,0 +1,17 @@
+﻿@inject ICementService CementService
+<div class="market-summary-card">
+    <h2 class="summary-title">نبض بازار امروز</h2>
+    <div class="summary-value">
+        @data?.Value
+    </div>
+    <p class="summary-label">@data?.Label</p>
+    <p class="summary-subtitle">@data?.Subtitle</p>
+</div>
+
+@code {
+    private BasicCementMarketSummary? data;
+    protected override async Task OnInitializedAsync()
+    {
+        data = await CementService.GetBasicCementMarketSummaryDataAsync();
+    }
+}
