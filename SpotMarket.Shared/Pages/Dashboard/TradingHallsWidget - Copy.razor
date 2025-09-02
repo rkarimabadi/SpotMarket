@@ -1,0 +1,54 @@
+﻿
+@inject IDashboardService DashboardService
+@if (data != null && data.Items.Any())
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h3 class="section-title">@Title</h3>
+        </div>
+        <div class="horizontal-scroll-container">
+            @foreach (var hall in data.Items)
+            {
+                <div class="trading-hall-card">
+                    <div class="card-header">
+                        <div class="hall-icon @hall.IconBgCssClass"><i class="@hall.IconCssClass"></i></div>
+                        <h4 class="hall-title">@hall.Title</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="stat-item">
+                            <span class="stat-label">@hall.ValueLabel</span>
+                            <span class="stat-value">@hall.Value</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">نسبت فروش به عرضه</span>
+                            <div class="ratio-indicator @GetRatioCssClass(hall.ChangeState)">
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string Title { get; set; } = "سلامت تالارها";
+    private TradingHallsData? data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await DashboardService.GetTradingHalls();
+    }
+    private string GetRatioCssClass(ValueState state)
+    {
+        return state switch
+        {
+            ValueState.Positive => "ratio-high",
+            ValueState.Negative => "ratio-low",
+            _ => "ratio-medium"
+        };
+    }
+}

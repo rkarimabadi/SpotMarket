@@ -1,0 +1,31 @@
+﻿@page "/markets/{mainGroupId:int}"
+@page "/commodity-tree/main-groups/{mainGroupId:int}"
+
+@inject NavStateService NavState
+@inject IMarketsService MarketService
+@inject IMainGroupService MainGroupService
+<PageTitle>@pageTitle</PageTitle>
+<div class="page-container">
+    <MainGroupHeaderWidget MainGroupId="@mainGroupId" OnDataReceived="OnGroupNameRecived"/>
+    <MainGroupHierarchyWidget MainGroupId="@mainGroupId" />
+    <MainGroupStatsRowWidget MainGroupId="@mainGroupId" Title="شرایط بازار" Subtitle="" />
+
+    <MainGroupListContainerWidget MainGroupId="@mainGroupId" UrlPrefix="@urlprefix"/>
+        
+    <MainGroupOffersWidget MainGroupId="@mainGroupId" />
+    <MainGroupConditionsWidget MainGroupId="@mainGroupId" Subtitle="براساس آمار معاملات روز جاری" />
+
+</div>
+@code {
+    [Parameter]
+    public int mainGroupId { get; set; }
+
+    private string? pageTitle;
+    private string urlprefix => $"{mainGroupId}/";
+
+    private void OnGroupNameRecived(string groupName)
+    {
+        pageTitle = $"گروه اصلی {groupName}";
+        NavState.SetNavState(pageTitle, true, "/markets");
+    }
+}

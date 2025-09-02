@@ -1,0 +1,18 @@
+﻿namespace SpotMarket.Shared.Models.Presentation
+{
+    /// <summary>
+    /// نمایانگر یک آیتم در لیست عرضه‌های آینده است
+    /// </summary>
+    public class UpcomingOfferItem
+    {
+        public string DayOfWeek { get; set; } = string.Empty;
+        public string DayOfMonth { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Subtitle { get; set; } = string.Empty;
+        public string? UrlName { get; set; } = string.Empty;
+        public UpcomingOfferType Type {get; set;} = UpcomingOfferType.None;
+        public OfferDateType OfferDateType { get; set;} = OfferDateType.Past;
+    }
+    public enum UpcomingOfferType { Offer, Commodity, SubGroup, Group, MainGroup, None }
+    public enum OfferDateType { Past, Today, Future }
+}

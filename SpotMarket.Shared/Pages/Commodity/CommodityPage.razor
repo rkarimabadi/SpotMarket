@@ -1,0 +1,46 @@
+﻿@page "/markets/{mainGroupId:int}/{groupId:int}/{subGroupId:int}/{commodityId:int}"
+@page "/commodity-tree/commodities/{commodityId:int}"
+
+
+
+@inject ICommodityService CommodityService
+@inject NavStateService NavState
+
+<PageTitle>@pageTitle</PageTitle>
+<CommodityHeader CommodityId="commodityId" OnDataReceived="OnDataReceived" />
+<CommodityHierarchy CommodityId="commodityId" OnDataReceived="FillNav" />
+<PriceTrends CommodityId="commodityId" />
+<MarketAbsorptionWidget CommodityId="commodityId" />
+<CommodityOffersWidget CommodityId="commodityId" Title="" />
+<CommodityMainPlayersWidget CommodityId="commodityId" />
+<CommodityAttributesWidget CommodityId="commodityId" />
+<DistributedAttributesWidget CommodityId="commodityId" />
+<DistributedAttributesWidget CommodityId="commodityId" />
+@code {
+    [Parameter] public int mainGroupId { get; set; }
+    [Parameter] public int groupId { get; set; }
+    [Parameter] public int subGroupId { get; set; }
+    [Parameter] public int commodityId { get; set; }
+    private string? pageTitle;
+    private List<HierarchyItem>? hierarchyData;
+    private void OnDataReceived(CommodityHeaderData? _commodityData)
+    {
+        if (_commodityData != null)
+        {
+            pageTitle = $"تحلیل کالای {_commodityData.CommodityName}";
+            SetNavParams();
+        }
+    }
+    private void FillNav(List<HierarchyItem>? _hierarchyData)
+    {
+        hierarchyData = _hierarchyData;
+        SetNavParams();
+    }
+    private void SetNavParams()
+    {
+        if(hierarchyData!= null && hierarchyData.Count > 0)
+        {
+            NavState.SetNavState((!string.IsNullOrEmpty(pageTitle) ? pageTitle : hierarchyData?.FirstOrDefault(x => x.Type == "Commodity")?.Name ?? "..."), true, $"/markets/{hierarchyData?.FirstOrDefault(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{hierarchyData?.FirstOrDefault(x => x.Type == "Group")?.Id ?? groupId}/{hierarchyData?.FirstOrDefault(x => x.Type == "SubGroup")?.Id ?? subGroupId}");
+        }
+    }
+}

@@ -1,0 +1,136 @@
+﻿@page "/settings/market-layout"
+@inject NavStateService NavState
+@inject SettingsService SettingsService
+
+<PageTitle>سفارشی‌سازی بازارها</PageTitle>
+
+<div class="page-container">
+    <div class="page-header">
+        <h1 class="page-title-large">سفارشی‌سازی بازارها</h1>
+    </div>
+
+    @if (marketSettings != null && infoWidgetsConfig != null)
+    {
+        <div class="settings-group">
+            <div class="settings-group-header">نمای اصلی صفحه بازارها</div>
+            @foreach (var viewType in Enum.GetValues<MarketMainViewType>())
+            {
+                <div class="settings-item selection-item" @onclick="() => SelectMainView(viewType)">
+                    <div class="settings-icon @GetIconClassForView(viewType)">
+                        <i class="@GetIconForView(viewType)"></i>
+                    </div>
+                    <div class="settings-label">@marketSettings.GetDisplayName(viewType)</div>
+                    <div class="settings-action">
+                        @if (marketSettings.MainView == viewType)
+                        {
+                            <i class="bi bi-check-lg checkmark-icon"></i>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="settings-group">
+            <div class="settings-group-header">ویجت‌های اطلاعاتی</div>
+            @foreach (var infoWidget in infoWidgetsConfig)
+            {
+                <div class="settings-item">
+                    <div class="settings-icon @GetIconClassForWidget(infoWidget.Type)">
+                        <i class="@GetIconForWidget(infoWidget.Type)"></i>
+                    </div>
+                    <div class="settings-label">@infoWidget.DisplayName</div>
+                    <div class="settings-action">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch"
+                                   @bind="infoWidget.IsVisible"
+                                   @bind:after="SaveChanges" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <p class="settings-footer">تغییرات شما به صورت خودکار ذخیره می‌شود.</p>
+    }
+    else
+    {
+        <p>در حال بارگذاری تنظیمات...</p>
+    }
+</div>
+
+@code {
+    private MarketSettings? marketSettings;
+    private List<MarketInfoWidgetConfig>? infoWidgetsConfig;
+
+    protected override async Task OnInitializedAsync()
+    {
+        NavState.SetNavState("سفارشی‌سازی بازارها", true, "/account");
+        var settings = await SettingsService.LoadSettingsAsync() ?? SettingsService.GetDefaultSettings();
+        marketSettings = settings.MarketPageLayout;
+
+        infoWidgetsConfig = new List<MarketInfoWidgetConfig>();
+        foreach (var widgetType in Enum.GetValues<MarketInfoWidgetType>())
+        {
+            infoWidgetsConfig.Add(new MarketInfoWidgetConfig
+                {
+                    Type = widgetType,
+                    DisplayName = marketSettings.GetDisplayName(widgetType),
+                    IsVisible = marketSettings.VisibleInfoWidgets.Contains(widgetType)
+                });
+        }
+    }
+
+    private async Task SelectMainView(MarketMainViewType viewType)
+    {
+        if (marketSettings != null)
+        {
+            marketSettings.MainView = viewType;
+            await SaveChanges();
+        }
+    }
+
+    private async Task SaveChanges()
+    {
+        if (marketSettings != null && infoWidgetsConfig != null)
+        {
+            marketSettings.VisibleInfoWidgets.Clear();
+            marketSettings.VisibleInfoWidgets.AddRange(infoWidgetsConfig.Where(w => w.IsVisible).Select(w => w.Type));
+
+            var settings = await SettingsService.LoadSettingsAsync() ?? SettingsService.GetDefaultSettings();
+            settings.MarketPageLayout = marketSettings;
+            await SettingsService.SaveSettingsAsync(settings);
+        }
+    }
+
+    // Helper methods for icons
+    private string GetIconForView(MarketMainViewType viewType) => viewType switch
+    {
+        MarketMainViewType.List => "bi bi-list-ul",
+        MarketMainViewType.Heatmap => "bi bi-grid-1x2-fill",
+        MarketMainViewType.Shortcuts => "bi bi-grid-3x3-gap-fill",
+        _ => "bi bi-question-circle"
+    };
+
+    private string GetIconClassForView(MarketMainViewType viewType) => viewType switch
+    {
+        MarketMainViewType.List => "icon-bg-blue",
+        MarketMainViewType.Heatmap => "icon-bg-orange",
+        MarketMainViewType.Shortcuts => "icon-bg-purple",
+        _ => "icon-bg-gray"
+    };
+
+    private string GetIconForWidget(MarketInfoWidgetType widgetType) => widgetType switch
+    {
+        MarketInfoWidgetType.ProgressRings => "bi bi-heart-pulse-fill",
+        MarketInfoWidgetType.SelectedCommodity => "bi bi-person-circle",
+        MarketInfoWidgetType.TodayGroups => "bi bi-bar-chart-steps",
+        _ => "bi bi-info-circle"
+    };
+
+    private string GetIconClassForWidget(MarketInfoWidgetType widgetType) => widgetType switch
+    {
+        MarketInfoWidgetType.ProgressRings => "icon-bg-red",
+        MarketInfoWidgetType.SelectedCommodity => "icon-bg-teal",
+        MarketInfoWidgetType.TodayGroups => "icon-bg-indigo",
+        _ => "icon-bg-gray"
+    };
+}

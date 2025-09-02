@@ -1,0 +1,67 @@
+﻿
+
+<div class="attributes-widget">
+    @if (Data != null && Data.Items.Any())
+    {
+        <div class="attributes-list">
+            @foreach (var item in Data.Items)
+            {
+                <div class="attribute-item @(item.IsAlert ? "alert-state" : "") @(selectedItem == item ? "expanded" : "")" @onclick="() => ToggleItem(item)">
+                    <div class="item-main">
+                        <div class="icon-wrapper @item.IconBgCssClass">
+                            <i class="@item.IconCssClass"></i>
+                        </div>
+                        <div class="item-info">
+                            <span class="title">@item.Title</span>
+                            <span class="value">@item.CurrentValue</span>
+                        </div>
+                        <div class="item-action">
+                            @if (item.IsAlert)
+                            {
+                                <i class="bi bi-exclamation-triangle-fill alert-icon"></i>
+                            }
+                            <i class="bi bi-chevron-down expand-chevron"></i>
+                        </div>
+                    </div>
+                    @if (selectedItem == item)
+                    {
+                        <div class="details-panel">
+                            <p class="interpretation">@item.Interpretation</p>
+                            @if (item.IsAlert)
+                            {
+                                <div class="alert-details">
+                                    <div class="detail-item">
+                                        <span>متداول برای این کالا:</span>
+                                        <strong>@item.CommodityMostCommonValue</strong>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span>متداول در کل بازار:</span>
+                                        <strong>@item.MarketMostCommonValue</strong>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private CommodityAttributeItem? selectedItem;
+
+    private void ToggleItem(CommodityAttributeItem item)
+    {
+        if (selectedItem == item)
+        {
+            selectedItem = null; // Close if already open
+        }
+        else
+        {
+            selectedItem = item; // Open the selected item
+        }
+    }
+    [Parameter]
+    public CommodityAttributesData? Data { get; set; }
+}

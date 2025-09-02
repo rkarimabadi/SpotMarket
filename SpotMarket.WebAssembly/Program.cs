@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SpotMarket.WebAssembly;
-using SpotMarket.WebAssembly.Services.App;
-using SpotMarket.WebAssembly.Extensions;
+using SpotMarket.Shared.Extensions;
+using SpotMarket.Shared.Services.App;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
