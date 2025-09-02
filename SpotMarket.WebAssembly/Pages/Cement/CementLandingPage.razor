@@ -1,0 +1,167 @@
+﻿@page "/cement-market"
+@using SpotMarket.WebAssembly.Models.Presentation
+@inject NavigationManager NavigationManager
+
+<PageTitle>بازار سیمان</PageTitle>
+
+<div class="cement-landing-page">
+    <div class="page-header">
+        <h1 class="page-title">بازار سیمان</h1>
+        <p class="page-subtitle">تحلیل روزانه و مسیرهای دسترسی سریع</p>
+    </div>
+
+    <!-- بخش 1: خلاصه بازار (الهام گرفته از Stocks اپل) -->
+    <div class="market-summary-card">
+        <h2 class="summary-title">نبض بازار امروز</h2>
+        <div class="summary-value">
+            @Data?.MarketSummaryValue
+        </div>
+        <p class="summary-label">@Data?.MarketSummaryLabel</p>
+        <p class="summary-subtitle">@Data?.MarketSummarySubtitle</p>
+    </div>
+
+    <!-- بخش 2: مسیر سریع برای خریدار هدفمند -->
+    <div class="quick-path-container">
+        <h2 class="section-title">به دنبال سیمان خاصی هستید؟</h2>
+        <div class="quick-path-grid">
+            @foreach (var item in Data?.QuickPathItems ?? new List<QuickPathItem>())
+            {
+                <div class="quick-path-card @item.ThemeCssClass" @onclick="() => NavigateTo(item.UrlName)">
+                    <i class="@item.IconCssClass"></i>
+                    <span class="card-title">@item.Title</span>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- بخش 3: بررسی گروه‌های فعال برای تحلیلگر بازار -->
+    <div class="group-list-widget">
+        <h2 class="section-title">بررسی گروه‌های سیمان</h2>
+        <div class="active-items-container">
+            @foreach (var item in Data?.ActiveGroups ?? new List<CementGroupStatusItem>())
+            {
+                <div class="active-item-card" @onclick="() => NavigateTo(item.UrlName)">
+                    <div class="card-top-row">
+                        <div class="status-dial @GetStatusCssClass(item.Status)">
+                            <i class="@GetStatusIconClass(item.Status)"></i>
+                        </div>
+                        <div class="info">
+                            <span class="title">@item.Name</span>
+                            <span class="subtitle">@item.Subtitle</span>
+                        </div>
+                        <i class="bi bi-chevron-left item-chevron"></i>
+                    </div>
+                    <div class="card-bottom-row">
+                        <div class="stat-item">
+                            <span class="value">@item.OfferCount</span>
+                            <span class="label">اطلاعیه عرضه</span>
+                        </div>
+                        <div class="stat-item">
+                            <div class="demand-indicator @GetDemandStatusCssClass(item.DemandStatus)">
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                            </div>
+                            <span class="label">وضعیت تقاضا</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (Data?.HasInactiveGroups ?? false)
+        {
+            <div class="inactive-group-section">
+                @if (_showAllInactiveGroups)
+                {
+                    <div class="data-card">
+                        @foreach (var item in Data.InactiveGroups)
+                        {
+                            <div class="inactive-item" @onclick="() => NavigateTo(item.UrlName)">
+                                <span class="title">@item.Name</span>
+                                <i class="bi bi-chevron-left item-chevron"></i>
+                            </div>
+                        }
+                    </div>
+                }
+                <div class="expand-button-container">
+                    <button class="expand-button" @onclick="ToggleShowAllInactiveGroups">
+                        @(_showAllInactiveGroups ? "نمایش کمتر" : $"نمایش همه {Data.InactiveGroupsCount} گروه")
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+@code {
+    private CementLandingPageData? Data { get; set; }
+    private bool _showAllInactiveGroups = false;
+
+    protected override void OnInitialized()
+    {
+        // داده‌های نمونه برای نمایش اولیه. در نسخه نهایی باید از سرویس CementService واکشی شوند.
+        Data = new CementLandingPageData
+            {
+                MarketSummaryValue = "85.2 همت",
+                MarketSummaryLabel = "ارزش کل معاملات امروز",
+                MarketSummarySubtitle = "با میانگین رقابت +2.1%",
+
+                QuickPathItems = new List<QuickPathItem>
+            {
+                new QuickPathItem { Title = "تیپ ۲ پاکتی", UrlName = "/cement/type-2/bagged", IconCssClass = "bi bi-bag-fill", ThemeCssClass = "theme-blue" },
+                new QuickPathItem { Title = "تیپ ۱ فله", UrlName = "/cement/type-1/bulk", IconCssClass = "bi bi-truck", ThemeCssClass = "theme-green" },
+                new QuickPathItem { Title = "سیمان سفید", UrlName = "/cement/white", IconCssClass = "bi bi-palette-fill", ThemeCssClass = "theme-purple" },
+                new QuickPathItem { Title = "جامبوبگ", UrlName = "/cement/jumbobag", IconCssClass = "bi bi-box-fill", ThemeCssClass = "theme-orange" }
+            },
+
+                ActiveGroups = new List<CementGroupStatusItem>
+            {
+                new CementGroupStatusItem { Name = "سیمان پرتلند تیپ 2", Subtitle = "سیمان تهران، سیمان آبیک", UrlName = "/cement/type-2", Status = GroupActivityStatus.HasOfferToday, OfferCount = 8, DemandStatus = DemandStatus.High },
+                new CementGroupStatusItem { Name = "سیمان پرتلند تیپ 1", Subtitle = "سیمان سپاهان، سیمان ساوه", UrlName = "/cement/type-1", Status = GroupActivityStatus.HasUpcomingOffer, OfferCount = 3, DemandStatus = DemandStatus.Medium },
+                new CementGroupStatusItem { Name = "سیمان سفید پرتلند", Subtitle = "سیمان سفید شرق", UrlName = "/cement/white", Status = GroupActivityStatus.HasUpcomingOffer, OfferCount = 1, DemandStatus = DemandStatus.Low }
+            },
+                InactiveGroups = new List<CementGroupStatusItem>
+            {
+                new CementGroupStatusItem { Name = "سیمان پوزولانی", UrlName = "/cement/pozzolana", Status = GroupActivityStatus.Inactive, OfferCount = 0 },
+                new CementGroupStatusItem { Name = "سیمان سرباره‌ای", UrlName = "/cement/slag", Status = GroupActivityStatus.Inactive, OfferCount = 0 },
+                new CementGroupStatusItem { Name = "سیمان مرکب", UrlName = "/cement/composite", Status = GroupActivityStatus.Inactive, OfferCount = 0 }
+            }
+            };
+
+        if (Data?.ActiveGroups.Count + Data?.InactiveGroups.Count <= 6)
+        {
+            _showAllInactiveGroups = true;
+        }
+    }
+
+    private void ToggleShowAllInactiveGroups()
+    {
+        _showAllInactiveGroups = !_showAllInactiveGroups;
+    }
+
+    private void NavigateTo(string url)
+    {
+        NavigationManager.NavigateTo(url);
+    }
+
+    private string GetStatusCssClass(GroupActivityStatus status) => status switch
+    {
+        GroupActivityStatus.HasOfferToday => "status-today",
+        _ => "status-future"
+    };
+
+    private string GetStatusIconClass(GroupActivityStatus status) => status switch
+    {
+        GroupActivityStatus.HasOfferToday => "bi bi-calendar-check-fill",
+        _ => "bi bi-calendar-event-fill"
+    };
+
+    private string GetDemandStatusCssClass(DemandStatus status) => status switch
+    {
+        DemandStatus.High => "status-high",
+        DemandStatus.Low => "status-low",
+        _ => "status-medium"
+    };
+}

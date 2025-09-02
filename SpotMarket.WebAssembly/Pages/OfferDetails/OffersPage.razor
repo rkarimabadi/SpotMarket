@@ -26,7 +26,7 @@
     protected override async Task OnInitializedAsync()
     {
         offer = await DataService.GetOfferByIdAsync(offerId);
-        NavState.SetNavState((!string.IsNullOrEmpty(pageTitle) ? pageTitle : hierarchyData?.FirstOrDefault(x => x.Type == "Commodity")?.Name ?? "..."), true, $"/markets/{hierarchyData?.FirstOrDefault(x => x.Type == "MainGroup")?.Id ?? mainGroupId}/{hierarchyData?.FirstOrDefault(x => x.Type == "Group")?.Id ?? groupId}/{hierarchyData?.FirstOrDefault(x => x.Type == "SubGroup")?.Id ?? subGroupId}");
+        NavState.SetNavState(offer?.CommodityName ?? "...", true, $"/commodity-tree/commodities/{offer?.CommodityId}");
     }
     private string deliveryDue
     {
