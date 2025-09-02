@@ -1,0 +1,25 @@
+﻿@if (Specs != null && Specs.Any())
+{
+    <div class="specs-container">
+        <span class="section-label">مشخصات فنی</span>
+        <div class="specs-grid">
+            @foreach (var spec in Specs)
+            {
+                <div class="spec-card @spec.ThemeCssClass">
+                    <div class="icon-wrapper">
+                        <i class="@spec.IconCssClass"></i>
+                    </div>
+                    <div class="spec-info">
+                        <span class="spec-title">@spec.Title</span>
+                        <span class="spec-value">@spec.Value</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<TechnicalSpecification>? Specs { get; set; }
+}

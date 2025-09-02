@@ -1,0 +1,79 @@
+﻿.offers-container {
+    margin-bottom: 1.5rem;
+}
+
+.section-label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.offers-table-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.offer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+    .offer-row:last-child {
+        border-bottom: none;
+    }
+
+.offer-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex-shrink: 0;
+    width: 4rem;
+}
+
+.day-of-week {
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+}
+
+.date-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+.offer-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
+}
+
+.offer-supplier {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+}
+
+.offer-volume {
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+}
+
+.offer-price {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}

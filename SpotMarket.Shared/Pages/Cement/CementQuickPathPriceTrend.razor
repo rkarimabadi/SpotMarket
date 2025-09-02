@@ -1,0 +1,62 @@
+﻿@using System.Globalization
+
+@if (Trend != null && Trend.PriceHistory.Any())
+{
+    <div class="price-trend-container">
+        <span class="section-label">@Trend.Title</span>
+        <div class="trend-card">
+            <div class="bar-chart-container">
+                <svg width="100%" height="100%" viewBox="0 0 350 110">
+                    @{
+                        var maxPrice = Trend.PriceHistory.Max(d => d.Price);
+                        var minPrice = Trend.PriceHistory.Min(d => d.Price);
+                        var priceRange = maxPrice - minPrice;
+                        if (priceRange == 0) priceRange = 1;
+
+                        var barWidthPercentage = (100.0 / Trend.PriceHistory.Count) * 0.5;
+
+                        for (int i = 0; i < Trend.PriceHistory.Count; i++)
+                        {
+                            var item = Trend.PriceHistory[i];
+                            var barHeight = ((double)(item.Price - minPrice) / (double)priceRange) * 80 + 20;
+                            var x = (100.0 / Trend.PriceHistory.Count) * (i + 0.5);
+                            var y = 90 - barHeight;
+
+                            <rect x="@((x - barWidthPercentage / 2).ToString(CultureInfo.InvariantCulture))%" y="90" width="@(barWidthPercentage.ToString(CultureInfo.InvariantCulture))%" height="0" class="@(i == Trend.PriceHistory.Count - 1 ? "latest" : "historical")" rx="4" ry="4">
+                                <animate attributeName="height" from="0" to="@(barHeight.ToString(CultureInfo.InvariantCulture))" dur="0.5s" begin="@($"{i * 0.1}s")" fill="freeze" />
+                                <animate attributeName="y" from="90" to="@(y.ToString(CultureInfo.InvariantCulture))" dur="0.5s" begin="@($"{i * 0.1}s")" fill="freeze" />
+                            </rect>
+                            @GenerateSvgTextLabel(item, x)
+
+                        }
+                    }
+                </svg>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="price-trend-container">
+        <span class="section-label">روند قیمت</span>
+        <div class="trend-card">
+            <div class="bar-chart-container no-data-container">
+                <div class="no-data-content">
+                    <i class="bi bi-bar-chart-line"></i>
+                    <span>داده‌ای برای نمایش وجود ندارد</span>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public PriceTrendData? Trend { get; set; }
+    private MarkupString GenerateSvgTextLabel(PricePoint item, double x)
+    {
+        var xFormatted = x.ToString(CultureInfo.InvariantCulture);
+        var textElement = $"<text x=\"{xFormatted}%\" y=\"105\" text-anchor=\"middle\" font-size=\"10px\" fill=\"var(--text-secondary-color)\">{item.DateLabel}</text>";
+        return new MarkupString(textElement);
+    }
+}

@@ -1,0 +1,66 @@
+﻿.suppliers-container {
+    margin-bottom: 1.5rem;
+}
+
+.section-label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.suppliers-list {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.supplier-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+    .supplier-item:last-child {
+        border-bottom: none;
+    }
+
+.supplier-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+}
+
+.supplier-info {
+    display: flex;
+    gap: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    min-width: 11rem;
+    justify-content: space-between;
+}
+
+.price-info, .volume-info {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--primary-light);
+    color: white;
+    padding: 0 0.5rem;
+    flex-grow:1;
+}
+.volume-info {
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    border-right: solid 1px white;
+}
+.price-info {
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+

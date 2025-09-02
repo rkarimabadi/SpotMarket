@@ -1,0 +1,54 @@
+﻿@inject ICementService CementService
+<div class="cement-summary-card-container">
+    @if (data == null)
+    {
+        <div class="loading-state">
+            <span class="spinner-border text-primary" role="status"></span>
+            <span>در حال بارگذاری اطلاعات بازار...</span>
+        </div>
+    }
+    else
+    {
+        <div class="summary-pass-card">
+            <div class="card-body pt-4">
+                <div class="metric-item">
+                    <span class="value">@data.TotalValue <span class="unit">همت</span></span>
+                    <span class="label">ارزش کل معاملات امروز</span>
+                </div>
+                <div class="metric-item">
+                    <span class="value ltr">
+                        @data.CompetitionValue
+                        <i class="bi @(data.IsPositive ? "bi-arrow-up-right text-success" : "bi-arrow-down-right text-danger")"></i>
+                    </span>
+                    <span class="label">شاخص رقابت</span>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="label">ضریب تقاضا</span>
+                        <span class="value">@data.DemandValue</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">حجم معاملات</span>
+                        <span class="value">@data.TotalVolume</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">عرضه امروز</span>
+                        <span class="value">@data.TodayOffersCount</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private CementMarketSummary? data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = await CementService.GetCementMarketSummaryDataAsync();
+    }
+}

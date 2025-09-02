@@ -1,0 +1,22 @@
+﻿@using SpotMarket.Shared.Models.Presentation
+
+@if (Filters != null && Filters.Any())
+{
+    <div class="active-filters-container">
+        <span class="section-label">فیلترهای فعال</span>
+        <div class="filters-list">
+            @foreach (var filter in Filters)
+            {
+                <span class="filter-chip">
+                    <i class="@filter.IconCssClass"></i>
+                    @filter.Value
+                </span>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<ActiveFilter>? Filters { get; set; }
+}

@@ -8,5 +8,6 @@ namespace SpotMarket.Shared.Services.Presentation
         Task<CementMarketSummary> GetCementMarketSummaryDataAsync();
         Task<BasicCementMarketSummary> GetBasicCementMarketSummaryDataAsync();
         Task<CementQuickPathData> GetCementQuickPathDataAsync();
+        Task<QuickPathPageData> GetQuickPathPageDataAsync(string urlName);
     }
 }

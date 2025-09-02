@@ -1,0 +1,126 @@
+﻿@using SpotMarket.Shared.Models.Presentation
+
+    @if (Filters != null && Filters.Any())
+    {
+        <div class="filters-list mb-3">
+            @foreach (var filter in Filters)
+            {
+                <div class="filter-group">
+                    <button class="filter-chip @(filter.IsActive ? "active" : "")" @onclick="() => ToggleDropdown(filter.Title)">
+                        @if (!string.IsNullOrEmpty(filter.IconCssClass))
+                        {
+                            <i class="@filter.IconCssClass"></i>
+                        }
+                        <span class="filter-value">@filter.Value</span>
+                        <div class="divider"></div>
+                        <i class="bi bi-chevron-down expand-arrow @(filter.IsActive ? "rotate" : "")"></i>
+                    </button>
+                </div>
+            }
+        </div>
+    }
+
+@if (ActiveFilter?.IsActive ?? false)
+{
+    <div class="filter-dropdown-overlay" @onclick="CloseDropdown"></div>
+    <div class="filter-dropdown">
+        <h4 class="dropdown-title">@ActiveFilter.Title</h4>
+        <div class="dropdown-options">
+            @foreach (var option in ActiveFilter.Options)
+            {
+                <button class="dropdown-item @(option.IsSelected ? "selected" : "")" @onclick="() => SelectOption(ActiveFilter.Title, option.Key)">
+                    @option.Title
+                </button>
+            }
+        </div>
+        <div class="dropdown-footer">
+            <button class="clear-button" @onclick="() => ClearFilter(ActiveFilter.Title)">پاک کردن</button>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<ActiveFilter>? Filters { get; set; }
+
+    [Parameter]
+    public EventCallback<FilterChangeArgs> OnFilterChanged { get; set; }
+
+    private ActiveFilter? ActiveFilter { get; set; }
+
+    private void ToggleDropdown(string filterTitle)
+    {
+        var filter = Filters?.FirstOrDefault(f => f.Title == filterTitle);
+        if (filter != null)
+        {
+            if (ActiveFilter == filter)
+            {
+                ActiveFilter.IsActive = false;
+                ActiveFilter = null;
+            }
+            else
+            {
+                // Deactivate any currently active filter
+                if (ActiveFilter != null)
+                {
+                    ActiveFilter.IsActive = false;
+                }
+                // Activate the new filter
+                filter.IsActive = true;
+                ActiveFilter = filter;
+            }
+        }
+    }
+
+    private async Task SelectOption(string filterTitle, string selectedKey)
+    {
+        foreach (var filter in Filters)
+        {
+            if (filter.Title == filterTitle)
+            {
+                filter.Value = filter.Options.FirstOrDefault(o => o.Key == selectedKey)?.Title;
+                foreach (var option in filter.Options)
+                {
+                    option.IsSelected = option.Key == selectedKey;
+                }
+            }
+        }
+
+        ActiveFilter.IsActive = false;
+        ActiveFilter = null;
+
+        if (OnFilterChanged.HasDelegate)
+        {
+            await OnFilterChanged.InvokeAsync(new FilterChangeArgs(filterTitle, selectedKey));
+        }
+    }
+
+    private async Task ClearFilter(string filterTitle)
+    {
+        var filter = Filters?.FirstOrDefault(f => f.Title == filterTitle);
+        if (filter != null)
+        {
+            filter.Value = filter.Options.FirstOrDefault(o => o.Key == "all")?.Title;
+            foreach (var option in filter.Options)
+            {
+                option.IsSelected = option.Key == "all";
+            }
+        }
+        ActiveFilter.IsActive = false;
+        ActiveFilter = null;
+
+        if (OnFilterChanged.HasDelegate)
+        {
+            await OnFilterChanged.InvokeAsync(new FilterChangeArgs(filterTitle, "all"));
+        }
+    }
+
+    private void CloseDropdown()
+    {
+        if (ActiveFilter != null)
+        {
+            ActiveFilter.IsActive = false;
+            ActiveFilter = null;
+        }
+    }
+}

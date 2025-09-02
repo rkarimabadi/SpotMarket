@@ -1,0 +1,61 @@
+﻿.price-trend-container {
+    margin-bottom: 1.5rem;
+}
+
+.section-label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.trend-card {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    padding: 1.5rem 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.bar-chart-container {
+    width: 100%;
+    aspect-ratio: 2.5 / 1;
+    min-height: 120px;
+}
+
+    .bar-chart-container rect.historical {
+        fill: var(--gray-300);
+    }
+
+    .bar-chart-container rect.latest {
+        fill: var(--primary-color);
+    }
+
+.no-data-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.75rem;
+    color: var(--text-secondary-color);
+    height: 100%;
+}
+
+.no-data-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0.7;
+}
+
+    .no-data-content .bi {
+        font-size: 3rem;
+    }
+
+    .no-data-content span {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }

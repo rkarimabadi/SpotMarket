@@ -1,0 +1,35 @@
+﻿.active-filters-container {
+    padding: 1rem;
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.section-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+    display: block;
+    margin-bottom: 0.75rem;
+
+}
+
+.filters-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filter-chip {
+    background-color: var(--primary-light);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 9999px; /* Tailwind's rounded-full */
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}

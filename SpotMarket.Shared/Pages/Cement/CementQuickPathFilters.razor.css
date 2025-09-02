@@ -1,0 +1,173 @@
+﻿/* This CSS file defines the styles for the interactive filter buttons in the Quick Path page.
+    The design is inspired by Apple's clean, minimalist aesthetic with clear visual hierarchies.
+*/
+
+.active-filters-container {
+    /* Padding, background, and borders for the main container */
+    padding: 1rem;
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+    /* Ensuring the container does not wrap and allows horizontal scrolling */
+    white-space: nowrap;
+}
+
+.filters-list {
+    display: flex;
+    flex-wrap: nowrap; /* Changed from wrap to nowrap */
+    gap: 0.5rem;
+    /* Ensuring the list inside the container is flexible */
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.filter-group {
+    /* Positioning for the dropdown menu */
+    position: relative;
+    display: flex;
+}
+
+.filter-value {
+    white-space: nowrap;
+}
+
+.filter-chip {
+    /* Basic styling for the filter button (chip) */
+    background-color: var(--gray-200);
+    color: var(--text-primary-color);
+    padding: 0.5rem 0.75rem;
+    border-radius: 9999px; /* Pill shape */
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .filter-chip:hover {
+        background-color: var(--gray-300);
+    }
+
+    .filter-chip.active {
+        /* Highlight style for the active filter */
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+        .filter-chip.active .divider {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .filter-chip.active .filter-value {
+            color: white;
+        }
+
+.divider {
+    /* Vertical line separator */
+    width: 1px;
+    height: 1.2rem;
+    background-color: var(--gray-400);
+}
+
+.expand-arrow {
+    /* Styling for the dropdown arrow icon */
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+}
+
+    .expand-arrow.rotate {
+        /* Rotates the arrow when the dropdown is active */
+        transform: rotate(180deg);
+    }
+
+/* Overlay to close the dropdown when clicking outside */
+.filter-dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9;
+    background: #1a2828c4;
+}
+
+.filter-dropdown {
+    position: fixed; 
+    top: 25%;
+    bottom: auto; 
+    left: 1rem;
+    right: 1rem;
+    margin: auto;
+    background-color: var(--card-background-color);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+    text-align: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.dropdown-options {
+    max-height: 200px; /* Limit height for scrollability */
+    overflow-y: auto;
+}
+
+.dropdown-item {
+    /* Style for each option in the dropdown */
+    background-color: transparent;
+    border: none;
+    text-align: right;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+    color: var(--text-primary-color);
+    width: 100%;
+}
+
+    .dropdown-item:hover {
+        background-color: var(--gray-200);
+    }
+
+    .dropdown-item.selected {
+        /* Highlight style for the selected option */
+        background-color: var(--primary-light);
+        color: white;
+    }
+
+.dropdown-footer {
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.clear-button {
+    background-color: transparent;
+    border: none;
+    color: var(--danger-color);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+}

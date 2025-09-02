@@ -1,0 +1,29 @@
+﻿@using SpotMarket.Shared.Models.Presentation
+
+@if (Suppliers != null && Suppliers.Any())
+{
+    <div class="suppliers-container">
+        <span class="section-label">عرضه‌کنندگان اصلی</span>
+        <div class="suppliers-list">
+            @foreach (var supplier in Suppliers)
+            {
+                <div class="supplier-item">
+                    <span class="supplier-name">@supplier.SupplierName</span>
+                    <span class="supplier-info">
+                        <span class="price-info">
+                            <i class="bi bi-tag"></i> @supplier.LastTradePrice.ToString("N0")
+                        </span>
+                        <span class="volume-info">
+                            <i class="bi bi-box-seam"></i> @supplier.OfferedVolume.ToString("N0") تن
+                        </span>
+                    </span>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<MainSupplier>? Suppliers { get; set; }
+}

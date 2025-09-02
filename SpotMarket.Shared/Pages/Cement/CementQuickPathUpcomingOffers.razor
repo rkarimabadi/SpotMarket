@@ -1,0 +1,32 @@
+﻿@using SpotMarket.Shared.Models.Presentation
+
+@if (Offers != null && Offers.Any())
+{
+    <div class="offers-container">
+        <span class="section-label">عرضه‌های فعال و آتی</span>
+        <div class="offers-table-card">
+            @foreach (var offer in Offers)
+            {
+                <div class="offer-row">
+                    <div class="offer-date">
+                        <span class="day-of-week">@offer.DayOfWeek</span>
+                        <span class="date-number">@offer.Date</span>
+                    </div>
+                    <div class="offer-info">
+                        <span class="offer-supplier">@offer.SupplierName</span>
+                        <span class="offer-volume">@offer.Volume</span>
+                    </div>
+                    <div class="offer-price">
+                        @offer.Price
+                        <i class="bi bi-chevron-left"></i>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<UpcomingOffer>? Offers { get; set; }
+}

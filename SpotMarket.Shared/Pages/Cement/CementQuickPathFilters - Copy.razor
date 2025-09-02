@@ -1,0 +1,74 @@
+﻿@using SpotMarket.Shared.Models.Presentation
+
+<div class="active-filters-container">
+    @if (Filters != null && Filters.Any())
+    {
+        <div class="filters-list">
+            @foreach (var filter in Filters)
+            {
+                <div class="filter-group">
+                    <button class="filter-chip @(filter.IsActive ? "active" : "")" @onclick="() => ToggleDropdown(filter.Title)">
+                        @if (!string.IsNullOrEmpty(filter.IconCssClass))
+                        {
+                            <i class="@filter.IconCssClass"></i>
+                        }
+                        <span class="filter-value">@filter.Value</span>
+                        <div class="divider"></div>
+                        <i class="bi bi-chevron-down expand-arrow @(filter.IsActive ? "rotate" : "")"></i>
+                    </button>
+
+                    @if (filter.IsActive)
+                    {
+                        <div class="filter-dropdown">
+                            @foreach (var option in filter.Options)
+                            {
+                                <button class="dropdown-item @(option.IsSelected ? "selected" : "")" @onclick="() => SelectOption(filter.Title, option.Key)">
+                                    @option.Title
+                                </button>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<ActiveFilter>? Filters { get; set; }
+
+    [Parameter]
+    public EventCallback<FilterChangeArgs> OnFilterChanged { get; set; }
+
+    private string? _activeDropdownKey;
+
+    private void ToggleDropdown(string filterTitle)
+    {
+        foreach (var filter in Filters)
+        {
+            filter.IsActive = (filter.Title == filterTitle) && !filter.IsActive;
+        }
+    }
+
+    private async Task SelectOption(string filterTitle, string selectedKey)
+    {
+        foreach (var filter in Filters)
+        {
+            if (filter.Title == filterTitle)
+            {
+                filter.Value = filter.Options.FirstOrDefault(o => o.Key == selectedKey)?.Title;
+                foreach (var option in filter.Options)
+                {
+                    option.IsSelected = option.Key == selectedKey;
+                }
+            }
+            filter.IsActive = false;
+        }
+        
+        if (OnFilterChanged.HasDelegate)
+        {
+            await OnFilterChanged.InvokeAsync(new FilterChangeArgs(filterTitle, selectedKey));
+        }
+    }
+}

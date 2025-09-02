@@ -1,0 +1,48 @@
+﻿@page "/markets/cement/quick-path/{urlName}"
+@inject ICementService CementService
+@inject NavigationManager NavigationManager
+@inject NavStateService NavState
+@using SpotMarket.Shared.Models.Presentation
+<PageTitle>@data?.PageTitle</PageTitle>
+<div class="quick-path-page-container">
+    @if (data == null)
+    {
+        <div class="loading-state">
+            <span class="spinner-border text-primary" role="status"></span>
+            <span>در حال بارگذاری...</span>
+        </div>
+    }
+    else
+    {
+        @* 1. فیلترهای فعال *@
+        <CementQuickPathFilters Filters="data.ActiveFilters" />
+
+        @* 2. مشخصات فنی *@
+        <CementQuickPathTechnicalSpecs Specs="data.Specifications" />
+        
+        @* 3. روند قیمت *@
+        <CementQuickPathPriceTrend Trend="data.PriceTrend" />
+
+        @* 4. عرضه‌کنندگان اصلی *@
+        <CementQuickPathMainSuppliers Suppliers="data.MainSuppliers" />
+        
+        @* 5. عرضه‌های فعال و آتی *@
+        <CementQuickPathUpcomingOffers Offers="data.UpcomingOffers" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string urlName { get; set; } = "";
+
+    private QuickPathPageData? data;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        data = await CementService.GetQuickPathPageDataAsync(urlName);
+        if(data is not null)
+        {
+            NavState.SetNavState(data.PageTitle,true,"/markets/cement");
+        }
+    }
+}

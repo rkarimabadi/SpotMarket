@@ -1,0 +1,123 @@
+﻿/*
+    This CSS file defines the styles for the interactive filter buttons in the Quick Path page.
+    The design is inspired by Apple's clean, minimalist aesthetic with clear visual hierarchies.
+*/
+
+.active-filters-container {
+    /* Padding, background, and borders for the main container */
+    padding: 1rem;
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+}
+
+.filters-list {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filter-group {
+    /* Positioning for the dropdown menu */
+    position: relative;
+    display: flex;
+}
+.filter-value {
+    white-space: nowrap;
+}
+.filter-chip {
+    /* Basic styling for the filter button (chip) */
+    background-color: var(--gray-200);
+    color: var(--text-primary-color);
+    padding: 0.5rem 0.75rem;
+    border-radius: 9999px; /* Pill shape */
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .filter-chip:hover {
+        background-color: var(--gray-300);
+    }
+
+    .filter-chip.active {
+        /* Highlight style for the active filter */
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+        .filter-chip.active .divider {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .filter-chip.active .filter-value {
+            color: white;
+        }
+
+.divider {
+    /* Vertical line separator */
+    width: 1px;
+    height: 1.2rem;
+    background-color: var(--gray-400);
+}
+
+.expand-arrow {
+    /* Styling for the dropdown arrow icon */
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+}
+
+    .expand-arrow.rotate {
+        /* Rotates the arrow when the dropdown is active */
+        transform: rotate(180deg);
+    }
+
+.filter-dropdown {
+    /* Styles for the dropdown menu itself */
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    background-color: var(--card-background-color);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    min-width: 150px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-item {
+    /* Style for each option in the dropdown */
+    background-color: transparent;
+    border: none;
+    text-align: right;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+    color: var(--text-primary-color);
+}
+
+    .dropdown-item:hover {
+        background-color: var(--gray-200);
+    }
+
+    .dropdown-item.selected {
+        /* Highlight style for the selected option */
+        background-color: var(--primary-light);
+        color: white;
+    }
