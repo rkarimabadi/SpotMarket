@@ -1,0 +1,26 @@
+﻿.download-buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem; /* فاصله بین دکمه‌ها */
+    flex-wrap: wrap; /* در صفحه‌های کوچک، دکمه‌ها زیر هم قرار می‌گیرند */
+    padding: 1rem 0;
+}
+
+    .download-buttons-container a {
+        display: inline-block;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+        .download-buttons-container a:hover {
+            transform: scale(1.05); /* کمی بزرگنمایی هنگام هاور */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 12px; /* برای هماهنگی با گوشه‌های گرد عکس */
+        }
+
+    .download-buttons-container img {
+        max-width: 220px; /* حداکثر عرض دکمه */
+        height: auto;
+        display: block;
+        border-radius: 12px; /* گرد کردن گوشه‌های تصویر */
+    }

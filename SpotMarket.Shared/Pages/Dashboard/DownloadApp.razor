@@ -1,0 +1,17 @@
+﻿<div class="download-buttons-container">
+    <a href="@BazaarUrl" target="_blank" rel="noopener noreferrer" title="دانلود از کافه بازار">
+        <img src="_content/SpotMarket.Shared/images/cafe-bazar.png" alt="دریافت برنامه از کافه بازار" />
+    </a>
+
+    <a href="@ApkUrl" target="_blank" rel="noopener noreferrer" title="دانلود مستقیم فایل APK">
+        <img src="_content/SpotMarket.Shared/images/android.png" alt="دانلود مستقیم برنامه برای اندروید" />
+    </a>
+</div>
+
+@code {
+
+    [Parameter]
+    public string BazaarUrl { get; set; } = "#";
+    [Parameter]
+    public string ApkUrl { get; set; } = "#";
+}
