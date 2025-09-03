@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Components.Web;
+﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.StaticFiles;
 using SpotMarket.Shared;
 using SpotMarket.Shared.Extensions;
 using SpotMarket.Shared.Services.App;
