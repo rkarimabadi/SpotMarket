@@ -26,8 +26,8 @@
     {
         public string CompetitionTabTitle { get; set; } = "داغ‌ترین رقابت‌ها";
         public string DemandTabTitle { get; set; } = "بیشترین تقاضا";
-        public List<MarketMoverItem> CompetitionItems { get; set; } = new();
-        public List<MarketMoverItem> DemandItems { get; set; } = new();
+        public IEnumerable<MarketMoverItem> CompetitionItems { get; set; } = Enumerable.Empty<MarketMoverItem>();
+        public IEnumerable<MarketMoverItem> DemandItems { get; set; } = Enumerable.Empty<MarketMoverItem>();
         public string? EffectiveDate { get; set; }
         public bool IsForToday { get; set; }
     }

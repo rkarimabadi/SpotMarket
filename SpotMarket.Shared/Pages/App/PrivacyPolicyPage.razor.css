@@ -1,0 +1,27 @@
+﻿.text-l {
+    font-size: large;
+}
+
+.text-sm {
+    font-size: small;
+}
+
+.text-xs {
+    font-size: x-small;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.text-gray-500 {
+    color: var(--gray-500);
+}

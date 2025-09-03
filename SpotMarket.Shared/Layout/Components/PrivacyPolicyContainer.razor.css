@@ -1,0 +1,15 @@
+﻿.privacy-policy-container {
+    text-align: center;
+}
+
+.text-xs {
+    font-size: x-small;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.privacy-policy-text {
+    text-decoration: none;
+}

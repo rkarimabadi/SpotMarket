@@ -17,7 +17,7 @@
     /// </summary>
     public class MarketPulseData
     {
-        public List<PulseCardItem> Items { get; set; } = new();
+        public IEnumerable<PulseCardItem> Items { get; set; } = Enumerable.Empty<PulseCardItem>();
         public string? EffectiveDate { get; set; }
         public bool IsForToday { get; set; }
     }

@@ -19,7 +19,7 @@
     /// </summary>
     public class TradingHallsData
     {
-        public List<TradingHallItem> Items { get; set; } = new();
+        public IEnumerable<TradingHallItem> Items { get; set; } = [];
         public string? EffectiveDate { get; set; }
         public bool IsForToday { get; set; }
     }
