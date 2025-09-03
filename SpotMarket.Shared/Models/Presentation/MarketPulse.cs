@@ -9,7 +9,6 @@
         public string Value { get; set; } = string.Empty;
         public string Change { get; set; } = string.Empty;
         public string ChangeLabel { get; set; } = string.Empty;
-
         public ValueState ChangeState { get; set; } = ValueState.Neutral;
     }
 
@@ -18,9 +17,10 @@
     /// </summary>
     public class MarketPulseData
     {
-        public IEnumerable<PulseCardItem> Items { get; set; } = new List<PulseCardItem>();
+        public List<PulseCardItem> Items { get; set; } = new();
+        public string? EffectiveDate { get; set; }
+        public bool IsForToday { get; set; }
     }
-
     public class MarketMetricData
     {
         public List<MarketPulseMetric> Metrics { get; set; } = new();

@@ -27,6 +27,8 @@
     /// </summary>
     public class SupplyRiskData
     {
-        public IEnumerable<SupplyRiskItem> Items { get; set; } = new List<SupplyRiskItem>();
+        public List<SupplyRiskItem> Items { get; set; } = new();
+        public string? EffectiveDate { get; set; }
+        public bool IsForToday { get; set; }
     }
 }

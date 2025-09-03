@@ -9,6 +9,8 @@
 
     public class MarketSentimentData
     {
-        public IEnumerable<SentimentItem> Items { get; set; } = Enumerable.Empty<SentimentItem>();
+        public List<SentimentItem> Items { get; set; } = new();
+        public string? EffectiveDate { get; set; }
+        public bool IsForToday { get; set; }
     }
 }
