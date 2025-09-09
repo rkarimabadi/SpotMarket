@@ -10,6 +10,8 @@
         public int TotalOffers => Items.Sum(m => m.TotalOffers);
         public int TotalTradedOffers => Items.Sum(m => m.TradedOffers);
         public double TotalProgressPercentage => TotalOffers > 0 ? (double)TotalTradedOffers / TotalOffers * 100 : 0;
+        public string? EffectiveDate { get; set; }
+        public bool IsForToday { get; set; }
     }
 
     /// <summary>

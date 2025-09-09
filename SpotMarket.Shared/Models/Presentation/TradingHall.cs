@@ -19,6 +19,8 @@
     /// </summary>
     public class TradingHallsData
     {
-        public IEnumerable<TradingHallItem> Items { get; set; } = new List<TradingHallItem>();
+        public IEnumerable<TradingHallItem> Items { get; set; } = [];
+        public string? EffectiveDate { get; set; }
+        public bool IsForToday { get; set; }
     }
 }

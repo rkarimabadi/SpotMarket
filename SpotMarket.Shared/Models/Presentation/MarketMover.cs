@@ -17,7 +17,7 @@
     /// <summary>
     /// وضعیت مقدار را برای تعیین رنگ (مثبت، منفی، خنثی) مشخص می‌کند
     /// </summary>
-    public enum ValueState { Neutral, Positive, Negative }
+    public enum ValueState { Neutral, Positive, Negative,  }
 
     /// <summary>
     /// نگهدارنده کل داده‌های مورد نیاز برای ویجت پویایی بازار
@@ -28,6 +28,8 @@
         public string DemandTabTitle { get; set; } = "بیشترین تقاضا";
         public IEnumerable<MarketMoverItem> CompetitionItems { get; set; } = Enumerable.Empty<MarketMoverItem>();
         public IEnumerable<MarketMoverItem> DemandItems { get; set; } = Enumerable.Empty<MarketMoverItem>();
+        public string? EffectiveDate { get; set; }
+        public bool IsForToday { get; set; }
     }
 
 }
