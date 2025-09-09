@@ -1,0 +1,177 @@
+﻿.progress-widget {
+    background: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 1.5rem; /* 24px */
+    padding: 1.25rem;
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+    max-width: 350px; /* To ensure consistency */
+}
+
+.widget-header {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 0.5rem;
+}
+
+.market-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+}
+
+.progress-ring-container {
+    position: relative;
+    width: 160px; /* Slightly smaller for better balance */
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+    .progress-ring-container svg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+    }
+
+.ring-track, .ring-progress {
+    fill: none;
+    stroke-linecap: round;
+}
+
+.ring-track {
+    stroke: var(--border-color);
+    stroke-width: 10;
+    opacity: 0.5;
+}
+
+.ring-progress {
+    stroke-width: 10;
+    transition: stroke-dashoffset 0.5s linear, stroke 0.5s ease;
+}
+
+.ring-center-content {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.time-display {
+    font-size: 2.25rem; /* Adjusted for balance */
+    font-weight: 700;
+    color: var(--text-primary-color);
+    font-family: monospace;
+}
+
+.time-label, .status-icon-display {
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+    font-weight: 500;
+    margin-top: -0.25rem;
+}
+
+.status-icon-display {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.phase-info-section {
+    text-align: center;
+    width: 100%;
+    padding: 0 0.5rem; /* Add some horizontal padding */
+}
+
+.phase-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    margin: 0 0 0.25rem 0;
+}
+
+.instrument-info {
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+    margin: 0;
+    line-height: 1.4;
+    word-break: break-word; /* Prevents overflow */
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background-color: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s linear;
+}
+
+.widget-footer {
+    width: 100%;
+    padding-top: 1rem;
+    margin-top: auto; /* Pushes footer to the bottom */
+    border-top: 1px solid var(--border-color);
+}
+
+.time-range {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+.footer-separator {
+    width: 20px;
+    height: 1px;
+    background-color: var(--border-color);
+}
+
+/* --- State-specific styles --- */
+
+.progress-widget.upcoming {
+    opacity: 0.8;
+}
+
+.progress-widget.completed {
+    opacity: 0.6;
+}
+
+.progress-widget.active {
+    border-color: rgba(var(--primary-color-rgb), 0.5);
+    box-shadow: 0 8px 25px rgba(var(--primary-color-rgb), 0.1);
+}
+
+    .progress-widget.active .time-display {
+        animation: pulse-text 1.5s infinite ease-in-out;
+    }
+
+@keyframes pulse-text {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.03);
+        opacity: 0.95;
+    }
+}

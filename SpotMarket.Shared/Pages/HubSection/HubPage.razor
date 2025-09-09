@@ -1,0 +1,55 @@
+﻿@page "/hub"
+
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration configuration
+
+<h3>@serverTime</h3>
+<p>
+    @foreach (var tradeBoardMarketStepView in tradeBoardMarketStepViewList)
+    {
+@*         <MarketPhaseTicker Data="tradeBoardMarketStepView"/> *@
+        <MarketPhaseProgress Data="tradeBoardMarketStepView"/>
+    }
+</p>
+@code {
+    private string? serverTime;
+    private TradeBoardDataView tradeBoardDataView = new TradeBoardDataView();
+    private List<TradeBoardMarketStepView> tradeBoardMarketStepViewList = [];
+    private HubConnection? _connection;
+    protected override async Task OnInitializedAsync()
+    {
+        var apiBaseUrl = configuration.GetValue<string>("ApiSettings:BaseUrl");
+        _connection = new HubConnectionBuilder()
+                .WithUrl($"{apiBaseUrl}/hubs/trading-markets")
+                .Build();
+        _connection.On<String>(IPublicMsg.TIME_RECEIVE_MSG, (message) =>
+            {
+                if (!string.IsNullOrEmpty(message))
+                {
+                    serverTime = message;
+                    StateHasChanged();
+                }
+            });
+        _connection.On<String>(IPublicMsg.RECEIVE_MSG, (message) =>
+        {
+            if (!string.IsNullOrEmpty(message))
+            {
+                tradeBoardDataView = JsonConvert.DeserializeObject<TradeBoardDataView>(message);
+                StateHasChanged();
+            }
+        });
+        _connection.On<TradeBoardMarketStepView>(IPublicMsg.MarketStepRECEIVEMSG, (message) =>
+        {
+            if (message is not null)
+            {
+                var item = tradeBoardMarketStepViewList.RemoveAll(x => x.MarketId == message.MarketId && x.ActiveInstrumentId == message.ActiveInstrumentId);
+                tradeBoardMarketStepViewList.Add(message);
+                StateHasChanged();
+            }
+        });
+        await _connection.StartAsync();
+    }
+}
+

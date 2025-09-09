@@ -1,0 +1,139 @@
+﻿@using System.Globalization
+@using System.Text.RegularExpressions
+@using SpotMarket.Shared.Models.Presentation
+
+@if (Data != null)
+{
+    <div class="progress-widget @GetStatusCssClass(Data.Status)">
+        <div class="widget-header">
+            <span class="market-name">@Data.MarketName</span>
+        </div>
+        @Data.Counter
+        <div class="progress-ring-container">
+            <svg viewBox="0 0 120 120">
+                <circle class="ring-track" cx="60" cy="60" r="54" />
+                <circle class="ring-progress" cx="60" cy="60" r="54"
+                        stroke="@Data.Color"
+                        stroke-dasharray="@circumference"
+                        stroke-dashoffset="@progressOffset" />
+            </svg>
+            <div class="ring-center-content">
+                @if (Data.Status == 1) // Active
+                {
+                    <div class="time-display">@remainingTimeDisplay</div>
+                    <div class="time-label">زمان باقیمانده</div>
+                }
+                else
+                {
+                    <div class="status-icon-display">
+                        <i class="@GetStatusIconClass(Data.Status)"></i>
+                    </div>
+                    <div class="time-label">@GetStatusText(Data.Status)</div>
+                }
+            </div>
+        </div>
+
+        <div class="phase-info-section">
+            <h3 class="phase-title">@_phaseName</h3>
+            @if (!string.IsNullOrEmpty(_instrumentInfo))
+            {
+                <p class="instrument-info">@_instrumentInfo</p>
+            }
+        </div>
+
+        <!-- New Live Progress Bar -->
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: @_progressPercentage%; background-color: @Data.Color;"></div>
+        </div>
+
+        <div class="widget-footer">
+            <div class="time-range">
+                <i class="bi bi-clock"></i>
+                <span>@Data.StartTime</span>
+                <div class="footer-separator"></div>
+                <span>@Data.FinishTime</span>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public TradeBoardMarketStepView? Data { get; set; }
+
+    private double progressOffset = 339.29;
+    private string remainingTimeDisplay = "00:00";
+    private double _progressPercentage = 0;
+    private const double circumference = 2 * Math.PI * 54;
+
+    private string _phaseName = string.Empty;
+    private string _instrumentInfo = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        if (Data != null)
+        {
+            ParseStepDescription();
+            CalculateProgress();
+        }
+    }
+
+    private void ParseStepDescription()
+    {
+        if (string.IsNullOrEmpty(Data?.StepDescription))
+        {
+            _phaseName = "نامشخص";
+            _instrumentInfo = string.Empty;
+            return;
+        }
+
+        var match = Regex.Match(Data.StepDescription, @"^(.*?)(\[.*\])$");
+        if (match.Success)
+        {
+            _phaseName = match.Groups[1].Value.Trim();
+            _instrumentInfo = string.Join(" ", Regex.Matches(Data.StepDescription, @"\[.*?\]").Select(m => m.Value));
+        }
+        else
+        {
+            _phaseName = Data.StepDescription;
+            _instrumentInfo = string.Empty;
+        }
+    }
+
+    private void CalculateProgress()
+    {
+        if (Data == null) return;
+
+        double totalDurationInSeconds = Data.Duration * 60;
+
+        if (Data.Counter ==  0) // Completed
+        {
+            progressOffset = 0;
+            _progressPercentage = 100;
+            remainingTimeDisplay = "00:00";
+        }
+        else if (Data.Duration > 0 && Data.Counter > 0) // Active
+        {
+            double remainingSeconds = Data.Counter;
+            double elapsedSeconds = totalDurationInSeconds - remainingSeconds;
+            double progressRatio = Math.Max(0, Math.Min(1, elapsedSeconds / totalDurationInSeconds));
+
+            _progressPercentage = progressRatio * 100;
+            progressOffset = circumference * (1 - progressRatio);
+
+            var timeSpan = TimeSpan.FromSeconds(remainingSeconds);
+            remainingTimeDisplay = $"{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
+        }
+        else // Upcoming or other states
+        {
+            progressOffset = circumference;
+            _progressPercentage = 0;
+            remainingTimeDisplay = TimeSpan.FromMinutes(Data.Duration).ToString(@"mm\:ss");
+        }
+    }
+
+    private string GetStatusCssClass(int status) => status switch { 1 => "active", 2 => "completed", _ => "upcoming" };
+    private string GetStatusIconClass(int status) => status switch { 2 => "bi bi-check-lg", _ => "bi bi-hourglass-top" };
+    private string GetStatusText(int status) => status switch { 2 => "پایان یافته", _ => "در صف انتظار" };
+}
+

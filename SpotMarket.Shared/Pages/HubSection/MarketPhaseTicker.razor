@@ -1,0 +1,58 @@
+﻿@using SpotMarket.Shared.Models.Presentation
+
+@if (Data != null)
+{
+    <div class="ticker-widget @GetStatusCssClass(Data.Status)">
+        <div class="widget-header">
+            <span class="market-name">@Data.MarketName</span>
+            <div class="status-indicator">
+                <i class="@GetStatusIconClass(Data.Status)" style="color: @Data.Color;"></i>
+            </div>
+        </div>
+
+        <div class="widget-body">
+            <h2 class="phase-title">@Data.StepDescription</h2>
+        </div>
+
+        <div class="widget-footer">
+            <div class="info-item">
+                <i class="bi bi-clock"></i>
+                <span>@Data.StartTime - @Data.FinishTime</span>
+            </div>
+            <div class="info-item">
+                <i class="bi bi-hourglass-split"></i>
+                <span>@Data.Duration.ToString("F0") دقیقه</span>
+            </div>
+            <div class="info-item">
+                <i class="bi bi-hourglass-split"></i>
+                <span>@Data.Counter.ToString("F0")</span>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public TradeBoardMarketStepView? Data { get; set; }
+
+    /// <summary>
+    /// بر اساس وضعیت مرحله، کلاس CSS مناسب را برمی‌گرداند.
+    /// 0: Upcoming, 1: Active, 2: Completed
+    /// </summary>
+    private string GetStatusCssClass(int status) => status switch
+    {
+        1 => "active",
+        2 => "completed",
+        _ => "upcoming"
+    };
+
+    /// <summary>
+    /// بر اساس وضعیت مرحله، آیکون مناسب را برمی‌گرداند.
+    /// </summary>
+    private string GetStatusIconClass(int status) => status switch
+    {
+        1 => "bi bi-play-circle-fill",
+        2 => "bi bi-check-circle-fill",
+        _ => "bi bi-circle"
+    };
+}

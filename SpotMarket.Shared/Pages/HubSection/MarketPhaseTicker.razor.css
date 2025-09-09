@@ -1,0 +1,101 @@
+﻿.ticker-widget {
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    font-family: var(--font-family);
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Creates space between header, body, footer */
+    transition: all 0.3s ease-in-out;
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.market-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+}
+
+.status-indicator {
+    font-size: 1.75rem; /* 28px */
+}
+
+.widget-body {
+    text-align: center;
+}
+
+.phase-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    margin: 0;
+}
+
+.widget-footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    font-weight: 500;
+}
+
+    .info-item i {
+        font-size: 1.1rem;
+    }
+
+/* --- State-specific styles --- */
+
+.ticker-widget.upcoming {
+    opacity: 0.7;
+    background-color: var(--background-color);
+}
+
+.ticker-widget.completed {
+    opacity: 0.5;
+}
+
+    .ticker-widget.completed .phase-title {
+        text-decoration: line-through;
+    }
+
+.ticker-widget.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(var(--primary-color-rgb), 0.2);
+}
+
+    .ticker-widget.active .status-indicator {
+        animation: pulse 1.5s infinite;
+    }
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
