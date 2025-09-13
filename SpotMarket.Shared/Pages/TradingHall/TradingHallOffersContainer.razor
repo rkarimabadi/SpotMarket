@@ -1,0 +1,41 @@
+﻿@using SpotMarket.Shared.Models.Presentation
+
+<div class="offers-container-widget">
+    <div class="segment-control">
+        <button class="@GetSegmentClass("traded")" @onclick='() => SetActiveSegment("traded")'>
+            <span>معامله شده</span>
+        </button>
+        <button class="@GetSegmentClass("trading")" @onclick='() => SetActiveSegment("trading")'>
+            <span>در حال معامله</span>
+        </button>
+        <button class="@GetSegmentClass("upcoming")" @onclick='() => SetActiveSegment("upcoming")'>
+            <span>آینده</span>
+        </button>
+    </div>
+
+    <div class="offers-content">
+        @switch (_activeSegment)
+        {
+            case "traded":
+                <TradingHallTradedOffersList />
+                break;
+            case "trading":
+                <TradingHallInTradingOffersList />
+                break;
+            case "upcoming":
+                <TradingHallUpcomingOffersList />
+                break;
+        }
+    </div>
+</div>
+
+@code {
+    private string _activeSegment = "traded";
+
+    private void SetActiveSegment(string segment)
+    {
+        _activeSegment = segment;
+    }
+
+    private string GetSegmentClass(string segment) => _activeSegment == segment ? "segment-button active" : "segment-button";
+}

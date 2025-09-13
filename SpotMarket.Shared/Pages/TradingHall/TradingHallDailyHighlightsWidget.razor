@@ -1,0 +1,82 @@
+﻿@using SpotMarket.Shared.Services.Presentation
+@using SpotMarket.Shared.Models.Presentation
+@inject ITradingHallService HallService
+
+@if (_isLoading)
+{
+    <div class="highlights-widget-placeholder"></div>
+}
+else if (_data != null)
+{
+    <div class="widget-header">
+        <h3 class="widget-title">برترین‌های روز</h3>
+    </div>
+    <div class="segment-control">
+        <button class="@GetSegmentClass("value")" @onclick='() => SetActiveSegment("value")'>بیشترین ارزش</button>
+        <button class="@GetSegmentClass("hot")" @onclick='() => SetActiveSegment("hot")'>داغ‌ترین رقابت</button>
+        <button class="@GetSegmentClass("heavy")" @onclick='() => SetActiveSegment("heavy")'>سنگین‌ترین تقاضا</button>
+    </div>
+    <div class="highlights-widget">
+        <div class="highlights-list">
+            @foreach (var item in GetActiveList())
+            {
+                <div class="highlight-item">
+                    <div class="item-icon @GetIconBgClass(_activeSegment)">
+                        <i class="@GetIconClass(_activeSegment)"></i>
+                    </div>
+                    <div class="item-info">
+                        <span class="commodity-name">@item.CommodityName</span>
+                        <span class="description">@item.Description</span>
+                    </div>
+                    <div class="item-value">
+                        @item.FormattedValue
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private bool _isLoading = true;
+    private DailyHighlightsData? _data;
+    private string _activeSegment = "value";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _data = await HallService.GetHighlightsDataAsync();
+        _isLoading = false;
+    }
+
+    private void SetActiveSegment(string segment)
+    {
+        _activeSegment = segment;
+    }
+
+    private string GetSegmentClass(string segment) => _activeSegment == segment ? "segment-button active" : "segment-button";
+
+    private List<HighlightItem> GetActiveList()
+    {
+        if (_data == null) return new List<HighlightItem>();
+        return _activeSegment switch
+        {
+            "hot" => _data.HottestCompetitions,
+            "heavy" => _data.HeaviestCompetitions,
+            _ => _data.TopValueTrades,
+        };
+    }
+
+    private string GetIconClass(string segment) => segment switch
+    {
+        "hot" => "bi bi-fire",
+        "heavy" => "bi bi-stack",
+        _ => "bi bi-cash-coin",
+    };
+
+    private string GetIconBgClass(string segment) => segment switch
+    {
+        "hot" => "bg-hot",
+        "heavy" => "bg-heavy",
+        _ => "bg-value",
+    };
+}

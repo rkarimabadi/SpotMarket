@@ -1,0 +1,155 @@
+﻿.status-widget {
+    background-color: var(--card-background-color);
+    border-radius: 16px; /* Consistent with modern UI component rounding */
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.status-widget-placeholder {
+    background-color: var(--gray-200);
+    border-radius: 16px;
+    height: 180px;
+    margin-bottom: 2rem;
+}
+
+/* Offer Stats Section */
+.offers-stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.header-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.total-value {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    font-weight: 500;
+}
+
+.progress-bar {
+    display: flex;
+    width: 100%;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--background-color);
+    margin-bottom: 1rem;
+}
+
+.progress-segment {
+    height: 100%;
+    transition: width 0.5s ease-in-out;
+}
+
+    .progress-segment.traded {
+        background-color: var(--success-color);
+    }
+
+    .progress-segment.in-trading {
+        background-color: var(--warning-color);
+    }
+
+    .progress-segment.remaining {
+        background-color: var(--border-color);
+    }
+
+.progress-legend {
+    display: flex;
+    justify-content: space-around;
+    font-size: 0.8rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary-color);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+    .dot.traded {
+        background-color: var(--success-color);
+    }
+
+    .dot.in-trading {
+        background-color: var(--warning-color);
+    }
+
+    .dot.remaining {
+        background-color: var(--border-color);
+    }
+
+/* Divider */
+.divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 1.25rem 0;
+}
+
+/* Timing & Status Section */
+.timing-status-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timing-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+}
+
+    .timing-item .bi {
+        font-size: 1.25rem;
+    }
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.status-open {
+    color: var(--success-color);
+}
+
+    .status-open .status-dot {
+        background-color: var(--success-color);
+    }
+
+.status-preopening {
+    color: var(--warning-color);
+}
+
+    .status-preopening .status-dot {
+        background-color: var(--warning-color);
+    }
+
+.status-closed {
+    color: var(--danger-color);
+}
+
+    .status-closed .status-dot {
+        background-color: var(--danger-color);
+    }

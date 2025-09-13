@@ -1,0 +1,39 @@
+﻿.offers-container-widget {
+    /* This component itself doesn't need much styling, 
+       it acts as a container for other components. */
+}
+
+.segment-control {
+    display: flex;
+    background-color: var(--gray-200);
+    border-radius: 12px;
+    padding: 5px;
+    margin-bottom: 1.5rem;
+}
+
+.segment-button {
+    flex: 1;
+    padding: 0.75rem 0.5rem;
+    border: none;
+    background-color: transparent;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-secondary-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+    .segment-button.active {
+        background-color: var(--card-background-color);
+        color: var(--primary-color);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+.offers-content {
+    /* Content area for the selected segment's component */
+}

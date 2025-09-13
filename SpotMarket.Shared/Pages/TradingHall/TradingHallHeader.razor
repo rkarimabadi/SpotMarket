@@ -1,0 +1,25 @@
+﻿@using SpotMarket.Shared.Services.Presentation
+@using SpotMarket.Shared.Models.Presentation
+@inject ITradingHallService HallService
+
+@if (_data != null)
+{
+    <div class="trading-hall-header-container">
+        <div class="header-icon">
+            <i class="bi bi-shop"></i>
+        </div>
+        <div class="header-info">
+            <h1 class="header-title">@_data.Title</h1>
+            <h2 class="header-subtitle">@_data.Subtitle</h2>
+        </div>
+    </div>
+}
+
+@code {
+    private TradingHallHeaderData? _data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _data = await HallService.GetHeaderDataAsync();
+    }
+}

@@ -1,0 +1,82 @@
+﻿@using SpotMarket.Shared.Services.Presentation
+@using SpotMarket.Shared.Models.Presentation
+@inject ITradingHallService HallService
+
+@if (_isLoading)
+{
+    <div class="status-widget-placeholder"></div>
+}
+else if (_data != null)
+{
+    <div class="status-widget">
+        <!-- Offer Stats Section -->
+        <div class="offers-stats-header">
+            <span class="header-title">آمار عرضه‌های امروز</span>
+            <span class="total-value">@_data.TotalOffers عرضه</span>
+        </div>
+        <div class="progress-bar flex-row">
+            <div class="progress-segment traded" style="width: @(_tradedPercentage)%" title="معامله شده: @_data.TradedOffers"></div>
+            <div class="progress-segment in-trading" style="width: @(_inTradingPercentage)%" title="در حال معامله: @_data.InTradingOffers"></div>
+            <div class="progress-segment remaining" style="width: @(_remainingPercentage)%" title="باقی‌مانده: @_data.RemainingOffers"></div>
+        </div>
+        <div class="progress-legend">
+            <div class="legend-item"><span class="dot traded"></span>معامله شده (@_data.TradedOffers)</div>
+            <div class="legend-item"><span class="dot in-trading"></span>در حال معامله (@_data.InTradingOffers)</div>
+            <div class="legend-item"><span class="dot remaining"></span>باقی‌مانده (@_data.RemainingOffers)</div>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider"></div>
+
+        <!-- Hall Timings & Status Section -->
+        <div class="timing-status-section">
+            <div class="timing-item">
+                <i class="bi bi-clock"></i>
+                <span>شروع: <strong>@_data.StartTime.ToString(@"hh\:mm")</strong></span>
+                <span>|</span>
+                <span>پایان: <strong>@_data.EndTime.ToString(@"hh\:mm")</strong></span>
+            </div>
+            <div class="status-item @GetStatusCssClass(_data.Status)">
+                <span class="status-dot"></span>
+                <span class="status-text">@GetStatusText(_data.Status)</span>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    private bool _isLoading = true;
+    private HallStatusData? _data;
+
+    private double _tradedPercentage = 0;
+    private double _inTradingPercentage = 0;
+    private double _remainingPercentage = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _data = await HallService.GetStatusDataAsync();
+        if (_data != null && _data.TotalOffers > 0)
+        {
+            _tradedPercentage = (double)_data.TradedOffers / _data.TotalOffers * 100;
+            _inTradingPercentage = (double)_data.InTradingOffers / _data.TotalOffers * 100;
+            _remainingPercentage = (double)_data.RemainingOffers / _data.TotalOffers * 100;
+        }
+        _isLoading = false;
+    }
+
+    private string GetStatusText(HallStatus status) => status switch
+    {
+        HallStatus.Open => "باز",
+        HallStatus.Continuous => "پیوسته",
+        HallStatus.PreOpening => "پیش‌گشایش",
+        _ => "بسته"
+    };
+
+    private string GetStatusCssClass(HallStatus status) => status switch
+    {
+        HallStatus.Open or HallStatus.Continuous => "status-open",
+        HallStatus.PreOpening => "status-preopening",
+        _ => "status-closed"
+    };
+}
