@@ -1,10 +1,5 @@
 ﻿using SpotMarket.Shared.Models.Presentation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpotMarket.Shared.Services.Presentation
 {
@@ -18,11 +13,44 @@ namespace SpotMarket.Shared.Services.Presentation
             _httpClient = httpClient;
         }
 
-        /// <inheritdoc />
         public async Task<List<TradingMarketInfo>> GetAllMarketsAsync()
         {
-            // فراخوانی نقطه پایانی 'all' از کنترلر TradingMarketInfoController
             return await _httpClient.GetFromJsonAsync<List<TradingMarketInfo>>($"{_controllerPath}/all") ?? new List<TradingMarketInfo>();
+        }
+        public async Task<TradingHallHeaderData?> GetHeaderDataAsync(int marketId)
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<TradingHallHeaderData>($"{_controllerPath}/{marketId}/header");
+            }
+            catch
+            {
+                return new TradingHallHeaderData("تالار معاملات", "بورس کالا");
+            }
+        }
+
+        public async Task<HallStatusData?> GetStatusDataAsync(int marketId)
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<HallStatusData>($"{_controllerPath}/{marketId}/status");
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<DailyHighlightsData?> GetHighlightsDataAsync(int marketId)
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<DailyHighlightsData>($"{_controllerPath}/{marketId}/highlights");
+            }
+            catch
+            {
+                return new DailyHighlightsData();
+            }
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿@using SpotMarket.Shared.Services.Presentation
-@using SpotMarket.Shared.Models.Presentation
-@inject ITradingHallService HallService
+﻿@inject ITradingMarketInfoService HallService
 
 @if (_isLoading)
 {
@@ -46,6 +44,7 @@ else if (_data != null)
 
 
 @code {
+    [Parameter] public int MarketId { get; set; }
     private bool _isLoading = true;
     private HallStatusData? _data;
 
@@ -55,7 +54,7 @@ else if (_data != null)
 
     protected override async Task OnInitializedAsync()
     {
-        _data = await HallService.GetStatusDataAsync();
+        _data = await HallService.GetStatusDataAsync(MarketId);
         if (_data != null && _data.TotalOffers > 0)
         {
             _tradedPercentage = (double)_data.TradedOffers / _data.TotalOffers * 100;

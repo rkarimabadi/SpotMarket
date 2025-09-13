@@ -1,6 +1,6 @@
 ﻿@using SpotMarket.Shared.Services.Presentation
 @using SpotMarket.Shared.Models.Presentation
-@inject ITradingHallService HallService
+@inject ITradingMarketInfoService HallService
 
 @if (_data != null)
 {
@@ -16,10 +16,13 @@
 }
 
 @code {
+    [Parameter] public int MarketId { get; set; }
+    [Parameter] public EventCallback<TradingHallHeaderData> OnDataReceived { get; set; }
     private TradingHallHeaderData? _data;
 
     protected override async Task OnInitializedAsync()
     {
-        _data = await HallService.GetHeaderDataAsync();
+        _data = await HallService.GetHeaderDataAsync(MarketId);
+        await OnDataReceived.InvokeAsync(_data);
     }
 }

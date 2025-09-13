@@ -29,7 +29,6 @@
     overflow: hidden;
 }
 
-/* استایل جدید برای لینک شدن هر آیتم */
 .news-item-link {
     text-decoration: none;
     color: inherit;
@@ -95,15 +94,17 @@
 
 .news-source {
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: 300;
     color: var(--text-secondary-color);
     margin-bottom: 0.25rem;
 }
 
 .news-title {
-    font-weight: 600;
-    font-size: 1.0625rem;
+    font-weight: 500;
+    font-size: 1rem;
     line-height: 1.4;
+    text-align: justify;
+    text-justify: distribute;
 }
 
 [data-bs-theme="dark"] .data-card {

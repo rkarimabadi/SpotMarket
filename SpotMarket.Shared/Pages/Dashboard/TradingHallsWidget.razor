@@ -1,4 +1,4 @@
-﻿
+﻿@inject NavigationManager NavigationManager
 @inject IDashboardService DashboardService
 <div class="widget-container">
     <div class="section-header">
@@ -28,7 +28,7 @@
         <div class="horizontal-scroll-container">
             @foreach (var hall in data.Items)
             {
-                <div class="trading-hall-card">
+                <div class="trading-hall-card" @onclick="() => GoTo(hall)">
                     <div class="card-header">
                         <div class="hall-icon @hall.IconBgCssClass"><i class="@hall.IconCssClass"></i></div>
                         <h4 class="hall-title">@hall.Title</h4>
@@ -107,5 +107,12 @@
             ValueState.Negative => "ratio-low",
             _ => "ratio-medium"
         };
+    }
+    private void GoTo(TradingHallItem item)
+    {
+        if (item.Id > 0)
+        {
+            NavigationManager.NavigateTo($"/trading-halls/{item.Id}");
+        }
     }
 }

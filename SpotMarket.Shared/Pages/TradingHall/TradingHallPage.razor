@@ -1,25 +1,25 @@
-﻿@page "/markets/physical"
-@using SpotMarket.Shared.Services.Presentation
-@using SpotMarket.Shared.Models.Presentation
+﻿@page "/trading-halls/{MarketId:int}"
 @inject NavStateService NavState
-
-<PageTitle>@_pageTitle</PageTitle>
+<PageTitle>@pageTitle</PageTitle>
 
 <div class="trading-hall-page">
-    <TradingHallHeader />
-    <TradingHallStatusWidget />
-    <TradingHallDailyHighlightsWidget />
+    <TradingHallHeader MarketId="MarketId" OnDataReceived="OnDataReceived" />
+    <TradingHallStatusWidget MarketId="MarketId" />
+    <TradingHallDailyHighlightsWidget MarketId="MarketId" />
     <TradingHallOffersContainer/>
 </div>
 
 @code {
-    private string _pageTitle = "تالار معاملات فیزیکی";
+    [Parameter] public int MarketId { get; set; }
     private string _activeTab = "trades";
-
-    protected override void OnInitialized()
+    private string? pageTitle = "تالار معاملات فیزیکی";
+    private void OnDataReceived(TradingHallHeaderData data)
     {
-        NavState.SetNavState(_pageTitle, true);
+        if (data != null && !string.IsNullOrEmpty(data.Title))
+        {
+            pageTitle = $"{data.Title}";
+            NavState.SetNavState(pageTitle, true);
+        }
     }
-
 }
 

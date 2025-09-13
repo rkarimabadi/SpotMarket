@@ -1,6 +1,4 @@
-﻿@using SpotMarket.Shared.Services.Presentation
-@using SpotMarket.Shared.Models.Presentation
-@inject ITradingHallService HallService
+﻿@inject ITradingMarketInfoService HallService
 
 @if (_isLoading)
 {
@@ -24,11 +22,11 @@ else if (_data != null)
                     <div class="item-icon @GetIconBgClass(_activeSegment)">
                         <i class="@GetIconClass(_activeSegment)"></i>
                     </div>
-                    <div class="item-info">
+                    <div class="item-info text-truncate">
                         <span class="commodity-name">@item.CommodityName</span>
                         <span class="description">@item.Description</span>
                     </div>
-                    <div class="item-value">
+                    <div class="item-value text-nowrap">
                         @item.FormattedValue
                     </div>
                 </div>
@@ -38,13 +36,14 @@ else if (_data != null)
 }
 
 @code {
+    [Parameter] public int MarketId { get; set; }
     private bool _isLoading = true;
     private DailyHighlightsData? _data;
     private string _activeSegment = "value";
 
     protected override async Task OnInitializedAsync()
     {
-        _data = await HallService.GetHighlightsDataAsync();
+        _data = await HallService.GetHighlightsDataAsync(MarketId);
         _isLoading = false;
     }
 
