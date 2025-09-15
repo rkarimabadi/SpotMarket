@@ -1,5 +1,4 @@
-﻿/* Shared styles for all three placeholder components */
-.offer-list-placeholder {
+﻿.empty-state {
     border: 2px dashed var(--border-color);
     border-radius: 12px;
     padding: 3rem 2rem;
@@ -13,17 +12,22 @@
     gap: 0.5rem;
 }
 
-    .offer-list-placeholder .bi {
+    .empty-state .bi {
         font-size: 2.5rem;
         color: var(--gray-400);
     }
 
-    .offer-list-placeholder .title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--text-primary-color);
-    }
-
-    .offer-list-placeholder .subtitle {
+    .empty-state span {
         font-size: 0.9rem;
     }
+
+.loading-indicator {
+    padding: 3rem 2rem;
+    text-align: center;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}

@@ -3,11 +3,11 @@
         <button class="@GetSegmentClass("traded")" @onclick='() => SetActiveSegment("traded")'>
             <span>معامله شده</span>
         </button>
-        <button class="@GetSegmentClass("trading")" @onclick='() => SetActiveSegment("trading")'>
-            <span>در حال معامله</span>
+        <button class="@GetSegmentClass("untraded")" @onclick='() => SetActiveSegment("untraded")'>
+            <span>در انتظار عرضه</span>
         </button>
-        <button class="@GetSegmentClass("upcoming")" @onclick='() => SetActiveSegment("upcoming")'>
-            <span>آینده</span>
+        <button class="@GetSegmentClass("failed")" @onclick='() => SetActiveSegment("failed")'>
+            <span>معامله نشد</span>
         </button>
     </div>
 
@@ -15,19 +15,22 @@
         @switch (_activeSegment)
         {
             case "traded":
-                <TradingHallTradedOffersList />
+                <TradingHallTradedOffersList MarketId="MarketId" />
                 break;
-            case "trading":
-                <TradingHallInTradingOffersList />
+            case "untraded":
+                <TradingHallUntradedOffersList MarketId="MarketId" />
                 break;
-            case "upcoming":
-                <TradingHallUpcomingOffersList />
+            case "failed":
+                <TradingHallFailedOffersList MarketId="MarketId" />
                 break;
         }
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public int MarketId { get; set; }
+
     private string _activeSegment = "traded";
 
     private void SetActiveSegment(string segment)

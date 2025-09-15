@@ -52,5 +52,20 @@ namespace SpotMarket.Shared.Services.Presentation
                 return new DailyHighlightsData();
             }
         }
+        
+        public async Task<List<OfferListItem>> GetTradedOffersAsync(int marketId)
+        {
+            return await _httpClient.GetFromJsonAsync<List<OfferListItem>>($"{_controllerPath}/{marketId}/offers/traded") ?? new List<OfferListItem>();
+        }
+
+        public async Task<List<OfferListItem>> GetUntradedOffersAsync(int marketId)
+        {
+            return await _httpClient.GetFromJsonAsync<List<OfferListItem>>($"{_controllerPath}/{marketId}/offers/untraded") ?? new List<OfferListItem>();
+        }
+
+        public async Task<List<OfferListItem>> GetFailedOffersAsync(int marketId)
+        {
+            return await _httpClient.GetFromJsonAsync<List<OfferListItem>>($"{_controllerPath}/{marketId}/offers/failed") ?? new List<OfferListItem>();
+        }
     }
 }

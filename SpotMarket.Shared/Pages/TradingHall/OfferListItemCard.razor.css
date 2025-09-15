@@ -1,0 +1,211 @@
+﻿/* Base styles remain the same */
+:root {
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.offer-card {
+    background: var(--card-background-color);
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    cursor: pointer;
+    border-top-width: 3px; /* Slightly thicker for more impact */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+    .offer-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--card-hover-shadow);
+    }
+
+    .offer-card.status-traded {
+        border-top-color: var(--success-color);
+    }
+
+    .offer-card.status-failed {
+        border-top-color: var(--danger-color);
+    }
+
+    .offer-card.status-untraded {
+        border-top-color: var(--warning-color);
+    }
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.info-section {
+    padding: 1.25rem;
+}
+
+.commodity-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    margin: 0 0 0.25rem 0;
+}
+
+.supplier-name {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+}
+
+    .supplier-name .bi {
+        font-size: 0.8rem;
+    }
+
+.metrics-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    border-top: 1px solid var(--border-color);
+    padding: 1rem 1.25rem;
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+    .metric-item .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-secondary-color);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+.value-unit {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+}
+
+.metric-item .value {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.metric-item .unit {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+/* --- NEW & IMPROVED Details Section --- */
+
+.card-details-transition {
+    /* Wrapper for smooth animation */
+    transition: grid-template-rows 0.3s ease-in-out;
+    display: grid;
+    grid-template-rows: 1fr;
+}
+
+.card-details {
+    overflow: hidden;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Space between rows and status */
+}
+
+.details-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+    .detail-item .label {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.8rem;
+        color: var(--primary-color, #0d6efd);
+        margin-bottom: 0.25rem;
+        font-weight: 500;
+    }
+
+        .detail-item .label .bi {
+            font-size: 0.9rem;
+            background-color: rgba(var(--primary-color-rgb, 13, 110, 253), 0.1);
+            color: var(--primary-color, #0d6efd);
+            border-radius: 6px;
+            width: 26px;
+            height: 26px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0; /* Prevent icon from shrinking if label text is long */
+        }
+
+    .detail-item .value {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--text-primary-color);
+        display: flex;
+        align-items: baseline;
+        gap: 0.25rem;
+        justify-content: end;
+    }
+
+    /* Prominent style for key metrics */
+    .detail-item.prominent .value {
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+        .detail-item.prominent .value.price {
+            color: var(--primary-color);
+        }
+
+    .detail-item .unit, .detail-item .unit-small {
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: var(--text-secondary-color);
+    }
+
+    .detail-item .value.competition.positive {
+        color: var(--success-color);
+    }
+
+    .detail-item .value.competition.negative {
+        color: var(--danger-color);
+    }
+
+.trade-step-info {
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--gray-200);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--text-secondary-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}

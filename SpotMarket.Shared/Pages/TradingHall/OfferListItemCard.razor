@@ -1,0 +1,99 @@
+﻿<div class="offer-card status-@Offer.Status.ToString().ToLower()" @onclick="ToggleDetails">
+    <div class="card-content">
+        <div class="info-section">
+            <h3 class="commodity-name truncate-text">@Offer.CommodityName</h3>
+            <p class="supplier-name truncate-text">
+                <i class="bi bi-building"></i>
+                <span>@Offer.SupplierName</span>
+            </p>
+        </div>
+
+        <div class="metrics-section">
+            <div class="metric-item">
+                <span class="label">حجم عرضه</span>
+                <div class="value-unit">
+                    <span class="value">@Offer.OfferVolume.ToString("N0")</span>
+                    <span class="unit">@Offer.Unit</span>
+                </div>
+            </div>
+            <div class="metric-item">
+                <span class="label">قیمت پایه</span>
+                <div class="value-unit">
+                    <span class="value">@Offer.BasePrice.ToString("N0")</span>
+                    <span class="unit">@Offer.PriceUnit</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (_isDetailsVisible && Offer.TradeDetails != null)
+    {
+        <div class="card-details-transition">
+            <div class="card-details">
+                <!-- Trade Result Section -->
+                <div class="details-row">
+                    <div class="detail-item prominent">
+                        <span class="label"><i class="bi bi-tag-fill"></i> قیمت نهایی</span>
+                        <span class="value price">
+                            @Offer.TradeDetails.FinalPrice.ToString("N0")
+                            <span class="unit">@Offer.PriceUnit</span>
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label"><i class="bi bi-box-seam"></i> حجم معامله</span>
+                        <span class="value">
+                            @Offer.TradeDetails.TradeVolume.ToString("N0")
+                            <span class="unit">@Offer.Unit</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Competition & Demand Section -->
+                <div class="details-row">
+                    @if (Offer.TradeDetails.CompetitionPercentage.HasValue)
+                    {
+                        <div class="detail-item">
+                            <span class="label"><i class="bi bi-graph-up-arrow"></i> رقابت</span>
+                            <span class="value competition @(Offer.TradeDetails.CompetitionPercentage >= 0 ? "positive" : "negative")">
+                                @(Offer.TradeDetails.CompetitionPercentage >= 0 ? "+" : "")@Offer.TradeDetails.CompetitionPercentage?.ToString("F1")%
+                            </span>
+                        </div>
+                    }
+                    @if (Offer.TradeDetails.DemandToOfferRatio.HasValue)
+                    {
+                        <div class="detail-item">
+                            <span class="label"><i class="bi bi-people-fill"></i> نسبت تقاضا</span>
+                            <span class="value">
+                                @(Offer.TradeDetails.DemandToOfferRatio?.ToString("F1"))
+                                <span class="unit-small">برابر عرضه</span>
+                            </span>
+                        </div>
+                    }
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Offer.TradeDetails.TradeStepDescription))
+                {
+                    <div class="trade-step-info">
+                        <i class="bi bi-activity"></i>
+                        <span>@Offer.TradeDetails.TradeStepDescription</span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public OfferListItem Offer { get; set; } = new();
+
+    private bool _isDetailsVisible = false;
+
+    private void ToggleDetails()
+    {
+        if (Offer.TradeDetails != null)
+        {
+            _isDetailsVisible = !_isDetailsVisible;
+        }
+    }
+}

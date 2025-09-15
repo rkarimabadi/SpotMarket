@@ -6,14 +6,14 @@
         <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-        <p>در حال بارگذاری عرضه‌های معامله شده...</p>
+        <p>در حال بارگذاری عرضه‌های در انتظار...</p>
     </div>
 }
 else if (_offers.Count == 0)
 {
     <div class="empty-state">
         <i class="bi bi-info-circle"></i>
-        <span>امروز هیچ عرضه‌ای در این تالار معامله نشده است.</span>
+        <span>هیچ عرضه‌ای در انتظار معامله برای امروز وجود ندارد.</span>
     </div>
 }
 else
@@ -36,7 +36,7 @@ else
     {
         if (MarketId > 0)
         {
-            _offers = await TradingMarketInfoService.GetTradedOffersAsync(MarketId);
+            _offers = await TradingMarketInfoService.GetUntradedOffersAsync(MarketId);
         }
     }
 }

@@ -1,0 +1,105 @@
+﻿@using SpotMarket.Shared.Models.Presentation
+@using System.Text.RegularExpressions
+
+@if (Data != null)
+{
+    <div class="market-step-widget">
+        <div class="widget-header">
+            <i class="bi bi-bar-chart-line-fill"></i>
+            <span class="market-name">@Data.MarketName</span>
+        </div>
+
+        <div class="widget-body">
+            <div class="progress-track">
+                <div class="progress-fill @GetProgressColorClass()" style="width: @ProgressPercentage%">
+                    <div class="progress-info">
+                        <div class="description-block">
+                            <span class="stage-name">@_parsedDescription.StageName</span>
+                            <span class="product-name">@_parsedDescription.ProductName</span>
+                            @if (!string.IsNullOrWhiteSpace(_parsedDescription.OfferCode))
+                            {
+                                <span class="offer-code">
+                                    <i class="bi bi-tag-fill"></i>
+                                    @_parsedDescription.OfferCode
+                                </span>
+                            }
+                        </div>
+                        <span class="timer">@FormattedTime</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="widget-footer">
+            <div class="time-info">
+                <i class="bi bi-clock"></i>
+                <span>@Data.StartTime</span>
+            </div>
+            <div class="time-info">
+                <i class="bi bi-clock-fill"></i>
+                <span>@Data.FinishTime</span>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public TradeBoardMarketStepView? Data { get; set; }
+
+    private ParsedStepDescription _parsedDescription = ParsedStepDescription.Empty;
+
+    protected override void OnParametersSet()
+    {
+        if (Data != null)
+        {
+            _parsedDescription = ParseDescription(Data.StepDescription);
+        }
+    }
+
+    private double ProgressPercentage =>
+        (Data != null && Data.Duration > 0)
+            ? ((Data.Duration - Data.Counter) / Data.Duration) * 100
+            : 0;
+
+    private string FormattedTime =>
+        Data != null
+            ? TimeSpan.FromSeconds(Data.Counter).ToString(@"mm\:ss")
+            : "00:00";
+
+    private string GetProgressColorClass() =>
+        Data?.Color.ToLower() switch
+        {
+            "blue" => "bg-blue",
+            "green" => "bg-green",
+            "red" => "bg-red",
+            "orange" => "bg-orange",
+            _ => "bg-default"
+        };
+
+    private static ParsedStepDescription ParseDescription(string description)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+            return ParsedStepDescription.Empty;
+
+        // Use Regex for robust parsing
+        var match = Regex.Match(description, @"^(.*?)\[(.*?)\]\[(.*?)\]$");
+
+        if (match.Success)
+        {
+            return new ParsedStepDescription(
+                StageName: match.Groups[1].Value.Trim(),
+                OfferCode: match.Groups[2].Value.Trim(),
+                ProductName: match.Groups[3].Value.Trim()
+            );
+        }
+
+        // Fallback if format is unexpected
+        return new ParsedStepDescription(description, string.Empty, string.Empty);
+    }
+
+    private record ParsedStepDescription(string StageName, string OfferCode, string ProductName)
+    {
+        public static ParsedStepDescription Empty => new(string.Empty, string.Empty, string.Empty);
+    }
+}
