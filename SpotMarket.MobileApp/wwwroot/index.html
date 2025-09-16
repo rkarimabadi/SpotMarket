@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="fa">
-
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>کالانما</title>
     <base href="/" />
     <link href="_content/SpotMarket.Shared/css/bootstrap.rtl.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="_content/SpotMarket.Shared/fonts/bootstrap-icons/bootstrap-icons.min.css">
     <link rel="stylesheet" href="_content/SpotMarket.Shared/fonts/Peyda/02-Farsi_Namerals/WebFonts/fontiran.css">
     <link rel="stylesheet" href="_content/SpotMarket.Shared/css/app.css" />
-    <link href="SpotMarket.WebAssembly.styles.css" rel="stylesheet" />
-    <link href="manifest.webmanifest" rel="manifest" />
-    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="SpotMarket.MobileApp.styles.css" />
+    <link rel="icon" href="data:,">
 </head>
 
 <body>
+
+    <div class="status-bar-safe-area"></div>
+
     <div id="app">
         <svg class="loading-progress">
             <circle r="40%" cx="50%" cy="50%" />
@@ -27,13 +28,13 @@
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
-        <a href="." class="reload">Reload</a>
-        <span class="dismiss">🗙</span>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
     </div>
     <script src="_content/SpotMarket.Shared/js/bootstrap.bundle.min.js"></script>
     <script src="_content/SpotMarket.Shared/js/content-loaded.js"></script>
     <script src="_content/SpotMarket.Shared/js/chart.js"></script>
-    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_framework/blazor.webview.js" autostart="false"></script>
     <script>navigator.serviceWorker.register('_content/SpotMarket.Shared/js/service-worker.js');</script>
 </body>
 

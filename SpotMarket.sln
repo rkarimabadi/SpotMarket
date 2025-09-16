@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotMarket.WebAssembly", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotMarket.Shared", "SpotMarket.Shared\SpotMarket.Shared.csproj", "{8A944A63-1799-4043-BBBD-FBD86E04B5D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotMarket.MobileApp", "SpotMarket.MobileApp\SpotMarket.MobileApp.csproj", "{BD9726C2-1CDD-4417-A4EA-350BF60E61F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,11 @@ Global
 		{8A944A63-1799-4043-BBBD-FBD86E04B5D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A944A63-1799-4043-BBBD-FBD86E04B5D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A944A63-1799-4043-BBBD-FBD86E04B5D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD9726C2-1CDD-4417-A4EA-350BF60E61F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD9726C2-1CDD-4417-A4EA-350BF60E61F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD9726C2-1CDD-4417-A4EA-350BF60E61F2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BD9726C2-1CDD-4417-A4EA-350BF60E61F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD9726C2-1CDD-4417-A4EA-350BF60E61F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,8 @@ namespace SpotMarket.Shared.Extensions
             var apiBaseUrl = configuration.GetValue<string>("ApiSettings:BaseUrl");
             if (string.IsNullOrEmpty(apiBaseUrl))
             {
-                throw new InvalidOperationException("آدرس پایه API در فایل تنظیمات مشخص نشده است.");
+                //throw new InvalidOperationException("آدرس پایه API در فایل تنظیمات مشخص نشده است.");
+                apiBaseUrl = "https://spotapi.imedata.ir";
             }
 
             Action<HttpClient> configureClient = client => client.BaseAddress = new Uri(apiBaseUrl);
