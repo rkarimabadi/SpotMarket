@@ -9,17 +9,24 @@
         <p>در حال بارگذاری عرضه‌های در انتظار...</p>
     </div>
 }
-else if (_offers.Count == 0)
+else if (!FilteredOffers.Any())
 {
     <div class="empty-state">
-        <i class="bi bi-info-circle"></i>
-        <span>هیچ عرضه‌ای در انتظار معامله برای امروز وجود ندارد.</span>
+        <i class="bi bi-@(!string.IsNullOrEmpty(SearchTerm) ? "search" : "info-circle")"></i>
+        @if (!string.IsNullOrEmpty(SearchTerm))
+        {
+            <span>موردی با عبارت جستجوی شما یافت نشد.</span>
+        }
+        else
+        {
+            <span>هیچ عرضه‌ای در انتظار معامله برای امروز وجود ندارد.</span>
+        }
     </div>
 }
 else
 {
     <div class="offer-list">
-        @foreach (var offer in _offers)
+        @foreach (var offer in FilteredOffers)
         {
             <OfferListItemCard Offer="offer" />
         }
@@ -29,8 +36,24 @@ else
 @code {
     [Parameter]
     public int MarketId { get; set; }
+    [Parameter]
+    public string SearchTerm { get; set; } = string.Empty;
 
     private List<OfferListItem>? _offers;
+
+    private List<OfferListItem> FilteredOffers
+    {
+        get
+        {
+            if (_offers == null) return new List<OfferListItem>();
+            if (string.IsNullOrWhiteSpace(SearchTerm)) return _offers;
+
+            return _offers.Where(o =>
+                (o.CommodityName?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (o.SupplierName?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false)
+            ).ToList();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {

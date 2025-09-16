@@ -1,0 +1,87 @@
+﻿@using System.Text.RegularExpressions
+@inject IOfferDetailsService OfferService
+
+@if (Data != null)
+{
+    <div class="market-step-row">
+        <div class="info-section">
+            <div class="title-line">
+                <span class="commodity-name">@Offer.CommodityName</span>
+                <span class="supplier-name">@Offer.Supplier</span>
+            </div>
+            <div class="details-line">
+                <span class="stage-name">@_parsedDescription.StageName</span>
+                <span class="offer-symbol">#@Offer.Symbol</span>
+            </div>
+        </div>
+
+        <div class="timer-section">
+            <span class="timer-display">@FormattedTime</span>
+        </div>
+
+        <div class="status-indicator @GetProgressColorClass()"></div>
+
+        <div class="progress-bar-track">
+            <div class="progress-bar-fill @GetProgressColorClass()" style="width: @ProgressPercentage%;"></div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public TradeBoardMarketStepView? Data { get; set; }
+
+    private OfferViewModel Offer = new();
+    private ParsedStepDescription _parsedDescription = ParsedStepDescription.Empty;
+
+    // Fetch data when parameters are set
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Data?.ActiveInstrumentId != null)
+        {
+            Offer = await OfferService.GetOfferByIdAsync(Data.ActiveInstrumentId.Value);
+            _parsedDescription = ParseDescription(Data.StepDescription);
+        }
+    }
+
+    // Calculates the progress percentage for the progress bar
+    private double ProgressPercentage =>
+        (Data != null && Data.Duration > 0)
+            ? (100 - (Data.Counter / Data.Duration * 100))
+            : 0;
+
+    // Formats the remaining time into mm:ss format
+    private string FormattedTime =>
+        Data != null
+            ? TimeSpan.FromSeconds(Data.Counter).ToString(@"mm\:ss")
+            : "00:00";
+
+    // Returns a CSS class based on the step color
+    private string GetProgressColorClass() =>
+        Data?.Color.ToLower() switch
+        {
+            "blue" => "bg-blue",
+            "green" => "bg-green",
+            "red" => "bg-red",
+            "orange" => "bg-orange",
+            _ => "bg-default"
+        };
+
+    // Parses the step description string to extract details
+    private static ParsedStepDescription ParseDescription(string description)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+            return ParsedStepDescription.Empty;
+
+        var match = Regex.Match(description, @"^(.*?)\[(.*?)\]\[(.*?)\]$");
+
+        return match.Success
+            ? new ParsedStepDescription(StageName: match.Groups[1].Value.Trim())
+            : new ParsedStepDescription(description);
+    }
+
+    private record ParsedStepDescription(string StageName)
+    {
+        public static ParsedStepDescription Empty => new(string.Empty);
+    }
+}

@@ -1,0 +1,157 @@
+﻿/*
+  A creative, horizontal, and slim redesign of the Market Step Widget.
+  Inspired by modern timeline and progress indicators.
+*/
+.market-step-widget-horizontal {
+    background-color: var(--card-background-color);
+    border-radius: 1.25rem; /* 20px */
+    border: 1px solid var(--border-color);
+    padding: 1rem 1.25rem; /* 16px 20px */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* 8px for a compact look */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+/* --- TOP CONTENT (Market Name & Timer) --- */
+.widget-top-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.market-info-h {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* 8px */
+    font-size: 0.9rem; /* 14px */
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+    .market-info-h .bi {
+        color: var(--primary-color);
+        font-size: 1.1rem;
+    }
+
+.timer-h {
+    font-size: 1.25rem; /* 20px */
+    font-weight: 700;
+    color: var(--text-primary-color);
+    background-color: var(--background-color);
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.5rem; /* 8px */
+    border: 1px solid var(--border-color);
+    font-feature-settings: "tnum";
+}
+
+/* --- PROGRESS BAR CONTAINER --- */
+.progress-container-h {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* 12px */
+    width: 100%;
+}
+
+.time-marker {
+    font-size: 0.7rem; /* 11px */
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    white-space: nowrap;
+}
+
+.progress-track-h {
+    flex-grow: 1;
+    height: 8px;
+    background-color: var(--background-color);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.progress-fill-h {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* --- BOTTOM CONTENT (Stage Details) --- */
+.widget-bottom-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-color);
+    width: 100%;
+    gap: 1rem;
+}
+
+.stage-name-h {
+    font-size: 0.75rem; /* 12px */
+    font-weight: 700;
+    color: var(--text-secondary-color);
+    text-transform: uppercase;
+}
+
+.product-name-h {
+    font-size: 0.9rem; /* 14px */
+    font-weight: 600;
+    color: var(--text-primary-color);
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.offer-code-h {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    background-color: var(--background-color);
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.25rem;
+}
+
+
+/* Dynamic background colors */
+.progress-fill-h.bg-blue {
+    background: var(--primary-color);
+}
+
+.progress-fill-h.bg-green {
+    background: var(--success-color);
+}
+
+.progress-fill-h.bg-red {
+    background: var(--danger-color);
+}
+
+.progress-fill-h.bg-orange {
+    background: var(--warning-color);
+}
+
+.progress-fill-h.bg-default {
+    background: var(--gray-500);
+}
+
+.bi-bar-chart-line-fill.bg-blue {
+    color: var(--primary-color);
+}
+
+.bi-bar-chart-line-fill.bg-green {
+    color: var(--success-color);
+}
+
+.bi-bar-chart-line-fill.bg-red {
+    color: var(--danger-color);
+}
+
+.bi-bar-chart-line-fill.bg-orange {
+    color: var(--warning-color);
+}
+
+.bi-bar-chart-line-fill.bg-default {
+    color: var(--gray-500);
+}

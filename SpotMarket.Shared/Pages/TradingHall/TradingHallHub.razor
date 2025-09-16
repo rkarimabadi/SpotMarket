@@ -1,0 +1,83 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.Configuration
+@implements IAsyncDisposable
+@inject IConfiguration configuration
+
+<section class="trading-hall-widget">
+    <div class="widget-header">
+        <i class="bi bi-broadcast widget-icon"></i>
+        <h3 class="widget-title">تالار معاملات زنده</h3>
+    </div>
+
+    <div class="widget-content">
+        @{
+            var activeTrades = tradeBoardMarketStepViewList
+            .Where(x => x.MarketId == MarketId && x.Counter > 1)
+            .OrderBy(x => x.Counter)
+            .ToList();
+        }
+
+        @if (activeTrades.Any())
+        {
+            @foreach (var tradeBoardMarketStepView in activeTrades)
+            {
+                <CompactMarketStepWidget Data="tradeBoardMarketStepView" />
+            }
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-info-circle"></i>
+                <span>در حال حاضر معامله فعالی در این بازار وجود ندارد.</span>
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    [Parameter]
+    public int MarketId { get; set; }
+
+    private List<TradeBoardMarketStepView> tradeBoardMarketStepViewList = new();
+    private HubConnection? _connection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var apiBaseUrl = configuration.GetValue<string>("ApiSettings:BaseUrl");
+        _connection = new HubConnectionBuilder()
+            .WithUrl($"{apiBaseUrl}/hubs/trading-markets")
+            .WithAutomaticReconnect()
+            .Build();
+
+        _connection.On<TradeBoardMarketStepView>("ReceiveMarketStep", (message) =>
+        {
+            if (message is not null)
+            {
+                tradeBoardMarketStepViewList.RemoveAll(x => x.MarketId == message.MarketId && x.ActiveInstrumentId == message.ActiveInstrumentId);
+                tradeBoardMarketStepViewList.Add(message);
+                InvokeAsync(StateHasChanged);
+            }
+        });
+
+        try
+        {
+            if (_connection.State == HubConnectionState.Disconnected)
+            {
+                await _connection.StartAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log the exception
+            Console.WriteLine($"Error starting SignalR connection: {ex.Message}");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_connection is not null)
+        {
+            await _connection.DisposeAsync();
+        }
+    }
+}

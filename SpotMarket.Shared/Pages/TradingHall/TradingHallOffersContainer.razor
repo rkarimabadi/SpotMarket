@@ -11,20 +11,31 @@
         </button>
     </div>
 
-    <div class="offers-content">
-        @switch (_activeSegment)
+    <div class="search-container">
+        <i class="bi bi-search"></i>
+        <input type="text"
+        placeholder="جستجو در نام کالا یا عرضه‌کننده..."
+        @bind="_searchTerm"
+        @bind:event="oninput" />
+        @if (!string.IsNullOrEmpty(_searchTerm))
         {
-            case "traded":
-                <TradingHallTradedOffersList MarketId="MarketId" />
-                break;
-            case "untraded":
-                <TradingHallUntradedOffersList MarketId="MarketId" />
-                break;
-            case "failed":
-                <TradingHallFailedOffersList MarketId="MarketId" />
-                break;
+            <i class="bi bi-x-circle-fill clear-button" @onclick="() => _searchTerm = string.Empty"></i>
         }
     </div>
+        <div class="offers-content">
+            @switch (_activeSegment)
+            {
+                case "traded":
+                    <TradingHallTradedOffersList MarketId="MarketId" SearchTerm="@_searchTerm" />
+                    break;
+                case "untraded":
+                    <TradingHallUntradedOffersList MarketId="MarketId" SearchTerm="@_searchTerm" />
+                    break;
+                case "failed":
+                    <TradingHallFailedOffersList MarketId="MarketId" SearchTerm="@_searchTerm" />
+                    break;
+            }
+        </div>
 </div>
 
 @code {
@@ -32,6 +43,7 @@
     public int MarketId { get; set; }
 
     private string _activeSegment = "traded";
+    private string _searchTerm = string.Empty;
 
     private void SetActiveSegment(string segment)
     {

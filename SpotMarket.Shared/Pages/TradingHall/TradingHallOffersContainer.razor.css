@@ -1,6 +1,4 @@
 ﻿.offers-container-widget {
-    /* This component itself doesn't need much styling, 
-       it acts as a container for other components. */
 }
 
 .segment-control {
@@ -35,5 +33,45 @@
     }
 
 .offers-content {
-    /* Content area for the selected segment's component */
 }
+
+.search-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+    .search-container .bi-search {
+        position: absolute;
+        top: 50%;
+        right: 0.85rem;
+        transform: translateY(-50%);
+        color: var(--text-secondary-color);
+        pointer-events: none;
+    }
+
+    .search-container .clear-button {
+        position: absolute;
+        top: 50%;
+        left: 0.85rem;
+        transform: translateY(-50%);
+        color: var(--text-secondary-color);
+        cursor: pointer;
+        font-size: 1.1rem;
+    }
+
+    .search-container input[type="text"] {
+        width: 100%;
+        padding: 0.8rem 2.75rem 0.8rem 2.75rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        background-color: var(--card-background-color);
+        font-size: 1rem;
+        color: var(--text-primary-color);
+        transition: all 0.2s ease;
+    }
+
+        .search-container input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.15);
+        }

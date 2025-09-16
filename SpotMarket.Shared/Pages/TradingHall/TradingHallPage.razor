@@ -1,14 +1,17 @@
 ﻿@page "/trading-halls/{MarketId:int}"
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.Configuration
 @inject NavStateService NavState
+
 <PageTitle>@pageTitle</PageTitle>
 
 <div class="trading-hall-page">
     <TradingHallHeader MarketId="MarketId" OnDataReceived="OnDataReceived" />
     <TradingHallStatusWidget MarketId="MarketId" />
+    <TradingHallHub MarketId="MarketId"/>
     <TradingHallDailyHighlightsWidget MarketId="MarketId" />
-    <TradingHallOffersContainer MarketId="MarketId"/>
+    <TradingHallOffersContainer MarketId="MarketId" />
 </div>
-
 @code {
     [Parameter] public int MarketId { get; set; }
     private string _activeTab = "trades";

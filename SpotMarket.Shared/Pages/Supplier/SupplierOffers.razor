@@ -68,6 +68,12 @@
     protected override async Task OnParametersSetAsync()
     {
         data = await SupplierService.GetSupplierOffersAsync(SupplierId);
+        if (data != null && data.Items.Any())
+        {
+            PastOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
+            TodayOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
+            FutureOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
+        }
     }
 
     private const int MaxInitialItems = 5;
@@ -85,17 +91,6 @@
         { "today", false },
         { "future", false }
     };
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-        if (data != null && data.Items.Any())
-        {
-            PastOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Past).Take(MaxPastItems).ToList();
-            TodayOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Today).ToList();
-            FutureOffers = data.Items.Where(i => i.OfferDateType == OfferDateType.Future).ToList();
-        }
-    }
 
     private string selectedTabInPersian => selectedTab switch
     {

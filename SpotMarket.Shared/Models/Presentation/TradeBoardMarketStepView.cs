@@ -23,5 +23,6 @@
         public int Status { get; set; }
 
         public bool IsDeleted { get; set; }
+        public DateTime ExpireTime { get; set; }
     }
 }
