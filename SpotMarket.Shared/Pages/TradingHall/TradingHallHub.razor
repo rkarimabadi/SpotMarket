@@ -21,7 +21,7 @@
         {
             @foreach (var tradeBoardMarketStepView in activeTrades)
             {
-                <CompactMarketStepWidget Data="tradeBoardMarketStepView" />
+                <OldCompactMarketStepWidget Data="tradeBoardMarketStepView" />
             }
         }
         else
@@ -49,7 +49,7 @@
             .WithAutomaticReconnect()
             .Build();
 
-        _connection.On<TradeBoardMarketStepView>("ReceiveMarketStep", (message) =>
+        _connection.On<TradeBoardMarketStepView>("MarketStepReceiveMsg", (message) =>
         {
             if (message is not null)
             {
