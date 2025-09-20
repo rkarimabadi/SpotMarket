@@ -1,0 +1,43 @@
+﻿@if (GroupedOffers != null && GroupedOffers.Any())
+{
+    <div class="app-store-layout">
+        @foreach (var group in GroupedOffers)
+        {
+            <div class="category-section">
+                <div class="category-header">
+                    <h3 class="category-title">@group.Key</h3>
+                    @* <a href="#" class="see-all-link">مشاهده همه</a> *@
+                </div>
+
+                <div class="horizontal-scroll-container">
+                    @foreach (var chunk in group.Chunk(2))
+                    {
+                        <div class="scroll-item">
+                            @foreach (var offer in chunk)
+                            {
+                                <OfferListItemCard Offer="offer" />
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public List<OfferListItem> Offers { get; set; } = new();
+
+    private IGrouping<string, OfferListItem>[]? GroupedOffers;
+
+    protected override void OnParametersSet()
+    {
+        if (Offers != null)
+        {
+            GroupedOffers = Offers
+                .GroupBy(o => o.CommodityName)
+                .OrderBy(g => g.Key)
+                .ToArray();
+        }
+    }
+}

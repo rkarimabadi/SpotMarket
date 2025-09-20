@@ -1,0 +1,63 @@
+﻿.app-store-layout {
+}
+
+.category-section {
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+    .category-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+}
+
+.category-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+.see-all-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.horizontal-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 0.75rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+    .horizontal-scroll-container::-webkit-scrollbar {
+        display: none;
+    }
+
+.scroll-item {
+    flex: 0 0 90%;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 80vw;
+}
+
+/* On larger screens, a single column of cards might be too narrow */
+@media (min-width: 768px) {
+    .scroll-item {
+        flex-basis: 340px; /* On larger screens, have a fixed width for the column */
+    }
+}
