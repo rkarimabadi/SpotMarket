@@ -1,28 +1,32 @@
-﻿@using System.Text.RegularExpressions
+﻿@using SpotMarket.Shared.Models.Presentation
+@using System.Text.RegularExpressions
 @inject IOfferDetailsService OfferService
-
 @if (Data != null)
 {
-    <div class="market-step-row">
-        <div class="info-section">
-            <div class="title-line">
-                <span class="commodity-name">@Offer.CommodityName</span>
-                <span class="supplier-name">@Offer.Supplier</span>
+    <div class="market-step-widget-horizontal pb-2">
+
+        <div class="widget-top-content">
+            <div class="market-info-h">
+                <i class="bi bi-bar-chart-line-fill @GetProgressColorClass()"></i>
+                <span class="market-name-h">@Offer?.CommodityName</span>
             </div>
-            <div class="details-line">
-                <span class="stage-name">@_parsedDescription.StageName</span>
-                <span class="offer-symbol">#@Offer.Symbol</span>
+            <div class="timer-h">
+                @FormattedTime
             </div>
         </div>
 
-        <div class="timer-section">
-            <span class="timer-display">@FormattedTime</span>
+        <div class="progress-container-h">
+            <span class="time-marker start">@Data.StartTime</span>
+            <div class="progress-track-h">
+                <div class="progress-fill-h @GetProgressColorClass()" style="width: @ProgressPercentage%"></div>
+            </div>
+            <span class="time-marker end">@Data.FinishTime</span>
         </div>
 
-        <div class="status-indicator @GetProgressColorClass()"></div>
-
-        <div class="progress-bar-track">
-            <div class="progress-bar-fill @GetProgressColorClass()" style="width: @ProgressPercentage%;"></div>
+        <div class="widget-bottom-content">
+            <span class="stage-name-h">@_parsedDescription.StageName</span>
+            <span class="product-name-h">@Offer?.Supplier</span>
+            <span class="offer-code-h">@Offer?.Symbol</span>
         </div>
     </div>
 }
@@ -31,32 +35,29 @@
     [Parameter]
     public TradeBoardMarketStepView? Data { get; set; }
 
-    private OfferViewModel Offer = new();
+    private OfferViewModel? Offer;
     private ParsedStepDescription _parsedDescription = ParsedStepDescription.Empty;
 
-    // Fetch data when parameters are set
     protected override async Task OnParametersSetAsync()
     {
-        if (Data?.ActiveInstrumentId != null)
+        if (Data != null)
         {
-            Offer = await OfferService.GetOfferByIdAsync(Data.ActiveInstrumentId.Value);
+            if(Offer is null)
+                Offer = await OfferService.GetOfferByIdAsync(Data.ActiveInstrumentId!.Value);
             _parsedDescription = ParseDescription(Data.StepDescription);
         }
     }
 
-    // Calculates the progress percentage for the progress bar
     private double ProgressPercentage =>
         (Data != null && Data.Duration > 0)
-            ? (100 - (Data.Counter / Data.Duration * 100))
+            ? ((Data.Duration - Data.Counter) / Data.Duration) * 100
             : 0;
 
-    // Formats the remaining time into mm:ss format
     private string FormattedTime =>
         Data != null
             ? TimeSpan.FromSeconds(Data.Counter).ToString(@"mm\:ss")
             : "00:00";
 
-    // Returns a CSS class based on the step color
     private string GetProgressColorClass() =>
         Data?.Color.ToLower() switch
         {
@@ -67,7 +68,6 @@
             _ => "bg-default"
         };
 
-    // Parses the step description string to extract details
     private static ParsedStepDescription ParseDescription(string description)
     {
         if (string.IsNullOrWhiteSpace(description))
@@ -75,13 +75,21 @@
 
         var match = Regex.Match(description, @"^(.*?)\[(.*?)\]\[(.*?)\]$");
 
-        return match.Success
-            ? new ParsedStepDescription(StageName: match.Groups[1].Value.Trim())
-            : new ParsedStepDescription(description);
+        if (match.Success)
+        {
+            return new ParsedStepDescription(
+                StageName: match.Groups[1].Value.Trim(),
+                OfferCode: match.Groups[2].Value.Trim(),
+                ProductName: match.Groups[3].Value.Trim()
+            );
+        }
+
+        return new ParsedStepDescription(description, string.Empty, string.Empty);
     }
 
-    private record ParsedStepDescription(string StageName)
+    private record ParsedStepDescription(string StageName, string OfferCode, string ProductName)
     {
-        public static ParsedStepDescription Empty => new(string.Empty);
+        public static ParsedStepDescription Empty => new(string.Empty, string.Empty, string.Empty);
     }
 }
+

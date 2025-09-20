@@ -12,7 +12,7 @@
     <div class="widget-content">
         @{
             var activeTrades = tradeBoardMarketStepViewList
-            .Where(x => x.MarketId == MarketId && x.Counter > 1)
+            .Where(x => x.MarketId == MarketId && x.ExpireTime > DateTime.Now)
             .OrderBy(x => x.Counter)
             .ToList();
         }
@@ -21,7 +21,7 @@
         {
             @foreach (var tradeBoardMarketStepView in activeTrades)
             {
-                <OldCompactMarketStepWidget Data="tradeBoardMarketStepView" />
+                <CompactMarketStepWidget Data="tradeBoardMarketStepView" />
             }
         }
         else
@@ -54,6 +54,7 @@
             if (message is not null)
             {
                 tradeBoardMarketStepViewList.RemoveAll(x => x.MarketId == message.MarketId && x.ActiveInstrumentId == message.ActiveInstrumentId);
+                message.ExpireTime = DateTime.Now.AddSeconds(message.Duration - message.Counter);
                 tradeBoardMarketStepViewList.Add(message);
                 InvokeAsync(StateHasChanged);
             }

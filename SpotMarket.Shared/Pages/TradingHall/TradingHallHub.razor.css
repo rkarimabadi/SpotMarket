@@ -63,3 +63,7 @@
         font-weight: 500;
         line-height: 1.6;
     }
+
+::deep .market-step-widget-horizontal:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+}
