@@ -20,7 +20,7 @@ else if (_data != null)
         <div class="progress-legend">
             <div class="legend-item"><span class="dot traded"></span>معامله شده (@_data.TradedOffers)</div>
             <div class="legend-item"><span class="dot in-trading"></span>در حال معامله (@_data.InTradingOffers)</div>
-            <div class="legend-item"><span class="dot remaining"></span>باقی‌مانده (@_data.RemainingOffers)</div>
+            <div class="legend-item"><span class="dot remaining"></span>@(IsTimeInRange(now, _data.StartTime, _data.EndTime) ? "باقی‌مانده" : "معامله نشده") (@_data.RemainingOffers)</div>
         </div>
 
         <!-- Divider -->
@@ -51,7 +51,7 @@ else if (_data != null)
     private double _tradedPercentage = 0;
     private double _inTradingPercentage = 0;
     private double _remainingPercentage = 0;
-
+    private TimeSpan now => DateTime.Now.TimeOfDay;
     protected override async Task OnInitializedAsync()
     {
         _data = await HallService.GetStatusDataAsync(MarketId);
@@ -78,4 +78,11 @@ else if (_data != null)
         HallStatus.PreOpening => "status-preopening",
         _ => "status-closed"
     };
+    private bool IsTimeInRange(TimeSpan currentTime, TimeSpan? startTime, TimeSpan? finishTime)
+    {
+        if (startTime == null || finishTime == null)
+            return false;
+        else
+            return currentTime >= startTime && currentTime <= finishTime;
+    }
 }
