@@ -28,6 +28,46 @@
             <span class="product-name-h">@Offer?.Supplier</span>
             <span class="offer-code-h">@Offer?.Symbol</span>
         </div>
+        <div class="order-book-details">
+            <div class="book-section">
+                <div class="book-header">
+                    <span>مقدار (تن)</span>
+                    <span>قیمت (ریال)</span>
+                </div>
+                <div class="book-row sell">
+                    <span class="book-qty">@(Data?.BoardData?.QtyBuy1?.ToString("N0"))</span>
+                    <span class="book-price">@(Data?.BoardData?.SumBuy1?.ToString("N0"))</span>
+                </div>
+                    @foreach (var bid in Bids)
+                    {
+                        <div class="book-row buy">
+                            <span class="book-qty">@(bid.Qty?.ToString("N0"))</span>
+                            <span class="book-price">@(bid.Price?.ToString("N0"))</span>
+                        </div>
+                    }
+            </div>
+
+            <div class="trade-summary-grid">
+                <div class="summary-item">
+                    <span class="label">حجم عرضه</span>
+                    <span class="value">@(Data?.BoardData?.QtySell?.ToString("N0"))</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">قیمت فروشنده</span>
+                    <span class="value">@(Data?.BoardData?.CurrentSellPrice?.ToString("N0"))</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">میزان سفارش</span>
+                    <span class="value">@(Data?.BoardData?.TotalBuyQty?.ToString("N0"))</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">درصد تغییر</span>
+                    <span class="value @(PriceChangePercentage >= 0 ? "text-success" : "text-danger")">
+                        @PriceChangePercentage?.ToString("N2")%
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 }
 
@@ -37,17 +77,44 @@
 
     private OfferViewModel? Offer;
     private ParsedStepDescription _parsedDescription = ParsedStepDescription.Empty;
-
+    private List<(decimal? Price, int? Qty)> Bids = new();
     protected override async Task OnParametersSetAsync()
     {
         if (Data != null)
         {
             if(Offer is null)
+            {
                 Offer = await OfferService.GetOfferByIdAsync(Data.ActiveInstrumentId!.Value);
+            }
             _parsedDescription = ParseDescription(Data.StepDescription);
+            if (Data.BoardData is not null)
+            {
+                Bids = new List<(decimal? Price, int? Qty)>
+                {
+                    (Data.BoardData.SumBuy2, Data.BoardData.QtyBuy2),
+                    (Data.BoardData.SumBuy3, Data.BoardData.QtyBuy3),
+                    (Data.BoardData.SumBuy4, Data.BoardData.QtyBuy4),
+                    (Data.BoardData.SumBuy5, Data.BoardData.QtyBuy5),
+                }
+                .Where(b => b.Price.HasValue && b.Price > 0 && b.Qty.HasValue && b.Qty > 0)
+                .ToList();
+            }
         }
     }
-
+    private decimal? PriceChangePercentage
+    {
+        get
+        {
+            var board = Data?.BoardData;
+            if (board?.LowestMatchedPrice is null || board?.CurrentSellPrice is null || board?.CurrentSellPrice == 0)
+            {
+                return null;
+            }
+            var lowest = board?.LowestMatchedPrice is null || board?.LowestMatchedPrice == 0 ? board?.SumBuy1.Value : board?.LowestMatchedPrice;
+            var initial = board?.CurrentSellPrice.Value;
+            return ((lowest - initial) / initial) * 100;
+        }
+    }
     private double ProgressPercentage =>
         (Data != null && Data.Duration > 0)
             ? ((Data.Duration - Data.Counter) / Data.Duration) * 100

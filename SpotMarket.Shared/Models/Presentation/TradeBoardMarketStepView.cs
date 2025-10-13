@@ -24,5 +24,6 @@
 
         public bool IsDeleted { get; set; }
         public DateTime ExpireTime { get; set; }
+        public TradeBoardDataView? BoardData { get; set; }
     }
 }

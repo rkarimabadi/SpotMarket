@@ -21,12 +21,17 @@
         {
             @foreach (var tradeBoardMarketStepView in activeTrades)
             {
+                var message = tradeBoardDataViewList.FirstOrDefault(x => x.MarketId == tradeBoardMarketStepView.MarketId && x.InstrumentId == tradeBoardMarketStepView.ActiveInstrumentId);
+                if (message is not null)
+                {
+                    tradeBoardMarketStepView.BoardData = message;
+                }
                 <CompactMarketStepWidget Data="tradeBoardMarketStepView" />
             }
         }
         else
         {
-            <div class="empty-state">
+             <div class="empty-state">
                 <i class="bi bi-info-circle"></i>
                 <span>در حال حاضر معامله فعالی در این بازار وجود ندارد.</span>
             </div>
@@ -39,6 +44,7 @@
     public int MarketId { get; set; }
 
     private List<TradeBoardMarketStepView> tradeBoardMarketStepViewList = new();
+    private List<TradeBoardDataView> tradeBoardDataViewList = new();
     private HubConnection? _connection;
 
     protected override async Task OnInitializedAsync()
@@ -56,6 +62,15 @@
                 tradeBoardMarketStepViewList.RemoveAll(x => x.MarketId == message.MarketId && x.ActiveInstrumentId == message.ActiveInstrumentId);
                 message.ExpireTime = DateTime.Now.AddSeconds(message.Duration - message.Counter);
                 tradeBoardMarketStepViewList.Add(message);
+                InvokeAsync(StateHasChanged);
+            }
+        });
+        _connection.On<TradeBoardDataView>("PublicReceiveMsg", (message) =>
+        {
+            if (message is not null)
+            {
+                tradeBoardDataViewList.RemoveAll(x => x.MarketId == message.MarketId && x.InstrumentId == message.InstrumentId);
+                tradeBoardDataViewList.Add(message);
                 InvokeAsync(StateHasChanged);
             }
         });

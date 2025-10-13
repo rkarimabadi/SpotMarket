@@ -111,6 +111,99 @@
     border-radius: 0.25rem;
 }
 
+.order-book-details {
+    padding-top: 0.75rem;
+    margin-top: 0.25rem;
+    border-top: 1px dashed var(--border-color);
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.book-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    padding: 0 0.25rem 0.25rem 0.25rem;
+}
+
+.book-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.375rem;
+    font-feature-settings: "tnum";
+}
+
+    .book-row.sell {
+        background-color: rgba(var(--danger-color-rgb), 0.1);
+    }
+
+    .book-row.buy {
+        background-color: rgba(var(--success-color-rgb), 0.1);
+    }
+
+.book-price {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.book-row.sell .book-price {
+    color: var(--danger-color);
+}
+
+.book-row.buy .book-price {
+    color: var(--success-color);
+}
+
+.book-qty {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+}
+
+
+.trade-summary-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex-grow: 1;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: row;
+    gap: 0.1rem;
+    background-color: var(--background-color);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    /*border: 1px solid var(--border-color);*/
+    justify-content: space-between;
+}
+
+    .summary-item .label {
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: var(--text-secondary-color);
+    }
+
+    .summary-item .value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary-color);
+        font-feature-settings: "tnum";
+    }
+
+.text-success {
+    color: var(--success-color) !important;
+}
+
+.text-danger {
+    color: var(--danger-color) !important;
+}
 
 /* Dynamic background colors */
 .progress-fill-h.bg-blue {
@@ -152,3 +245,4 @@
 .bi-bar-chart-line-fill.bg-default {
     color: var(--gray-500);
 }
+
