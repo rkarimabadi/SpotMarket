@@ -1,0 +1,367 @@
+@page "/chat"
+@using System.Diagnostics
+@inject IChatService ChatService
+@inject ChatHistoryService ChatHistory
+@inject NavStateService NavState
+@inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
+
+<PageTitle>گفتگو</PageTitle>
+
+<div class="chat-page">
+    @if (_isLoading)
+    {
+        <div class="chat-thread">
+            <BarLoader />
+        </div>
+    }
+    else if (_hasError)
+    {
+        <div class="chat-thread">
+            <HasError />
+        </div>
+    }
+    else
+    {
+        <div class="chat-thread">
+            @if (_messages.Count == 0)
+            {
+                <ChatEmptyState Capabilities="_capabilities" OnQuestionSelected="SendAsync" />
+            }
+            else
+            {
+                <div class="thread-toolbar">
+                    <button type="button" class="clear-button" @onclick="ClearAsync" disabled="@_isStreaming">
+                        <i class="bi bi-trash"></i>
+                        <span>گفتگوی جدید</span>
+                    </button>
+                </div>
+
+                @foreach (var (message, index) in _messages.Select((m, i) => (m, i)))
+                {
+                    <ChatMessageView Message="message" @key="index" />
+                }
+            }
+
+            @if (_activeToolTitle is not null)
+            {
+                <div class="tool-indicator">
+                    <span class="tool-spinner"></span>
+                    <span>در حال دریافت داده: @_activeToolTitle</span>
+                </div>
+            }
+
+            <div @ref="_threadEndRef"></div>
+        </div>
+    }
+
+    <div class="chat-composer">
+        @if (_capabilities is { IsEnabled: false })
+        {
+            <div class="composer-disabled">
+                <i class="bi bi-exclamation-circle"></i>
+                <span>قابلیت گفتگو در حال حاضر در دسترس نیست.</span>
+            </div>
+        }
+        else
+        {
+            <div class="composer-row">
+                <textarea @ref="_inputRef"
+                          class="composer-input"
+                          rows="1"
+                          placeholder="پرسش خود را درباره بازار بنویسید…"
+                          value="@_draft"
+                          disabled="@(_isLoading || _hasError)"
+                          @oninput="OnDraftChanged"
+                          @onkeydown="OnKeyDown"></textarea>
+
+                @if (_isStreaming)
+                {
+                    <button type="button" class="composer-button is-stop" @onclick="StopStreaming" aria-label="توقف پاسخ">
+                        <i class="bi bi-stop-fill"></i>
+                    </button>
+                }
+                else
+                {
+                    <button type="button"
+                            class="composer-button"
+                            disabled="@(string.IsNullOrWhiteSpace(_draft) || _isLoading || _hasError)"
+                            @onclick="() => SendAsync(_draft)"
+                            aria-label="ارسال پرسش">
+                        <i class="bi bi-send"></i>
+                    </button>
+                }
+            </div>
+            <div class="composer-note">پاسخ‌ها بر پایه داده‌های بورس کالا تولید می‌شود و مرجع تصمیم سرمایه‌گذاری نیست.</div>
+        }
+    </div>
+</div>
+
+@code {
+    private ChatCapabilities? _capabilities;
+    private readonly List<ChatUiMessage> _messages = new();
+    private string _draft = string.Empty;
+
+    private bool _isLoading;
+    private bool _hasError;
+    private bool _isStreaming;
+    private string? _activeToolTitle;
+
+    private ElementReference _threadEndRef;
+    private ElementReference _inputRef;
+    private IJSObjectReference? _module;
+
+    private readonly CancellationTokenSource _cts = new();
+
+    /// <summary>لغو یک پاسخ در حال دریافت، مستقل از عمر خود صفحه.</summary>
+    private CancellationTokenSource? _streamCts;
+
+    /// <summary>
+    /// تکه‌های متن با سرعت بالا می‌رسند و رندر کردن به‌ازای هر تکه روی موبایل کند است؛
+    /// به‌جای آن با فاصله‌ای کوتاه رندر می‌شود که هم روان بماند و هم حس زنده بودن حفظ شود.
+    /// </summary>
+    private readonly Stopwatch _renderThrottle = Stopwatch.StartNew();
+    private const int RenderIntervalMs = 60;
+
+    /// <summary>پرسشی که گفتگو با آن از جای دیگری شروع شده است.</summary>
+    private string? _pendingQuestion;
+
+    protected override async Task OnInitializedAsync()
+    {
+        NavState.SetNavState("گفتگو", false);
+
+        // پیش از هر await خوانده می‌شود: اولین رندر صفحه همین‌جا و در نخستین await رخ
+        // می‌دهد، پس اگر این خط پایین‌تر بیاید، رندر با پرسشِ هنوز خوانده‌نشده انجام می‌شود.
+        _pendingQuestion = ChatHistory.PendingQuestion;
+        ChatHistory.PendingQuestion = null;
+
+        _isLoading = true;
+        _hasError = false;
+        try
+        {
+            _capabilities = await ChatService.GetCapabilitiesAsync(_cts.Token);
+            _messages.AddRange((await ChatHistory.LoadAsync(_cts.Token))
+                .Select(m => new ChatUiMessage { Role = m.Role, Content = m.Content }));
+        }
+        catch (Exception)
+        {
+            _hasError = true;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    /// <summary>
+    /// گفتگویی که از ویجت داشبورد شروع شده، پس از آماده شدن صفحه ارسال می‌شود تا کاربر
+    /// اول خود صفحه گفتگو را ببیند و بعد پاسخ کلمه‌به‌کلمه بیاید. به firstRender تکیه
+    /// نمی‌کند، چون اولین رندر پیش از پایان بارگذاری قابلیت‌ها اتفاق می‌افتد.
+    /// </summary>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_pendingQuestion is null || _isLoading) return;
+
+        var question = _pendingQuestion;
+        _pendingQuestion = null;
+
+        if (_hasError) return;
+
+        await SendAsync(question);
+    }
+
+    private void OnDraftChanged(ChangeEventArgs args)
+    {
+        _draft = args.Value?.ToString() ?? string.Empty;
+        _ = ResizeInputAsync();
+    }
+
+    // روی موبایل Enter باید خط جدید بسازد، پس ارسال با دکمه انجام می‌شود و
+    // Ctrl+Enter فقط میان‌بری برای کاربران دسکتاپ است.
+    private async Task OnKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter" && (args.CtrlKey || args.MetaKey))
+        {
+            await SendAsync(_draft);
+        }
+    }
+
+    private async Task SendAsync(string text)
+    {
+        if (_isStreaming || string.IsNullOrWhiteSpace(text)) return;
+        if (_capabilities is { IsEnabled: false }) return;
+
+        _messages.Add(new ChatUiMessage { Role = ChatRoles.User, Content = text.Trim() });
+        var reply = new ChatUiMessage { Role = ChatRoles.Assistant, IsPending = true };
+        _messages.Add(reply);
+
+        _draft = string.Empty;
+        _isStreaming = true;
+        _activeToolTitle = null;
+        _streamCts = CancellationTokenSource.CreateLinkedTokenSource(_cts.Token);
+
+        StateHasChanged();
+        await ResizeInputAsync();
+        await ScrollToEndAsync();
+
+        try
+        {
+            await foreach (var evt in ChatService.StreamAsync(BuildHistory(), _streamCts.Token))
+            {
+                HandleEvent(evt, reply);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // کاربر دکمه توقف را زد؛ هرچه تا اینجا رسیده حفظ می‌شود.
+        }
+        catch (Exception)
+        {
+            reply.IsError = true;
+            reply.Content = "ارتباط با سرویس گفتگو برقرار نشد. اتصال خود را بررسی کنید.";
+        }
+        finally
+        {
+            reply.IsPending = false;
+            if (string.IsNullOrWhiteSpace(reply.Content))
+            {
+                reply.IsError = true;
+                reply.Content = "پاسخی دریافت نشد.";
+            }
+
+            _isStreaming = false;
+            _activeToolTitle = null;
+            _streamCts?.Dispose();
+            _streamCts = null;
+
+            await PersistAsync();
+            StateHasChanged();
+            await ScrollToEndAsync();
+        }
+    }
+
+    private void HandleEvent(ChatStreamEvent evt, ChatUiMessage reply)
+    {
+        switch (evt.Type)
+        {
+            case ChatStreamEventTypes.Tool:
+                _activeToolTitle = evt.ToolTitle ?? evt.Tool;
+                if (!string.IsNullOrEmpty(evt.Tool) && !reply.UsedTools.Any(t => t.Name == evt.Tool))
+                {
+                    reply.UsedTools.Add(new ToolUsage { Name = evt.Tool, Title = evt.ToolTitle ?? evt.Tool });
+                }
+                StateHasChanged();
+                break;
+
+            case ChatStreamEventTypes.Delta:
+                reply.Content += evt.Text;
+                reply.IsPending = false;
+                _activeToolTitle = null;
+                if (_renderThrottle.ElapsedMilliseconds >= RenderIntervalMs)
+                {
+                    _renderThrottle.Restart();
+                    StateHasChanged();
+                }
+                break;
+
+            case ChatStreamEventTypes.Error:
+                reply.IsError = true;
+                reply.Content = evt.Text ?? "خطایی در تولید پاسخ رخ داد.";
+                StateHasChanged();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// سرور وضعیتی نگه نمی‌دارد، پس تاریخچه در هر درخواست ارسال می‌شود. پیام‌های خطا و
+    /// پیام خالیِ در حال ساخت کنار گذاشته می‌شوند و طول تاریخچه به همان مقداری محدود
+    /// می‌شود که سرور اعلام کرده است.
+    /// </summary>
+    private List<ChatMessageDto> BuildHistory()
+    {
+        IEnumerable<ChatUiMessage> history = _messages
+            .Where(m => !m.IsError && !string.IsNullOrWhiteSpace(m.Content));
+
+        var max = _capabilities?.MaxHistoryMessages ?? 0;
+        if (max > 0) history = history.TakeLast(max);
+
+        return history
+            .Select(m => new ChatMessageDto { Role = m.Role, Content = m.Content })
+            .ToList();
+    }
+
+    private void StopStreaming() => _streamCts?.Cancel();
+
+    private async Task ClearAsync()
+    {
+        if (_isStreaming) return;
+
+        _messages.Clear();
+        await ChatHistory.ClearAsync(_cts.Token);
+    }
+
+    private async Task PersistAsync()
+    {
+        try
+        {
+            await ChatHistory.SaveAsync(
+                _messages.Where(m => !m.IsError && !string.IsNullOrWhiteSpace(m.Content))
+                         .Select(m => new ChatMessageDto { Role = m.Role, Content = m.Content }),
+                _cts.Token);
+        }
+        catch (Exception)
+        {
+            // نگه نداشتن تاریخچه نباید گفتگوی جاری را خراب کند.
+        }
+    }
+
+    // ------------------------------------------------------------------ کمکی‌های JS
+
+    private async Task<IJSObjectReference?> GetModuleAsync()
+    {
+        try
+        {
+            return _module ??= await JSRuntime.InvokeAsync<IJSObjectReference>(
+                "import", "./_content/SpotMarket.Shared/js/chat.js");
+        }
+        catch (JSException)
+        {
+            return null;
+        }
+    }
+
+    private async Task ScrollToEndAsync() => await InvokeModuleAsync("scrollToEnd", _threadEndRef);
+
+    private async Task ResizeInputAsync() => await InvokeModuleAsync("autoGrow", _inputRef);
+
+    private async Task InvokeModuleAsync(string function, ElementReference element)
+    {
+        try
+        {
+            var module = await GetModuleAsync();
+            if (module is null) return;
+            await module.InvokeVoidAsync(function, element);
+        }
+        catch (JSDisconnectedException)
+        {
+            // صفحه بسته شده است.
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        _cts.Cancel();
+        _streamCts?.Cancel();
+        _cts.Dispose();
+        _streamCts?.Dispose();
+
+        if (_module is null) return;
+        try
+        {
+            await _module.DisposeAsync();
+        }
+        catch (JSDisconnectedException)
+        {
+        }
+    }
+}

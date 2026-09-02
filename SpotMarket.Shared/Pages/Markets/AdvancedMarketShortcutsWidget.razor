@@ -1,6 +1,7 @@
-﻿@using System.Linq
+@using System.Linq
 @inject IMarketsService MarketService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 
 <div class="shortcuts-widget">
     <div class="widget-header">
@@ -52,9 +53,10 @@
     public string Subtitle { get; set; } = "بر اساس ارزش کل عرضه‌ها";
     protected override async Task OnInitializedAsync()
     {
-        data = await MarketService.GetMarketShortcutsData();
+        data = await MarketService.GetMarketShortcutsData(_cts.Token);
     }
     private MarketShortcutsData? data;
+    private CancellationTokenSource _cts = new();
 
     private bool _isExpanded = false;
     private List<MarketShortcutItem> InitialItems
@@ -86,5 +88,11 @@
         {
             NavigationManager.NavigateTo($"/markets/{id}");
         }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

@@ -1,0 +1,151 @@
+.widget-container {
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    margin: 0;
+}
+
+.section-action {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.assistant-card {
+    padding: 1rem;
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+}
+
+.assistant-intro {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.85rem;
+}
+
+.assistant-avatar {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+}
+
+.assistant-hint {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: var(--text-secondary-color);
+}
+
+.ask-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ask-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.55rem 0.8rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    outline: none;
+}
+
+    .ask-input:focus {
+        border-color: var(--primary-color);
+    }
+
+.ask-button {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    color: #fff;
+    background-color: var(--primary-color);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+    .ask-button:disabled {
+        background-color: var(--gray-400);
+        cursor: default;
+    }
+
+    /* آیکون ارسال در چیدمان راست‌به‌چپ باید رو به چپ باشد */
+    .ask-button .bi-send {
+        transform: scaleX(-1);
+    }
+
+/* پیشنهادها در یک ردیف می‌مانند و در صورت نیاز افقی می‌لغزند تا ارتفاع ویجت ثابت بماند */
+.suggestion-row {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+    .suggestion-row::-webkit-scrollbar {
+        display: none;
+    }
+
+.suggestion-chip {
+    flex-shrink: 0;
+    padding: 0.3rem 0.7rem;
+    font-family: inherit;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    color: var(--text-secondary-color);
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+    .suggestion-chip:hover,
+    .suggestion-chip:active {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+[data-bs-theme="dark"] .assistant-card {
+    background-color: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .ask-input,
+[data-bs-theme="dark"] .suggestion-chip {
+    background-color: var(--gray-900);
+    border-color: var(--gray-700);
+}

@@ -1,4 +1,5 @@
-﻿@inject IDashboardService DashboardService
+@inject IDashboardService DashboardService
+@implements IDisposable
     <div class="widget-container">
         <div class="section-header">
             <h3 class="section-title">@Title</h3>
@@ -28,10 +29,16 @@
     [Parameter]
     public string Title { get; set; } = "سطح هیجان بازار";
     private MarketExcitementData? data;
+    private CancellationTokenSource _cts = new();
 
     protected override async Task OnInitializedAsync()
     {
-        data = await DashboardService.GetMarketExcitement();
+        data = await DashboardService.GetMarketExcitement(_cts.Token);
+    }
 
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

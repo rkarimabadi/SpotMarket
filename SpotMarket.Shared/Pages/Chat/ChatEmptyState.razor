@@ -1,0 +1,61 @@
+<div class="chat-empty">
+    <div class="empty-hero">
+        <div class="hero-icon"><i class="bi bi-chat-square-text"></i></div>
+        <h2 class="hero-title">دستیار بازار</h2>
+        <p class="hero-subtitle">درباره عرضه‌ها، معاملات، تالارها و بازیگران بازار فیزیکی بورس کالا بپرسید.</p>
+    </div>
+
+    @if (Capabilities is not null && Capabilities.SampleQuestions.Count > 0)
+    {
+        <div class="empty-section">
+            <div class="section-caption">نمونه پرسش‌ها</div>
+            <div class="sample-list">
+                @foreach (var question in Capabilities.SampleQuestions)
+                {
+                    <button type="button" class="sample-item" @onclick="() => OnQuestionSelected.InvokeAsync(question)">
+                        <span>@question</span>
+                        <i class="bi bi-arrow-left"></i>
+                    </button>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Capabilities is not null && Capabilities.Tools.Count > 0)
+    {
+        <div class="empty-section">
+            <button type="button" class="section-caption is-toggle" @onclick="() => _showTools = !_showTools">
+                <span>دستیار به چه داده‌هایی دسترسی دارد</span>
+                <i class="bi @(_showTools ? "bi-chevron-up" : "bi-chevron-down")"></i>
+            </button>
+            @if (_showTools)
+            {
+                <ul class="tool-list">
+                    @foreach (var tool in Capabilities.Tools)
+                    {
+                        var description = ChatToolDescription.ForDisplay(tool.Description);
+                        <li class="tool-item">
+                            <div class="tool-title">@tool.Title</div>
+                            @if (description.Length > 0)
+                            {
+                                <div class="tool-description">@description</div>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// نمونه پرسش‌ها و فهرست توابع از سرور می‌آید تا با اضافه یا کم شدن قابلیت‌ها،
+    /// این صفحه بدون تغییر کد به‌روز بماند.
+    /// </summary>
+    [Parameter] public ChatCapabilities? Capabilities { get; set; }
+
+    [Parameter] public EventCallback<string> OnQuestionSelected { get; set; }
+
+    private bool _showTools;
+}

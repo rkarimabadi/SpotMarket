@@ -1,4 +1,5 @@
-﻿@inject IMarketsService MarketService
+@inject IMarketsService MarketService
+@implements IDisposable
 <div class="widget-container">
     <div class="rings-progress-widget">
         <div class="widget-header">
@@ -39,8 +40,15 @@
 
 @code {
     private List<MarketActivity> data;
+    private CancellationTokenSource _cts = new();
     protected override async Task OnInitializedAsync()
     {
-        data = await MarketService.GetMarketActivities();
+        data = await MarketService.GetMarketActivities(_cts.Token);
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

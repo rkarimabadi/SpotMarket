@@ -1,5 +1,6 @@
-﻿@inject ICementService CementService
+@inject ICementService CementService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 
 <div class="group-list-widget">
     <h2 class="section-title">بررسی گروه‌های سیمان</h2>
@@ -65,9 +66,10 @@
 
 @code {
     public CementGroupsData? data;
+    private CancellationTokenSource _cts = new();
     protected override async Task OnInitializedAsync()
     {
-        data = await CementService.GetCementGroupsDataAsync();
+        data = await CementService.GetCementGroupsDataAsync(_cts.Token);
     }
 
     private bool _showAllInactiveGroups = false;
@@ -109,4 +111,10 @@
         DemandStatus.Low => "status-low",
         _ => "status-medium"
     };
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
 }

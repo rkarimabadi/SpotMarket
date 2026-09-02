@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using SpotMarket.Shared.Extensions;
-using SpotMarket.Shared.Services.App;
 
 namespace SpotMarket.MobileApp
 {
@@ -15,8 +14,6 @@ namespace SpotMarket.MobileApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
-            builder.Services.AddScoped<SettingsService>();
-            builder.Services.AddScoped<NavStateService>();
 
             builder.Services.AddPresentationServices(builder.Configuration);
             builder.Services.AddMauiBlazorWebView();

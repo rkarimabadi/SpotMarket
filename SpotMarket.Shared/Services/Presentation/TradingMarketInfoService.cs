@@ -13,15 +13,15 @@ namespace SpotMarket.Shared.Services.Presentation
             _httpClient = httpClient;
         }
 
-        public async Task<List<TradingMarketInfo>> GetAllMarketsAsync()
+        public async Task<List<TradingMarketInfo>> GetAllMarketsAsync(CancellationToken ct = default)
         {
-            return await _httpClient.GetFromJsonAsync<List<TradingMarketInfo>>($"{_controllerPath}/all") ?? new List<TradingMarketInfo>();
+            return await _httpClient.GetFromJsonAsync<List<TradingMarketInfo>>($"{_controllerPath}/all", ct) ?? new List<TradingMarketInfo>();
         }
-        public async Task<TradingHallHeaderData?> GetHeaderDataAsync(int marketId)
+        public async Task<TradingHallHeaderData?> GetHeaderDataAsync(int marketId, CancellationToken ct = default)
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<TradingHallHeaderData>($"{_controllerPath}/{marketId}/header");
+                return await _httpClient.GetFromJsonAsync<TradingHallHeaderData>($"{_controllerPath}/{marketId}/header", ct);
             }
             catch
             {
@@ -29,11 +29,11 @@ namespace SpotMarket.Shared.Services.Presentation
             }
         }
 
-        public async Task<HallStatusData?> GetStatusDataAsync(int marketId)
+        public async Task<HallStatusData?> GetStatusDataAsync(int marketId, CancellationToken ct = default)
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<HallStatusData>($"{_controllerPath}/{marketId}/status");
+                return await _httpClient.GetFromJsonAsync<HallStatusData>($"{_controllerPath}/{marketId}/status", ct);
             }
             catch
             {
@@ -41,11 +41,11 @@ namespace SpotMarket.Shared.Services.Presentation
             }
         }
 
-        public async Task<DailyHighlightsData?> GetHighlightsDataAsync(int marketId)
+        public async Task<DailyHighlightsData?> GetHighlightsDataAsync(int marketId, CancellationToken ct = default)
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<DailyHighlightsData>($"{_controllerPath}/{marketId}/highlights");
+                return await _httpClient.GetFromJsonAsync<DailyHighlightsData>($"{_controllerPath}/{marketId}/highlights", ct);
             }
             catch
             {
@@ -53,19 +53,19 @@ namespace SpotMarket.Shared.Services.Presentation
             }
         }
         
-        public async Task<List<OfferListItem>> GetTradedOffersAsync(int marketId)
+        public async Task<List<OfferListItem>> GetTradedOffersAsync(int marketId, CancellationToken ct = default)
         {
-            return await _httpClient.GetFromJsonAsync<List<OfferListItem>>($"{_controllerPath}/{marketId}/offers/traded") ?? new List<OfferListItem>();
+            return await _httpClient.GetFromJsonAsync<List<OfferListItem>>($"{_controllerPath}/{marketId}/offers/traded", ct) ?? new List<OfferListItem>();
         }
 
-        public async Task<List<OfferListItem>> GetUntradedOffersAsync(int marketId)
+        public async Task<List<OfferListItem>> GetUntradedOffersAsync(int marketId, CancellationToken ct = default)
         {
-            return await _httpClient.GetFromJsonAsync<List<OfferListItem>>($"{_controllerPath}/{marketId}/offers/untraded") ?? new List<OfferListItem>();
+            return await _httpClient.GetFromJsonAsync<List<OfferListItem>>($"{_controllerPath}/{marketId}/offers/untraded", ct) ?? new List<OfferListItem>();
         }
 
-        public async Task<List<OfferListItem>> GetFailedOffersAsync(int marketId)
+        public async Task<List<OfferListItem>> GetFailedOffersAsync(int marketId, CancellationToken ct = default)
         {
-            return await _httpClient.GetFromJsonAsync<List<OfferListItem>>($"{_controllerPath}/{marketId}/offers/failed") ?? new List<OfferListItem>();
+            return await _httpClient.GetFromJsonAsync<List<OfferListItem>>($"{_controllerPath}/{marketId}/offers/failed", ct) ?? new List<OfferListItem>();
         }
     }
 }

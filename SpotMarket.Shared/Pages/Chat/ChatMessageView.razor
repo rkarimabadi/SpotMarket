@@ -1,0 +1,48 @@
+<div class="chat-message @(Message.IsUser ? "is-user" : "is-assistant")">
+    <div class="chat-bubble @(Message.IsError ? "is-error" : null)">
+        @if (Message.IsUser)
+        {
+            <div class="chat-plain-text">@Message.Content</div>
+        }
+        else if (Message.IsPending && string.IsNullOrEmpty(Message.Content))
+        {
+            <div class="chat-typing" aria-label="در حال نوشتن پاسخ">
+                <span></span><span></span><span></span>
+            </div>
+        }
+        else
+        {
+            @foreach (var (block, index) in ChatMarkdown.Parse(Message.Content).Select((b, i) => (b, i)))
+            {
+                if (block.Kind == ChatBlockKind.Chart)
+                {
+                    <ChatChart Spec="block.Chart" @key="index" />
+                }
+                else if (block.Kind == ChatBlockKind.Code)
+                {
+                    <pre class="chat-code" @key="index"><code>@block.Text</code></pre>
+                }
+                else
+                {
+                    <div class="chat-rich-text" @key="index">@ChatMarkdown.ToHtml(block.Text)</div>
+                }
+            }
+        }
+    </div>
+
+    @if (!Message.IsUser && !Message.IsPending && Message.UsedTools.Count > 0)
+    {
+        <div class="chat-sources">
+            <i class="bi bi-database"></i>
+            <span class="sources-label">منبع داده:</span>
+            @foreach (var tool in Message.UsedTools)
+            {
+                <span class="source-chip">@tool.Title</span>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public ChatUiMessage Message { get; set; } = default!;
+}

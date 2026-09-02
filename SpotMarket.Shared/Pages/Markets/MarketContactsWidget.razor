@@ -1,5 +1,6 @@
-﻿@inject IMarketsService MarketService
+@inject IMarketsService MarketService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 
 <div class="contacts-widget">
     <div class="widget-header">
@@ -27,12 +28,19 @@
     [Parameter] public string Title { get; set; } = "بازارهای منتخب";
     [Parameter] public string Subtitle { get; set; } = "بر اساس ارزش کل عرضه‌ها";
     private MarketContactsData? data;
+    private CancellationTokenSource _cts = new();
     protected override async Task OnInitializedAsync()
     {
-        data = await MarketService.GetMarketContacts();
+        data = await MarketService.GetMarketContacts(_cts.Token);
     }
     private void GoTo(string id)
     {
         NavigationManager.NavigateTo($"/markets/{id}");
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

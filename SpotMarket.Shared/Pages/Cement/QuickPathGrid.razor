@@ -1,5 +1,6 @@
-﻿@inject ICementService CementService
+@inject ICementService CementService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 
 <div class="quick-path-container">
     <h2 class="section-title">به دنبال سیمان خاصی هستید؟</h2>
@@ -19,13 +20,20 @@
 
 @code {
     private CementQuickPathData? data;
+    private CancellationTokenSource _cts = new();
     protected override async Task OnInitializedAsync()
     {
-        data = await CementService.GetCementQuickPathDataAsync();
+        data = await CementService.GetCementQuickPathDataAsync(_cts.Token);
     }
 
     private void NavigateTo(string url)
     {
         NavigationManager.NavigateTo(url);
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

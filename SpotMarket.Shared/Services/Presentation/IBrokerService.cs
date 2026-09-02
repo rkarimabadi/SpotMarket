@@ -4,15 +4,15 @@ namespace SpotMarket.Shared.Services.Presentation
 {
     public interface IBrokerService
     {
-        Task<BrokerHeaderData?> GetBrokerHeaderAsync(int brokerId);
-        Task<CompetitionData?> GetCompetitionRatioAsync(int brokerId);
-        Task<CompetitionData?> GetSuccessRateAsync(int brokerId);
-        Task<List<MarketShareItem>?> GetMarketShareAsync(int brokerId);
-        Task<List<RankingItem>?> GetRankingAsync(int brokerId);
-        Task<List<CommodityGroupShareItem>?> GetCommodityGroupShareAsync(int brokerId);
-        Task<UpcomingOffersData?> GetBrokerOffersAsync(int brokerId);
-        Task<TopSuppliersData?> GetTopSuppliersAsync(int brokerId);
-        Task<List<SupplierItem>?> GetAllSuppliersAsync(int brokerId);
-        Task<List<StrategicPerformanceItem>?> GetStrategicPerformanceAsync(int brokerId);
+        Task<BrokerHeaderData?> GetBrokerHeaderAsync(int brokerId, CancellationToken ct = default);
+        Task<CompetitionData?> GetCompetitionRatioAsync(int brokerId, CancellationToken ct = default);
+        Task<CompetitionData?> GetSuccessRateAsync(int brokerId, CancellationToken ct = default);
+        Task<List<MarketShareItem>?> GetMarketShareAsync(int brokerId, CancellationToken ct = default);
+        Task<List<RankingItem>?> GetRankingAsync(int brokerId, CancellationToken ct = default);
+        Task<List<CommodityGroupShareItem>?> GetCommodityGroupShareAsync(int brokerId, CancellationToken ct = default);
+        Task<UpcomingOffersData?> GetBrokerOffersAsync(int brokerId, CancellationToken ct = default);
+        Task<TopSuppliersData?> GetTopSuppliersAsync(int brokerId, CancellationToken ct = default);
+        Task<List<SupplierItem>?> GetAllSuppliersAsync(int brokerId, CancellationToken ct = default);
+        Task<List<StrategicPerformanceItem>?> GetStrategicPerformanceAsync(int brokerId, CancellationToken ct = default);
     }
 }

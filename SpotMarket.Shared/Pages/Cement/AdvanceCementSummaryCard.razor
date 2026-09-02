@@ -1,4 +1,5 @@
-﻿@inject ICementService CementService
+@inject ICementService CementService
+@implements IDisposable
 <div class="cement-summary-card-container">
     @if (data == null)
     {
@@ -46,9 +47,16 @@
 
 @code {
     private CementMarketSummary? data;
+    private CancellationTokenSource _cts = new();
 
     protected override async Task OnInitializedAsync()
     {
-        data = await CementService.GetCementMarketSummaryDataAsync();
+        data = await CementService.GetCementMarketSummaryDataAsync(_cts.Token);
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

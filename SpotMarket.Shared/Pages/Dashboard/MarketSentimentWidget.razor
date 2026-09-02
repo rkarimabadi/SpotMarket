@@ -1,5 +1,6 @@
-﻿
+
 @inject IDashboardService DashboardService
+@implements IDisposable
     <div class="widget-container">
         <div class="section-header">
             <h3 class="section-title">@Title</h3>
@@ -52,6 +53,7 @@ else
     private MarketSentimentData? data;
     private bool _isLoading = false;
     private bool _hasError = false;
+    private CancellationTokenSource _cts = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,7 +61,7 @@ else
         _hasError = false;
         try
         {
-            data = await DashboardService.GetMarketSentiment();
+            data = await DashboardService.GetMarketSentiment(_cts.Token);
             if (data == null)
             {
                 data = new MarketSentimentData { Items = Enumerable.Empty<SentimentItem>() };
@@ -73,5 +75,11 @@ else
         {
             _isLoading = false;
         }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

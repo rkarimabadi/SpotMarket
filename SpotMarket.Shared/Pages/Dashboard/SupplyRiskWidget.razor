@@ -1,5 +1,6 @@
-﻿@inject IDashboardService DashboardService
+@inject IDashboardService DashboardService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 
 <div class="widget-container">
     <div class="section-header">
@@ -84,6 +85,7 @@
     private SupplyRiskData? data;
     private bool _isLoading = false;
     private bool _hasError = false;
+    private CancellationTokenSource _cts = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -91,7 +93,7 @@
         _hasError = false;
         try
         {
-            data = await DashboardService.GetSupplyRisk();
+            data = await DashboardService.GetSupplyRisk(_cts.Token);
             if (data == null)
             {
                 data = new SupplyRiskData { Items = Enumerable.Empty<SupplyRiskItem>() };
@@ -124,5 +126,11 @@
         {
             NavigationManager.NavigateTo($"/commodity-tree/commodities/{item.CommodityId}");
         }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

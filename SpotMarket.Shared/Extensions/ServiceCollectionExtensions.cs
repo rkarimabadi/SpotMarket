@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SpotMarket.Shared.Services.App;
 using SpotMarket.Shared.Services.Presentation;
 
 namespace SpotMarket.Shared.Extensions
@@ -17,6 +18,10 @@ namespace SpotMarket.Shared.Extensions
 
             Action<HttpClient> configureClient = client => client.BaseAddress = new Uri(apiBaseUrl);
 
+            services.AddScoped<SettingsService>();
+            services.AddScoped<NavStateService>();
+            services.AddScoped<ChatHistoryService>();
+
             services.AddHttpClient<IDashboardService, DashboardService>(configureClient);
             services.AddHttpClient<IMarketsService, MarketsService>(configureClient);
             services.AddHttpClient<IMainGroupService, MainGroupService>(configureClient);
@@ -29,6 +34,7 @@ namespace SpotMarket.Shared.Extensions
             services.AddHttpClient<ISupplierService, SupplierService>(configureClient);
             services.AddHttpClient<ICementService, CementService>(configureClient);
             services.AddHttpClient<ITradingMarketInfoService, TradingMarketInfoService>(configureClient);
+            services.AddHttpClient<IChatService, ChatService>(configureClient);
             return services;
         }
     }

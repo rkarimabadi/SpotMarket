@@ -1,5 +1,6 @@
-﻿@inject IMarketsService MarketService
+@inject IMarketsService MarketService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 @if (data != null && data.Items.Any())
 {
     <div class="widget-container">
@@ -77,12 +78,19 @@
     [Parameter] public string Title { get; set; } = "نقشه حرارتی بازار";
     [Parameter] public string Subtitle { get; set; } = "برحسب داده‌های عرضه";
     private MarketHeatmapData? data;
+    private CancellationTokenSource _cts = new();
     protected override async Task OnInitializedAsync()
     {
-       data = await MarketService.GetMarketHeatmapData();
+       data = await MarketService.GetMarketHeatmapData(_cts.Token);
     }
     private void GoTo(int name)
     {
         NavigationManager.NavigateTo($"/markets/{name}");
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

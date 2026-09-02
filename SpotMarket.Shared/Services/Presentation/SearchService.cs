@@ -4,7 +4,7 @@ namespace SpotMarket.Shared.Services.Presentation
 {
     public interface ISearchService
     {
-        Task<SearchResultsData> GlobalSearchAsync(string term);
+        Task<SearchResultsData> GlobalSearchAsync(string term, CancellationToken ct = default);
     }
 
     public class SearchService : ISearchService
@@ -16,9 +16,9 @@ namespace SpotMarket.Shared.Services.Presentation
         {
             _httpClient = httpClient;
         }
-        public async Task<SearchResultsData> GlobalSearchAsync(string term)
+        public async Task<SearchResultsData> GlobalSearchAsync(string term, CancellationToken ct = default)
         {
-            return await _httpClient.GetFromJsonAsync<SearchResultsData>($"{_controllerPath}/{term}") ?? new SearchResultsData();
+            return await _httpClient.GetFromJsonAsync<SearchResultsData>($"{_controllerPath}/{term}", ct) ?? new SearchResultsData();
         }
         
     }

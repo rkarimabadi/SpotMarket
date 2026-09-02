@@ -1,4 +1,5 @@
 ﻿@inject ICementService CementService
+@implements IDisposable
 <div class="market-summary-card">
     <h2 class="summary-title">نبض بازار امروز</h2>
     <div class="summary-value">
@@ -10,8 +11,15 @@
 
 @code {
     private BasicCementMarketSummary? data;
+    private CancellationTokenSource _cts = new();
     protected override async Task OnInitializedAsync()
     {
-        data = await CementService.GetBasicCementMarketSummaryDataAsync();
+        data = await CementService.GetBasicCementMarketSummaryDataAsync(_cts.Token);
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

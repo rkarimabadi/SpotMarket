@@ -1,4 +1,5 @@
 ﻿@inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
 
 <div class="swift-toast-container">
     @foreach (var toast in toasts)
@@ -14,6 +15,7 @@
 
 @code {
     private List<ToastItem> toasts = new List<ToastItem>();
+    private readonly CancellationTokenSource _cts = new();
 
     public async Task ShowToast(string message, ToastType type = ToastType.Success)
     {
@@ -30,29 +32,50 @@
         var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "js/toast.js");
         await module.InvokeVoidAsync("showSwiftToast", toast.Id);
 
-        // Automatically remove the toast from the UI after a delay
-        _ = Task.Delay(4000).ContinueWith(async _ =>
+        _ = RemoveToastAfterDelay(toast.Id);
+    }
+
+    private async Task RemoveToastAfterDelay(string toastId)
+    {
+        try
         {
-            await RemoveToast(toast.Id);
-        });
+            await Task.Delay(4000, _cts.Token);
+            await RemoveToast(toastId);
+        }
+        catch (OperationCanceledException)
+        {
+            // Component was disposed
+        }
     }
 
     private async Task RemoveToast(string toastId)
     {
-        var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "js/toast.js");
-        await module.InvokeVoidAsync("hideSwiftToast", toastId);
-
-        // Wait for the animation to complete before removing from the list
-        await Task.Delay(500);
-
-        await InvokeAsync(() =>
+        try
         {
-            var toastToRemove = toasts.FirstOrDefault(t => t.Id == toastId);
-            if (toastToRemove != null)
+            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "js/toast.js");
+            await module.InvokeVoidAsync("hideSwiftToast", toastId);
+
+            await Task.Delay(500, _cts.Token);
+
+            await InvokeAsync(() =>
             {
-                toasts.Remove(toastToRemove);
-                StateHasChanged();
-            }
-        });
+                var toastToRemove = toasts.FirstOrDefault(t => t.Id == toastId);
+                if (toastToRemove != null)
+                {
+                    toasts.Remove(toastToRemove);
+                    StateHasChanged();
+                }
+            });
+        }
+        catch (OperationCanceledException)
+        {
+            // Component was disposed
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _cts.CancelAsync();
+        _cts.Dispose();
     }
 }

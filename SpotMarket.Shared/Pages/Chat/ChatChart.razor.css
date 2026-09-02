@@ -1,0 +1,43 @@
+.chat-chart {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+    .chat-chart.is-pending {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+.chart-pending-text {
+    font-size: 0.75rem;
+    color: var(--text-secondary-color);
+    white-space: nowrap;
+}
+
+.chart-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.chart-unit {
+    font-weight: 400;
+    color: var(--text-secondary-color);
+    margin-right: 0.25rem;
+}
+
+/* ارتفاع ثابت لازم است چون Chart.js با maintainAspectRatio=false به ظرف تکیه می‌کند */
+.chart-canvas-wrapper {
+    position: relative;
+    height: 200px;
+}
+
+[data-bs-theme="dark"] .chat-chart {
+    background-color: var(--gray-900);
+    border-color: var(--gray-700);
+}

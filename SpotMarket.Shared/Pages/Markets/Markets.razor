@@ -2,10 +2,10 @@
 
 
 
-
 @inject NavStateService NavState
 @inject SettingsService SettingsService
 @inject IMarketsService MarketService
+@implements IDisposable
 <PageTitle>بازارها</PageTitle>
 
 <div class="page-container">
@@ -58,13 +58,19 @@
 @code {
     private MarketSettings? marketSettings;
     private bool settingsLoaded = false;
+    private CancellationTokenSource _cts = new();
 
     protected override async Task OnInitializedAsync()
     {
         NavState.SetNavState("بازارها", true);
-        var settings = await SettingsService.LoadSettingsAsync() ?? SettingsService.GetDefaultSettings();
+        var settings = await SettingsService.LoadSettingsAsync(_cts.Token) ?? SettingsService.GetDefaultSettings();
         marketSettings = settings.MarketPageLayout;
         settingsLoaded = true;
     }
-  
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
 }

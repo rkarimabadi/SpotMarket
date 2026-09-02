@@ -1,4 +1,4 @@
-﻿using SpotMarket.Shared.Models.Presentation;
+using SpotMarket.Shared.Models.Presentation;
 using System.Net.Http.Json;
 
 namespace SpotMarket.Shared.Services.Presentation
@@ -40,9 +40,9 @@ namespace SpotMarket.Shared.Services.Presentation
         {
             _httpClient = httpClient;
         }
-        public async Task<CementGroupsData> GetCementGroupsDataAsync()
+        public async Task<CementGroupsData> GetCementGroupsDataAsync(CancellationToken ct = default)
         {
-            await Task.Delay(500); // شبیه‌سازی تأخیر شبکه
+            await Task.Delay(500, ct); // شبیه‌سازی تأخیر شبکه
 
             return new CementGroupsData
             {
@@ -60,9 +60,9 @@ namespace SpotMarket.Shared.Services.Presentation
                 }
             };
         }
-        public async Task<CementQuickPathData> GetCementQuickPathDataAsync()
+        public async Task<CementQuickPathData> GetCementQuickPathDataAsync(CancellationToken ct = default)
         {
-            await Task.Delay(500); // شبیه‌سازی تأخیر شبکه
+            await Task.Delay(500, ct); // شبیه‌سازی تأخیر شبکه
 
             return new CementQuickPathData
             {
@@ -75,9 +75,9 @@ namespace SpotMarket.Shared.Services.Presentation
                 }
             };
         }
-        public async Task<BasicCementMarketSummary> GetBasicCementMarketSummaryDataAsync()
+        public async Task<BasicCementMarketSummary> GetBasicCementMarketSummaryDataAsync(CancellationToken ct = default)
         {
-            await Task.Delay(500); // شبیه‌سازی تأخیر شبکه
+            await Task.Delay(500, ct); // شبیه‌سازی تأخیر شبکه
 
             return new BasicCementMarketSummary
             {
@@ -86,9 +86,9 @@ namespace SpotMarket.Shared.Services.Presentation
                 Subtitle = "با میانگین رقابت +۲.۱٪",
             };
         }
-        public async Task<CementMarketSummary> GetCementMarketSummaryDataAsync()
+        public async Task<CementMarketSummary> GetCementMarketSummaryDataAsync(CancellationToken ct = default)
         {
-            await Task.Delay(500); // شبیه‌سازی تأخیر شبکه
+            await Task.Delay(500, ct); // شبیه‌سازی تأخیر شبکه
 
             return new CementMarketSummary
             {
@@ -103,9 +103,9 @@ namespace SpotMarket.Shared.Services.Presentation
             };
         }
 
-        public async Task<QuickPathPageData> GetQuickPathPageDataAsync(string urlName)
+        public async Task<QuickPathPageData> GetQuickPathPageDataAsync(string urlName, CancellationToken ct = default)
         {
-            await Task.Delay(800); // شبیه سازی تاخیر شبکه
+            await Task.Delay(800, ct); // شبیه سازی تاخیر شبکه
 
             var data = new QuickPathPageData();
 

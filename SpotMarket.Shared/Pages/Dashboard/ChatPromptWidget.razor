@@ -1,0 +1,108 @@
+@inject IChatService ChatService
+@inject ChatHistoryService ChatHistory
+@inject NavigationManager Navigation
+@implements IDisposable
+
+@* وقتی سرویس گفتگو غیرفعال است، ویجت اصلاً نمایش داده نمی‌شود؛ دعوت کردن کاربر به
+   قابلیتی که کار نمی‌کند بدتر از نبودن آن است. *@
+@if (!_isDisabled)
+{
+    <div class="widget-container">
+        <div class="section-header">
+            <h3 class="section-title">@Title</h3>
+            <a href="chat" class="section-action">گفتگو</a>
+        </div>
+
+        <div class="assistant-card">
+            <div class="assistant-intro">
+                <div class="assistant-avatar"><i class="bi bi-chat-square-text"></i></div>
+                <p class="assistant-hint">درباره عرضه‌ها، معاملات، تالارها و بازیگران بازار بپرسید.</p>
+            </div>
+
+            <div class="ask-row">
+                <input type="text"
+                       class="ask-input"
+                       placeholder="پرسش خود را بنویسید…"
+                       value="@_question"
+                       @oninput="OnQuestionChanged"
+                       @onkeydown="OnKeyDown" />
+                <button type="button"
+                        class="ask-button"
+                        disabled="@string.IsNullOrWhiteSpace(_question)"
+                        @onclick="() => StartConversation(_question)"
+                        aria-label="شروع گفتگو">
+                    <i class="bi bi-send"></i>
+                </button>
+            </div>
+
+            @if (_suggestions.Count > 0)
+            {
+                <div class="suggestion-row">
+                    @foreach (var suggestion in _suggestions)
+                    {
+                        <button type="button" class="suggestion-chip" @onclick="() => StartConversation(suggestion)">
+                            @suggestion
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string Title { get; set; } = "دستیار بازار";
+
+    /// <summary>تعداد پرسش پیشنهادی؛ بیش از این، ویجت داشبورد را شلوغ می‌کند.</summary>
+    private const int SuggestionCount = 3;
+
+    private string _question = string.Empty;
+    private IReadOnlyList<string> _suggestions = [];
+    private bool _isDisabled;
+    private CancellationTokenSource _cts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var capabilities = await ChatService.GetCapabilitiesAsync(_cts.Token);
+            _isDisabled = capabilities is { IsEnabled: false };
+            _suggestions = capabilities?.SampleQuestions.Take(SuggestionCount).ToList() ?? [];
+        }
+        catch (Exception)
+        {
+            // خطای شبکه ویجت را پنهان نمی‌کند: کادر پرسش بدون پیشنهاد نمایش داده می‌شود و
+            // اگر مشکل ادامه داشته باشد، صفحه گفتگو آن را با پیام مناسب نشان می‌دهد.
+            _suggestions = [];
+        }
+    }
+
+    private void OnQuestionChanged(ChangeEventArgs args)
+    {
+        _question = args.Value?.ToString() ?? string.Empty;
+    }
+
+    private void OnKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter") StartConversation(_question);
+    }
+
+    /// <summary>
+    /// پرسش را برای صفحه گفتگو کنار می‌گذارد و کاربر را به آنجا می‌برد؛ ادامه گفتگو
+    /// تنها در همان صفحه انجام می‌شود.
+    /// </summary>
+    private void StartConversation(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return;
+
+        ChatHistory.PendingQuestion = text.Trim();
+        _question = string.Empty;
+        Navigation.NavigateTo("chat");
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
+}

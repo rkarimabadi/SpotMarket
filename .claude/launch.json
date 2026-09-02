@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "SpotMarket.WebAssembly",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "SpotMarket.WebAssembly/SpotMarket.WebAssembly.csproj", "-lp", "https"],
+      "port": 7109,
+      "url": "https://localhost:7109"
+    }
+  ]
+}

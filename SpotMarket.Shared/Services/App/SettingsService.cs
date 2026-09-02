@@ -13,19 +13,20 @@ namespace SpotMarket.Shared.Services.App
             _jsRuntime = jsRuntime;
         }
 
-        /// <summary>
-        /// تنظیمات کاربر را از LocalStorage بارگذاری می‌کند
-        /// </summary>
-        public async Task<UserSettings?> LoadSettingsAsync()
+        public async Task<UserSettings?> LoadSettingsAsync(CancellationToken ct = default)
         {
             try
             {
-                var settingsJson = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", SettingsKey);
+                var settingsJson = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", ct, SettingsKey);
                 if (string.IsNullOrEmpty(settingsJson))
                 {
                     return GetDefaultSettings();
                 }
-                return JsonSerializer.Deserialize<UserSettings>(settingsJson);
+                var settings = JsonSerializer.Deserialize<UserSettings>(settingsJson);
+                if (settings is null) return GetDefaultSettings();
+
+                MergeNewWidgets(settings);
+                return settings;
             }
             catch
             {
@@ -33,18 +34,32 @@ namespace SpotMarket.Shared.Services.App
             }
         }
 
-        /// <summary>
-        /// تنظیمات کاربر را در LocalStorage ذخیره می‌کند
-        /// </summary>
-        public async Task SaveSettingsAsync(UserSettings settings)
+        public async Task SaveSettingsAsync(UserSettings settings, CancellationToken ct = default)
         {
             var settingsJson = JsonSerializer.Serialize(settings);
-            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", SettingsKey, settingsJson);
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", ct, SettingsKey, settingsJson);
         }
 
         /// <summary>
-        /// تنظیمات پیش‌فرض برنامه را برمی‌گرداند
+        /// ویجت‌هایی را که پس از ذخیره شدن تنظیمات کاربر به برنامه اضافه شده‌اند، در جای
+        /// پیش‌فرضشان به چیدمان او اضافه می‌کند.
+        ///
+        /// بدون این کار، کاربری که یک بار وارد صفحه تنظیمات شده هیچ‌وقت ویجت‌های جدید را
+        /// نمی‌بیند، چون چیدمان ذخیره‌شده‌اش کامل و معتبر به نظر می‌رسد.
         /// </summary>
+        private void MergeNewWidgets(UserSettings settings)
+        {
+            var defaults = GetDefaultSettings().DashboardLayout;
+
+            for (var i = 0; i < defaults.Count; i++)
+            {
+                if (settings.DashboardLayout.Any(widget => widget.Type == defaults[i].Type)) continue;
+
+                var position = Math.Min(i, settings.DashboardLayout.Count);
+                settings.DashboardLayout.Insert(position, defaults[i]);
+            }
+        }
+
         public UserSettings GetDefaultSettings()
         {
             return new UserSettings
@@ -52,6 +67,7 @@ namespace SpotMarket.Shared.Services.App
                 DashboardLayout = new List<DashboardWidgetConfig>
                 {
                     new() { Type = DashboardWidgetType.MarketProgress, IsVisible = true },
+                    new() { Type = DashboardWidgetType.ChatAssistant, IsVisible = true },
                     new() { Type = DashboardWidgetType.TradingHalls, IsVisible = true },
                     new() { Type = DashboardWidgetType.MarketMovers, IsVisible = true },
                     new() { Type = DashboardWidgetType.MainPlayers, IsVisible = true },
@@ -72,7 +88,4 @@ namespace SpotMarket.Shared.Services.App
             };
         }
     }
-
-
-
 }

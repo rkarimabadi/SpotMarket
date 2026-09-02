@@ -1,6 +1,7 @@
-﻿@page "/settings/market-layout"
+@page "/settings/market-layout"
 @inject NavStateService NavState
 @inject SettingsService SettingsService
+@implements IDisposable
 
 <PageTitle>سفارشی‌سازی بازارها</PageTitle>
 
@@ -60,11 +61,12 @@
 @code {
     private MarketSettings? marketSettings;
     private List<MarketInfoWidgetConfig>? infoWidgetsConfig;
+    private CancellationTokenSource _cts = new();
 
     protected override async Task OnInitializedAsync()
     {
         NavState.SetNavState("سفارشی‌سازی بازارها", true, "/account");
-        var settings = await SettingsService.LoadSettingsAsync() ?? SettingsService.GetDefaultSettings();
+        var settings = await SettingsService.LoadSettingsAsync(_cts.Token) ?? SettingsService.GetDefaultSettings();
         marketSettings = settings.MarketPageLayout;
 
         infoWidgetsConfig = new List<MarketInfoWidgetConfig>();
@@ -95,10 +97,16 @@
             marketSettings.VisibleInfoWidgets.Clear();
             marketSettings.VisibleInfoWidgets.AddRange(infoWidgetsConfig.Where(w => w.IsVisible).Select(w => w.Type));
 
-            var settings = await SettingsService.LoadSettingsAsync() ?? SettingsService.GetDefaultSettings();
+            var settings = await SettingsService.LoadSettingsAsync(_cts.Token) ?? SettingsService.GetDefaultSettings();
             settings.MarketPageLayout = marketSettings;
-            await SettingsService.SaveSettingsAsync(settings);
+            await SettingsService.SaveSettingsAsync(settings, _cts.Token);
         }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 
     // Helper methods for icons
