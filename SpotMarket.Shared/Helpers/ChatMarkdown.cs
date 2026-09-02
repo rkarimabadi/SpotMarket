@@ -55,6 +55,29 @@ namespace SpotMarket.Shared.Helpers
         private static readonly Regex RulePattern = new(@"^\s{0,3}(-{3,}|\*{3,}|_{3,})\s*$", RegexOptions.Compiled);
         private static readonly Regex TableDividerPattern = new(@"^\s*\|?[\s:|-]*-[\s:|-]*\|?\s*$", RegexOptions.Compiled);
 
+        /// <summary>
+        /// پیوند مارک‌داون. فقط مسیر نسبی (شروع با /) گرفته می‌شود؛ الگو عمداً هیچ نشانی
+        /// مطلقی را نمی‌پذیرد تا <c>javascript:</c> و دامنه‌ی بیرونی اصلاً به مرحله‌ی بعد نرسد.
+        /// </summary>
+        private static readonly Regex LinkPattern =
+            new(@"\[([^\]\n]{1,80})\]\((/[^)\s""]{1,200})\)", RegexOptions.Compiled);
+
+        /// <summary>
+        /// مسیرهای مجازِ پیوند در پاسخ دستیار — همان مسیرهایی که در این برنامه صفحه دارند.
+        ///
+        /// چرا فهرست سفید: نشانی را مدل زبانی در متن پاسخ می‌نویسد و بخشی از داده‌ای که مدل
+        /// می‌بیند (اخبار، اطلاعیه‌ها، نام‌ها) را اشخاص ثالث نوشته‌اند. سمت سرور
+        /// (<c>AppRoutes</c> در IME.SpotDataApi) نشانی درست را کنار هر موجودیت می‌گذارد و مدل
+        /// فقط رونویسی می‌کند، ولی این لایه به آن تکیه نمی‌کند: هر نشانی‌ای که دقیقاً با یکی
+        /// از این الگوها جور نباشد، به‌جای پیوند، متن ساده رندر می‌شود.
+        /// </summary>
+        private static readonly Regex AllowedRoutePattern = new(
+            @"^/(players/(brokers|suppliers)/\d{1,9}"
+            + @"|offers/\d{1,9}"
+            + @"|commodity-tree/(commodities|groups|main-groups|sub-groups)/\d{1,9}"
+            + @"|trading-halls/\d{1,9})$",
+            RegexOptions.Compiled);
+
         private static readonly JsonSerializerOptions ChartJsonOptions = new(JsonSerializerDefaults.Web);
 
         private const string ChartFenceLanguage = "chart";
@@ -347,8 +370,31 @@ namespace SpotMarket.Shared.Helpers
 
         private static string Emphasis(string text)
         {
+            // پیوندها قبل از پررنگ/کج اعمال می‌شوند تا برچسبِ داخل پیوند هم بتواند پررنگ باشد.
+            // نشانی خروجی هیچ ستاره‌ای ندارد (فهرست سفید فقط حرف و رقم و / را می‌پذیرد)،
+            // پس الگوهای بعدی نمی‌توانند تگ <a> را خراب کنند.
+            text = LinkPattern.Replace(text, RenderLink);
             text = BoldPattern.Replace(text, "<strong>$1</strong>");
             return ItalicPattern.Replace(text, "<em>$1</em>");
+        }
+
+        /// <summary>
+        /// یک پیوند مارک‌داون را به تگ لنگر تبدیل می‌کند، مشروط به اینکه مسیرش در فهرست
+        /// سفید باشد. مسیر ناشناخته (یا شناسه‌ی بی‌ربط) پیوند نمی‌شود و فقط برچسبش می‌ماند،
+        /// چون فرستادن کاربر به صفحه‌ی ۴۰۴ بدتر از نبودِ پیوند است.
+        ///
+        /// برچسب و مسیر هر دو از متنی می‌آیند که پیش‌تر HTML-encode شده است، پس اینجا
+        /// دوباره encode نمی‌شوند؛ فهرست سفید هم شکل مسیر را کاملاً محدود می‌کند.
+        /// </summary>
+        private static string RenderLink(Match match)
+        {
+            var label = match.Groups[1].Value;
+            var href = match.Groups[2].Value;
+
+            if (!AllowedRoutePattern.IsMatch(href))
+                return label;
+
+            return $"<a href=\"{href}\" class=\"chat-link\">{label}</a>";
         }
     }
 }
