@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using SpotMarket.Shared.Models.Presentation;
 using System.Net;
 using System.Text;
@@ -71,6 +71,12 @@ namespace SpotMarket.Shared.Helpers
         /// فقط رونویسی می‌کند، ولی این لایه به آن تکیه نمی‌کند: هر نشانی‌ای که دقیقاً با یکی
         /// از این الگوها جور نباشد، به‌جای پیوند، متن ساده رندر می‌شود.
         /// </summary>
+        /// <summary>
+        /// خانه‌ای که فقط یک مسیر نسبی است (بدون هیچ متن دیگری) — نشانه‌ی ستون «لینک».
+        /// </summary>
+        private static readonly Regex BareRoutePattern =
+            new(@"^/[A-Za-z0-9\-_/]{1,200}$", RegexOptions.Compiled);
+
         private static readonly Regex AllowedRoutePattern = new(
             @"^/(players/(brokers|suppliers)/\d{1,9}"
             + @"|offers/\d{1,9}"
@@ -299,26 +305,77 @@ namespace SpotMarket.Shared.Helpers
             var headers = SplitRow(lines[index]);
             index += 2; // خط عنوان و خط جداکننده
 
-            html.Append("<div class=\"chat-table-scroll\"><table class=\"chat-table\"><thead><tr>");
-            foreach (var header in headers)
+            var rows = new List<string[]>();
+            while (index < lines.Length && lines[index].TrimStart().StartsWith("|", StringComparison.Ordinal))
             {
-                html.Append("<th>").Append(Inline(header)).Append("</th>");
+                rows.Add(SplitRow(lines[index]));
+                index++;
+            }
+
+            var skipped = FindRouteOnlyColumns(headers, rows);
+
+            html.Append("<div class=\"chat-table-scroll\"><table class=\"chat-table\"><thead><tr>");
+            for (var column = 0; column < headers.Length; column++)
+            {
+                if (skipped.Contains(column)) continue;
+                html.Append("<th>").Append(Inline(headers[column])).Append("</th>");
             }
             html.Append("</tr></thead><tbody>");
 
-            while (index < lines.Length && lines[index].TrimStart().StartsWith("|", StringComparison.Ordinal))
+            foreach (var row in rows)
             {
                 html.Append("<tr>");
-                foreach (var cell in SplitRow(lines[index]))
+                for (var column = 0; column < row.Length; column++)
                 {
-                    html.Append("<td>").Append(Inline(cell)).Append("</td>");
+                    if (skipped.Contains(column)) continue;
+                    html.Append("<td>").Append(Inline(row[column])).Append("</td>");
                 }
                 html.Append("</tr>");
-                index++;
             }
 
             html.Append("</tbody></table></div>");
             return index;
+        }
+
+        /// <summary>
+        /// ستون‌هایی را پیدا می‌کند که خانه‌هایشان چیزی جز نشانی خام صفحه نیستند.
+        ///
+        /// مدل گاهی کنار نام موجودیت یک ستون «لینک» هم می‌سازد و مسیر را در آن به‌صورت
+        /// متن ساده می‌گذارد. چون نام موجودیت خودش پیوند شده است، آن ستون هم تکراری است
+        /// و هم بدون قالب‌بندی دیده می‌شود؛ پس اینجا حذف می‌شود. معیار، شکل خانه‌هاست نه
+        /// عنوان ستون، تا با هر واژه‌ای که مدل برای عنوان انتخاب کند کار کند.
+        /// </summary>
+        private static HashSet<int> FindRouteOnlyColumns(string[] headers, List<string[]> rows)
+        {
+            var skipped = new HashSet<int>();
+            if (rows.Count == 0) return skipped;
+
+            for (var column = 0; column < headers.Length; column++)
+            {
+                var sawRoute = false;
+                var allRoutes = true;
+
+                foreach (var row in rows)
+                {
+                    if (column >= row.Length) continue;
+
+                    var cell = row[column];
+                    if (cell.Length == 0) continue;
+
+                    if (BareRoutePattern.IsMatch(cell))
+                        sawRoute = true;
+                    else
+                    {
+                        allRoutes = false;
+                        break;
+                    }
+                }
+
+                if (sawRoute && allRoutes) skipped.Add(column);
+            }
+
+            // اگر همه‌ی ستون‌ها نشانی بودند، جدول را خالی نمی‌کنیم.
+            return skipped.Count == headers.Length ? new HashSet<int>() : skipped;
         }
 
         private static string[] SplitRow(string line)
