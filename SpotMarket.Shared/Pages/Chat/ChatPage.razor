@@ -1,4 +1,4 @@
-@page "/chat"
+﻿@page "/chat"
 @using System.Diagnostics
 @inject IChatService ChatService
 @inject ChatHistoryService ChatHistory
@@ -111,6 +111,10 @@
     private ElementReference _inputRef;
     private IJSObjectReference? _module;
 
+    /// <summary>ارجاعی که شنونده‌ی Enter در جاوااسکریپت با آن به این صفحه برمی‌گردد.</summary>
+    private DotNetObjectReference<ChatPage>? _selfRef;
+    private bool _enterToSendReady;
+
     private readonly CancellationTokenSource _cts = new();
 
     /// <summary>لغو یک پاسخ در حال دریافت، مستقل از عمر خود صفحه.</summary>
@@ -160,6 +164,15 @@
     /// </summary>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        // کادر نوشتن تا پایان بارگذاری قابلیت‌ها در صفحه نیست، پس به firstRender
+        // تکیه نمی‌شود؛ به‌جای آن اولین رندری که کادر را ساخته باشد شنونده را وصل می‌کند.
+        if (!_enterToSendReady && !_isLoading && !_hasError && _capabilities is not { IsEnabled: false })
+        {
+            _enterToSendReady = true;
+            _selfRef ??= DotNetObjectReference.Create(this);
+            await InvokeModuleAsync("enableEnterToSend", _inputRef, _selfRef);
+        }
+
         if (_pendingQuestion is null || _isLoading) return;
 
         var question = _pendingQuestion;
@@ -176,14 +189,23 @@
         _ = ResizeInputAsync();
     }
 
-    // روی موبایل Enter باید خط جدید بسازد، پس ارسال با دکمه انجام می‌شود و
-    // Ctrl+Enter فقط میان‌بری برای کاربران دسکتاپ است.
+    // Enterِ تنها را شنونده‌ی جاوااسکریپت می‌گیرد (بلیزور نمی‌تواند preventDefault را
+    // شرطی کند). این‌جا فقط Ctrl/Cmd+Enter می‌ماند تا روی صفحه‌های لمسیِ دارای
+    // صفحه‌کلید جانبی هم میان‌بری برای ارسال باشد.
     private async Task OnKeyDown(KeyboardEventArgs args)
     {
         if (args.Key == "Enter" && (args.CtrlKey || args.MetaKey))
         {
             await SendAsync(_draft);
         }
+    }
+
+    /// <summary>ارسال با Enter، از شنونده‌ی <c>enableEnterToSend</c> در chat.js.</summary>
+    [JSInvokable]
+    public async Task SubmitFromKeyboard()
+    {
+        await SendAsync(_draft);
+        StateHasChanged();
     }
 
     private async Task SendAsync(string text)
@@ -334,13 +356,13 @@
 
     private async Task ResizeInputAsync() => await InvokeModuleAsync("autoGrow", _inputRef);
 
-    private async Task InvokeModuleAsync(string function, ElementReference element)
+    private async Task InvokeModuleAsync(string function, ElementReference element, params object?[] args)
     {
         try
         {
             var module = await GetModuleAsync();
             if (module is null) return;
-            await module.InvokeVoidAsync(function, element);
+            await module.InvokeVoidAsync(function, [element, .. args]);
         }
         catch (JSDisconnectedException)
         {
@@ -350,6 +372,7 @@
 
     public async ValueTask DisposeAsync()
     {
+        _selfRef?.Dispose();
         _cts.Cancel();
         _streamCts?.Cancel();
         _cts.Dispose();
