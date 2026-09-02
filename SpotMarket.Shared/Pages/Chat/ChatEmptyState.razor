@@ -33,9 +33,13 @@
                 <ul class="tool-list">
                     @foreach (var tool in Capabilities.Tools)
                     {
+                        var description = ChatToolDescription.ForDisplay(tool.Description);
                         <li class="tool-item">
                             <div class="tool-title">@tool.Title</div>
-                            <div class="tool-description">@tool.Description</div>
+                            @if (description.Length > 0)
+                            {
+                                <div class="tool-description">@description</div>
+                            }
                         </li>
                     }
                 </ul>
