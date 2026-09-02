@@ -1,4 +1,4 @@
-# CLAUDE.md
+﻿# CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -72,7 +72,7 @@ Shared state components (`Layout/Components`): `ToastContainer` and `GenericModa
 
 - Scoped CSS per component (`Foo.razor` + `Foo.razor.css`) is used almost everywhere. Global tokens live in `SpotMarket.Shared/wwwroot/css/app.css` as CSS custom properties on `:root` (`--primary-color`, the `--gray-*` ramp, `--mood-*`, `--risk-color-*`, `--safe-area-inset-*`, `--bottom-nav-height`). Use these variables, not literals.
 - RTL: hosts set `<html dir="rtl" lang="fa">` and load `bootstrap.rtl.min.css`; the Peyda font (Farsi numerals variant) is bundled.
-- JS lives in `SpotMarket.Shared/wwwroot/js` and is served at `_content/SpotMarket.Shared/js/...`. `chart.js`/`chart-utility.js` (ES module, `renderDoughnutChart` etc.), `toast.js`, `modal.js`, `jalaali.js`, `dataStorage.js`, `content-loaded.js` (`setupResizeObserver`/`getElementHeight`, used by `MainLayout` to size top-nav padding). Note the existing `InvokeAsync<IJSObjectReference>("import", "js/toast.js")` calls use a bare `js/…` path while the assets are only published under `_content/SpotMarket.Shared/js/…` — prefer the `_content/` path for new imports.
+- JS lives in `SpotMarket.Shared/wwwroot/js` and is served at `_content/SpotMarket.Shared/js/...`. `chart-utility.js` (ES module; `renderChatChart`/`destroyChart`, used only by the chat). It lazy-loads the bundled `chart.js` on the first chart instead of the hosts script-tagging it, so the 208KB library never loads outside `/chat`. `toast.js`, `modal.js`, `jalaali.js`, `dataStorage.js`, `content-loaded.js` (`setupResizeObserver`/`getElementHeight`, used by `MainLayout` to size top-nav padding). Note the existing `InvokeAsync<IJSObjectReference>("import", "js/toast.js")` calls use a bare `js/…` path while the assets are only published under `_content/SpotMarket.Shared/js/…` — prefer the `_content/` path for new imports.
 
 ### Persian dates
 

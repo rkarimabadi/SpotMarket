@@ -1,71 +1,28 @@
 ﻿export let chartInstances = {};
-export function loadChartJs(scriptUrl) {
-    if (document.querySelector(`script[src="${scriptUrl}"]`)) {
-        return; // Already loaded
-    }
-    const script = document.createElement('script');
-    script.src = scriptUrl;
-    document.body.appendChild(script);
-}
 
-export function renderDoughnutChart(canvasId, labels, data) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+// نشانی کتابخانه‌ی Chart.js. تنها مصرف‌کننده‌اش صفحه‌ی گفتگوست، پس به‌جای اینکه در
+// هر بار باز شدن برنامه بارگذاری شود، همین‌جا و فقط هنگام رسم نخستین نمودار خوانده
+// می‌شود. نتیجه‌ی وعده نگه داشته می‌شود تا چند نمودار هم‌زمان، یک بار بیشتر آن را
+// بارگذاری نکنند.
+const chartJsUrl = '_content/SpotMarket.Shared/js/chart.js';
+let chartJsPromise = null;
 
-    if (chartInstances[canvasId]) {
-        chartInstances[canvasId].destroy();
-    }
+function ensureChartJs() {
+    if (typeof Chart !== 'undefined') return Promise.resolve();
 
-    if (!labels || labels.length === 0) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.font = "14px 'PeydaWebFaNum'"; // فونت فارسی
-        ctx.fillStyle = 'grey';
-        ctx.textAlign = 'center';
-        ctx.fillText('داده‌ای برای نمایش نمودار وجود ندارد', canvas.width / 2, canvas.height / 2);
-        return;
-    }
-
-    chartInstances[canvasId] = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-                backgroundColor: ['#5e72e4', '#ffb300', '#26a69a', '#f57c00', '#673ab7', '#d32f2f', '#78909c'],
-                borderWidth: 1,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        // استفاده از نام فونت صحیح
-                        font: {
-                            family: 'PeydaWebFaNum'
-                        }
-                    }
-                },
-                tooltip: {
-                    // استفاده از نام فونت صحیح
-                    titleFont: {
-                        family: 'PeydaWebFaNum'
-                    },
-                    bodyFont: {
-                        family: 'PeydaWebFaNum'
-                    },
-                    footerFont: {
-                        family: 'PeydaWebFaNum'
-                    },
-                    rtl: true
-                }
-            }
-        }
+    chartJsPromise ??= new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = chartJsUrl;
+        script.onload = () => resolve();
+        script.onerror = () => {
+            // وعده‌ی شکست‌خورده را دور می‌ریزیم تا نمودار بعدی بتواند دوباره تلاش کند.
+            chartJsPromise = null;
+            reject(new Error('Chart.js failed to load'));
+        };
+        document.head.appendChild(script);
     });
+
+    return chartJsPromise;
 }
 
 // پالت نمودارهای گفتگو؛ هم‌راستا با متغیرهای رنگ برنامه در app.css
@@ -73,9 +30,15 @@ const chatChartPalette = ['#5e72e4', '#2dce89', '#fb6340', '#ffb300', '#673ab7',
 
 // رسم نمودار پیشنهادی دستیار. spec همان ساختار بلاک chart در پاسخ مدل است و
 // پیش از رسیدن به اینجا سمت کلاینت اعتبارسنجی شده است.
-export function renderChatChart(canvasId, spec) {
+export async function renderChatChart(canvasId, spec) {
     const canvas = document.getElementById(canvasId);
-    if (!canvas || !spec || typeof Chart === 'undefined') return;
+    if (!canvas || !spec) return;
+
+    await ensureChartJs();
+
+    // بارگذاری کتابخانه زمان می‌برد؛ ممکن است کاربر در همین فاصله صفحه را ترک کرده
+    // و بوم از سند برداشته شده باشد.
+    if (!canvas.isConnected) return;
 
     const ctx = canvas.getContext('2d');
     if (chartInstances[canvasId]) {

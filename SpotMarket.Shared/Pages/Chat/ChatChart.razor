@@ -1,4 +1,4 @@
-@inject IJSRuntime JSRuntime
+﻿@inject IJSRuntime JSRuntime
 @implements IAsyncDisposable
 
 @if (Spec is null)
@@ -59,6 +59,11 @@ else
         catch (JSDisconnectedException)
         {
             // کاربر صفحه را ترک کرده است.
+        }
+        catch (JSException)
+        {
+            // بارگذاری Chart.js شکست خورده است (مثلاً قطع شبکه). امضا ثبت نمی‌شود تا
+            // رندر بعدی دوباره تلاش کند؛ متن پاسخ بدون نمودار هم خواناست.
         }
     }
 
