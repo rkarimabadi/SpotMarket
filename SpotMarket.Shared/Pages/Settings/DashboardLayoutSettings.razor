@@ -1,6 +1,7 @@
 ﻿@page "/settings/dashboard-layout"
 @inject NavStateService NavState
 @inject SettingsService SettingsService
+@implements IDisposable
 <PageTitle>چیدمان داشبورد</PageTitle>
 <div class="page-container">
     <div class="page-header">
@@ -53,11 +54,12 @@
 @code {
     private List<DashboardWidgetConfig>? widgetLayout;
     private DashboardWidgetConfig? draggedWidget;
+    private CancellationTokenSource _cts = new();
 
     protected override async Task OnInitializedAsync()
     {
         NavState.SetNavState("چیدمان داشبورد", true, "/account");
-        var settings = await SettingsService.LoadSettingsAsync();
+        var settings = await SettingsService.LoadSettingsAsync(_cts.Token);
         widgetLayout = settings?.DashboardLayout;
     }
 
@@ -116,9 +118,15 @@
     {
         if (widgetLayout != null)
         {
-            var settings = await SettingsService.LoadSettingsAsync() ?? SettingsService.GetDefaultSettings();
+            var settings = await SettingsService.LoadSettingsAsync(_cts.Token) ?? SettingsService.GetDefaultSettings();
             settings.DashboardLayout = widgetLayout;
-            await SettingsService.SaveSettingsAsync(settings);
+            await SettingsService.SaveSettingsAsync(settings, _cts.Token);
         }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

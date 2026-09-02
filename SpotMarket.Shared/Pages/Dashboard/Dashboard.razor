@@ -5,6 +5,7 @@
 @inject NavStateService NavState
 @inject SettingsService SettingsService
 @inject IDashboardService DashboardService
+@implements IDisposable
 
 <PageTitle>داشبورد</PageTitle>
 <div class="dashboard-container">
@@ -20,6 +21,9 @@
                 {
                     case DashboardWidgetType.MarketProgress:
                         <MarketAdvanceProgressBarWidget />
+                        break;
+                    case DashboardWidgetType.ChatAssistant:
+                        <ChatPromptWidget />
                         break;
                     case DashboardWidgetType.TradingHalls:
                         <TradingHallsWidget/>
@@ -57,10 +61,15 @@
     protected override async Task OnInitializedAsync()
     {
         NavState.SetNavState("کالا نما", false);
-        var settings = await SettingsService.LoadSettingsAsync();
+        var settings = await SettingsService.LoadSettingsAsync(_cts.Token);
         widgetLayout = settings?.DashboardLayout;
     }
     private List<DashboardWidgetConfig> widgetLayout = new();
+    private CancellationTokenSource _cts = new();
 
-
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
 }

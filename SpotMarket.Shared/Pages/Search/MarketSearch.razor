@@ -1,4 +1,4 @@
-﻿@using System.Timers
+@using System.Timers
 
 @inject ISearchService SearchService
 @inject NavigationManager NavigationManager
@@ -66,6 +66,7 @@
     private bool isLoading;
     private List<SearchResult> searchResults = new();
     private Timer? debounceTimer;
+    private CancellationTokenSource _cts = new();
     // لیست کلمات کلیدی کسب‌وکار که طول کمی دارند
     private readonly HashSet<string> specialSearchTerms = new() { "مس", "روی", "فولاد", "قیر", "سیمان" };
 
@@ -111,8 +112,12 @@
 
         try
         {
-            var apiResults = await SearchService.GlobalSearchAsync(searchTerm);
+            var apiResults = await SearchService.GlobalSearchAsync(searchTerm, _cts.Token);
             searchResults = apiResults.Items.Select(item => item.ToViewModel()).ToList();
+        }
+        catch (OperationCanceledException)
+        {
+            // Search was cancelled, ignore
         }
         catch (Exception ex)
         {
@@ -175,5 +180,7 @@
     public void Dispose()
     {
         debounceTimer?.Dispose();
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

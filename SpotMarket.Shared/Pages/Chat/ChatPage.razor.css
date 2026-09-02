@@ -1,0 +1,153 @@
+/* کادر نوشتن روی نوار پایین ثابت می‌ماند، پس رشته گفتگو به همان اندازه فضای
+   خالی انتها لازم دارد تا آخرین پیام زیر آن پنهان نشود. */
+.chat-thread {
+    padding-bottom: 6.5rem;
+}
+
+.thread-toolbar {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.clear-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.72rem;
+    color: var(--text-secondary-color);
+    background-color: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+    .clear-button:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+
+.tool-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary-color);
+}
+
+.tool-spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gray-300);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: tool-spin 0.8s linear infinite;
+}
+
+@keyframes tool-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- کادر نوشتن ---------- */
+
+.chat-composer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--bottom-nav-height) + var(--safe-area-inset-bottom));
+    z-index: 9;
+    margin: 0 auto;
+    padding: 0.6rem 1rem 0.5rem;
+    background-color: var(--card-background-color);
+    border-top: 1px solid var(--border-color);
+}
+
+.composer-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.composer-input {
+    flex: 1;
+    resize: none;
+    max-height: 140px;
+    padding: 0.55rem 0.8rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    outline: none;
+    overflow-y: hidden;
+}
+
+    .composer-input:focus {
+        border-color: var(--primary-color);
+    }
+
+.composer-button {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #fff;
+    background-color: var(--primary-color);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    .composer-button:disabled {
+        background-color: var(--gray-400);
+        cursor: default;
+    }
+
+    .composer-button.is-stop {
+        background-color: var(--danger-color);
+    }
+
+    /* آیکون ارسال در چیدمان راست‌به‌چپ باید رو به چپ باشد */
+    .composer-button .bi-send {
+        transform: scaleX(-1);
+    }
+
+.composer-note {
+    margin-top: 0.35rem;
+    font-size: 0.65rem;
+    text-align: center;
+    color: var(--text-secondary-color);
+}
+
+.composer-disabled {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+}
+
+[data-bs-theme="dark"] .chat-composer {
+    background-color: var(--gray-800);
+    border-top-color: var(--gray-700);
+}
+
+[data-bs-theme="dark"] .composer-input,
+[data-bs-theme="dark"] .clear-button {
+    background-color: var(--gray-900);
+    border-color: var(--gray-700);
+}

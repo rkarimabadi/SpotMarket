@@ -1,0 +1,85 @@
+@inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
+
+@if (Spec is null)
+{
+    <div class="chat-chart is-pending">
+        <BarLoader />
+        <span class="chart-pending-text">در حال آماده‌سازی نمودار…</span>
+    </div>
+}
+else
+{
+    <div class="chat-chart">
+        @if (!string.IsNullOrWhiteSpace(Spec.Title))
+        {
+            <div class="chart-title">
+                @Spec.Title
+                @if (!string.IsNullOrWhiteSpace(Spec.Unit))
+                {
+                    <span class="chart-unit">(@Spec.Unit)</span>
+                }
+            </div>
+        }
+        <div class="chart-canvas-wrapper">
+            <canvas id="@_canvasId"></canvas>
+        </div>
+    </div>
+}
+
+@code {
+    /// <summary>
+    /// مشخصات نمودار. تا زمانی که بلاک نمودار در جریان پاسخ بسته نشده null است.
+    /// </summary>
+    [Parameter] public ChartSpec? Spec { get; set; }
+
+    private readonly string _canvasId = $"chat-chart-{Guid.NewGuid():N}";
+    private IJSObjectReference? _module;
+
+    /// <summary>
+    /// امضای آخرین نموداری که رسم شده. حین جریان پاسخ، والد در هر تکه یک نمونه تازه
+    /// از ChartSpec می‌سازد؛ بدون این مقایسه، نمودار ده‌ها بار بی‌دلیل دوباره رسم می‌شود.
+    /// </summary>
+    private string? _renderedSignature;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (Spec is null) return;
+
+        var signature = BuildSignature(Spec);
+        if (signature == _renderedSignature) return;
+
+        try
+        {
+            _module ??= await JSRuntime.InvokeAsync<IJSObjectReference>(
+                "import", "./_content/SpotMarket.Shared/js/chart-utility.js");
+            await _module.InvokeVoidAsync("renderChatChart", _canvasId, Spec);
+            _renderedSignature = signature;
+        }
+        catch (JSDisconnectedException)
+        {
+            // کاربر صفحه را ترک کرده است.
+        }
+    }
+
+    private static string BuildSignature(ChartSpec spec)
+    {
+        var values = string.Join('|', spec.Series.Select(s => $"{s.Name}:{string.Join(',', s.Values)}"));
+        return $"{spec.Type}~{spec.Title}~{string.Join(',', spec.Labels)}~{values}";
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_module is null) return;
+
+        try
+        {
+            await _module.InvokeVoidAsync("destroyChart", _canvasId);
+            await _module.DisposeAsync();
+        }
+        catch (JSDisconnectedException)
+        {
+            // در زمان بسته شدن صفحه، ارتباط JS از قبل قطع شده است.
+        }
+    }
+}

@@ -1,5 +1,6 @@
-﻿@inject NavigationManager NavigationManager
+@inject NavigationManager NavigationManager
 @inject IDashboardService DashboardService
+@implements IDisposable
 <div class="widget-container">
     <div class="section-header">
         <h3 class="section-title">@Title</h3>
@@ -76,6 +77,7 @@
     private TradingHallsData? data;
     private bool _isLoading = false;
     private bool _hasError = false;
+    private CancellationTokenSource _cts = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -83,7 +85,7 @@
         _hasError = false;
         try
         {
-            data = await DashboardService.GetTradingHalls();
+            data = await DashboardService.GetTradingHalls(_cts.Token);
             if (data == null)
             {
                 data = new TradingHallsData { Items = Enumerable.Empty<TradingHallItem>() };
@@ -114,5 +116,11 @@
         {
             NavigationManager.NavigateTo($"/trading-halls/{item.Id}");
         }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

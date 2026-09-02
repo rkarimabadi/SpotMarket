@@ -1,4 +1,5 @@
-﻿@inject IDashboardService DashboardService
+@inject IDashboardService DashboardService
+@implements IDisposable
     <div class="widget-container">
     <div class="progress-card-widget">
         <div class="widget-header">
@@ -62,14 +63,21 @@
     public string Unit { get; set; } = "عرضه";
 
     private MarketProgressData? data;
+    private CancellationTokenSource _cts = new();
 
     protected override async Task OnInitializedAsync()
     {
-         data = await DashboardService.GetMarketProgressData();
+         data = await DashboardService.GetMarketProgressData(_cts.Token);
     }
 
     private void ToggleDetails()
     {
         _detailsVisible = !_detailsVisible;
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

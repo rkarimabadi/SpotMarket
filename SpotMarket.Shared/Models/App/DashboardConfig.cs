@@ -13,7 +13,11 @@
         MarketPulse,
         MarketSentiment,
         SupplyRisk,
-        SpotNotifictions
+        SpotNotifictions,
+
+        // مقادیر این enum به‌صورت عددی در تنظیمات کاربر ذخیره می‌شود، پس موارد جدید
+        // فقط باید به انتهای فهرست اضافه شوند تا چیدمان ذخیره‌شده جابه‌جا نشود.
+        ChatAssistant
     }
 
     /// <summary>
@@ -34,6 +38,7 @@
             DashboardWidgetType.MarketSentiment => "احساسات بازار",
             DashboardWidgetType.SupplyRisk => "ریسک تمرکز عرضه",
             DashboardWidgetType.SpotNotifictions => "آخرین اخبار",
+            DashboardWidgetType.ChatAssistant => "دستیار بازار",
             _ => "ویجت ناشناس"
         };
     }

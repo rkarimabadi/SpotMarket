@@ -5,15 +5,15 @@ namespace SpotMarket.Shared.Services.Presentation
 {
     public interface ICommodityService
     {
-        Task<CommodityHeaderData?> GetCommodityHeaderAsync(int commodityId);
-        Task<PriceViewModel?> GetPriceTrendsAsync(int commodityId);
-        Task<MarketAbsorptionData?> GetMarketAbsorptionAsync(int commodityId);
-        Task<CommodityAttributesData?> GetCommodityAttributesAsync(int commodityId);
-        Task<IEnumerable<MainPlayer>?> GetMainPlayersAsync(int commodityId);
-        Task<DistributedAttributesData?> GetDistributedAttributesAsync(int commodityId);
-        Task<List<HierarchyItem>> GetCommodityHierarchyAsync(int commodityId);
-        Task<UpcomingOffersData?> GetOfferHistoryAsync(int commodityId);
-        Task<DistributedAttributesData> GetPlayerDistributionAsync(int commodityId);
+        Task<CommodityHeaderData?> GetCommodityHeaderAsync(int commodityId, CancellationToken ct = default);
+        Task<PriceViewModel?> GetPriceTrendsAsync(int commodityId, CancellationToken ct = default);
+        Task<MarketAbsorptionData?> GetMarketAbsorptionAsync(int commodityId, CancellationToken ct = default);
+        Task<CommodityAttributesData?> GetCommodityAttributesAsync(int commodityId, CancellationToken ct = default);
+        Task<IEnumerable<MainPlayer>?> GetMainPlayersAsync(int commodityId, CancellationToken ct = default);
+        Task<DistributedAttributesData?> GetDistributedAttributesAsync(int commodityId, CancellationToken ct = default);
+        Task<List<HierarchyItem>> GetCommodityHierarchyAsync(int commodityId, CancellationToken ct = default);
+        Task<UpcomingOffersData?> GetOfferHistoryAsync(int commodityId, CancellationToken ct = default);
+        Task<DistributedAttributesData> GetPlayerDistributionAsync(int commodityId, CancellationToken ct = default);
     }
 
         public class CommodityService : ICommodityService
@@ -26,47 +26,47 @@ namespace SpotMarket.Shared.Services.Presentation
                 _httpClient = httpClient;
             }
 
-            public async Task<CommodityHeaderData?> GetCommodityHeaderAsync(int commodityId)
+            public async Task<CommodityHeaderData?> GetCommodityHeaderAsync(int commodityId, CancellationToken ct = default)
             {
-                return await _httpClient.GetFromJsonAsync<CommodityHeaderData>($"{_controllerPath}/{commodityId}/header");
+                return await _httpClient.GetFromJsonAsync<CommodityHeaderData>($"{_controllerPath}/{commodityId}/header", ct);
             }
     
-            public async Task<PriceViewModel?> GetPriceTrendsAsync(int commodityId)
+            public async Task<PriceViewModel?> GetPriceTrendsAsync(int commodityId, CancellationToken ct = default)
             {
-                return await _httpClient.GetFromJsonAsync<PriceViewModel>($"{_controllerPath}/{commodityId}/price-trends");
+                return await _httpClient.GetFromJsonAsync<PriceViewModel>($"{_controllerPath}/{commodityId}/price-trends", ct);
             }
-            public async Task<List<HierarchyItem>> GetCommodityHierarchyAsync(int commodityId)
+            public async Task<List<HierarchyItem>> GetCommodityHierarchyAsync(int commodityId, CancellationToken ct = default)
             {
-                return await _httpClient.GetFromJsonAsync<List<HierarchyItem>>($"{_controllerPath}/{commodityId}/hierarchy");
-            }
-
-            public async Task<MarketAbsorptionData?> GetMarketAbsorptionAsync(int commodityId)
-            {
-                return await _httpClient.GetFromJsonAsync<MarketAbsorptionData>($"{_controllerPath}/{commodityId}/market-absorption");
+                return await _httpClient.GetFromJsonAsync<List<HierarchyItem>>($"{_controllerPath}/{commodityId}/hierarchy", ct);
             }
 
-            public async Task<CommodityAttributesData?> GetCommodityAttributesAsync(int commodityId)
+            public async Task<MarketAbsorptionData?> GetMarketAbsorptionAsync(int commodityId, CancellationToken ct = default)
             {
-                return await _httpClient.GetFromJsonAsync<CommodityAttributesData>($"{_controllerPath}/{commodityId}/attributes");
+                return await _httpClient.GetFromJsonAsync<MarketAbsorptionData>($"{_controllerPath}/{commodityId}/market-absorption", ct);
             }
 
-            public async Task<IEnumerable<MainPlayer>?> GetMainPlayersAsync(int commodityId)
+            public async Task<CommodityAttributesData?> GetCommodityAttributesAsync(int commodityId, CancellationToken ct = default)
             {
-                return await _httpClient.GetFromJsonAsync<IEnumerable<MainPlayer>>($"{_controllerPath}/{commodityId}/main-players");
+                return await _httpClient.GetFromJsonAsync<CommodityAttributesData>($"{_controllerPath}/{commodityId}/attributes", ct);
             }
 
-            public async Task<DistributedAttributesData?> GetDistributedAttributesAsync(int commodityId)
+            public async Task<IEnumerable<MainPlayer>?> GetMainPlayersAsync(int commodityId, CancellationToken ct = default)
             {
-                return await _httpClient.GetFromJsonAsync<DistributedAttributesData>($"{_controllerPath}/{commodityId}/distributed-attributes");
+                return await _httpClient.GetFromJsonAsync<IEnumerable<MainPlayer>>($"{_controllerPath}/{commodityId}/main-players", ct);
             }
 
-            public async Task<DistributedAttributesData?> GetPlayerDistributionAsync(int commodityId)
+            public async Task<DistributedAttributesData?> GetDistributedAttributesAsync(int commodityId, CancellationToken ct = default)
             {
-                return await _httpClient.GetFromJsonAsync<DistributedAttributesData>($"{_controllerPath}/{commodityId}/player-distribution");
+                return await _httpClient.GetFromJsonAsync<DistributedAttributesData>($"{_controllerPath}/{commodityId}/distributed-attributes", ct);
             }
-            public async Task<UpcomingOffersData?> GetOfferHistoryAsync(int commodityId)
+
+            public async Task<DistributedAttributesData?> GetPlayerDistributionAsync(int commodityId, CancellationToken ct = default)
+            {
+                return await _httpClient.GetFromJsonAsync<DistributedAttributesData>($"{_controllerPath}/{commodityId}/player-distribution", ct);
+            }
+            public async Task<UpcomingOffersData?> GetOfferHistoryAsync(int commodityId, CancellationToken ct = default)
         {
-                return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{commodityId}/offer-history");
+                return await _httpClient.GetFromJsonAsync<UpcomingOffersData>($"{_controllerPath}/{commodityId}/offer-history", ct);
             }
         }
 }

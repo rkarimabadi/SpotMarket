@@ -18,11 +18,21 @@
 
 <body>
     <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
+        <div class="app-splash">
+            <div class="splash-logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M4 20V10M12 20V4M20 20V14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+            <h1 class="splash-name">کالانما</h1>
+            <p class="splash-tagline">روایت‌گر داستان بازار</p>
+            <div class="splash-progress">
+                <div class="splash-progress-track">
+                    <div class="splash-progress-bar"></div>
+                </div>
+                <div class="splash-progress-text"></div>
+            </div>
+        </div>
     </div>
 
     <div id="blazor-error-ui">

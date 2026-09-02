@@ -3,6 +3,7 @@
 @using Newtonsoft.Json
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.Extensions.Configuration
+@implements IAsyncDisposable
 @inject IConfiguration configuration
 
 <h3>@serverTime</h3>
@@ -51,6 +52,14 @@
             }
         });
         await _connection.StartAsync();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_connection is not null)
+        {
+            await _connection.DisposeAsync();
+        }
     }
 }
 

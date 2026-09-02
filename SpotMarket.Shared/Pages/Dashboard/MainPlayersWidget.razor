@@ -1,5 +1,6 @@
-﻿@inject IDashboardService DashboardService
+@inject IDashboardService DashboardService
 @inject NavigationManager NavManager
+@implements IDisposable
 <div class="widget-container">
     <div class="section-header">
         <h3 class="section-title">@Title</h3>
@@ -58,13 +59,14 @@
     private IEnumerable<MainPlayer>? Players;
     private bool _isLoading = false;
     private bool _hasError = false;
+    private CancellationTokenSource _cts = new();
     protected override async Task OnInitializedAsync()
     {
         _isLoading = true;
         _hasError = false;
         try
         {
-            Players = await DashboardService.GetMainPlayers();
+            Players = await DashboardService.GetMainPlayers(_cts.Token);
             if (Players == null)
             {
                 Players = Enumerable.Empty<MainPlayer>();
@@ -98,5 +100,11 @@
                 NavManager.NavigateTo($"/players/suppliers/{item.Id}");
                 break;
         }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

@@ -1,5 +1,6 @@
-﻿@inject IMarketsService MarketService
+@inject IMarketsService MarketService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 <div class="market-list-container">
     <div class="market-list">
         @if(data == null || data.Count == 0)
@@ -46,9 +47,10 @@
 
 @code {
     private List<MarketInfo>? data;
+    private CancellationTokenSource _cts = new();
     protected override async Task OnInitializedAsync()
     {
-        data = await MarketService.GetMainGroupsData();
+        data = await MarketService.GetMainGroupsData(_cts.Token);
     }
     private void GoTo(int id)
     {
@@ -56,4 +58,9 @@
     }
     private List<MarketInfo> MarketItems { get; set; } = new();
 
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
 }

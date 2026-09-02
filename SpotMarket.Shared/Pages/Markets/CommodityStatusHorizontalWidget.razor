@@ -1,4 +1,5 @@
-﻿@inject IMarketsService MarketService
+@inject IMarketsService MarketService
+@implements IDisposable
 
 <div class="widget-container">
     <div class="section-header">
@@ -47,9 +48,10 @@
     [Parameter]
     public string Subtitle { get; set; } = "براساس تعداد اطلاعیه عرضه";
     private CommodityStatusData? data;
+    private CancellationTokenSource _cts = new();
     protected override async Task OnInitializedAsync()
     {
-        data = await MarketService.GetIndexGroups();
+        data = await MarketService.GetIndexGroups(_cts.Token);
     }
     private string GetThemeClass(string mainGroupName) => mainGroupName switch
     {
@@ -77,4 +79,10 @@
         DemandStatus.Low => "پایین",
         _ => "متوسط"
     };
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
 }

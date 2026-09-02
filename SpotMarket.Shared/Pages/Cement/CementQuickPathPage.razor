@@ -1,7 +1,8 @@
-﻿@page "/markets/cement/quick-path/{urlName}"
+@page "/markets/cement/quick-path/{urlName}"
 @inject ICementService CementService
 @inject NavigationManager NavigationManager
 @inject NavStateService NavState
+@implements IDisposable
 @using SpotMarket.Shared.Models.Presentation
 <PageTitle>@data?.PageTitle</PageTitle>
 <div class="quick-path-page-container">
@@ -36,13 +37,20 @@
     public string urlName { get; set; } = "";
 
     private QuickPathPageData? data;
+    private CancellationTokenSource _cts = new();
 
     protected override async Task OnParametersSetAsync()
     {
-        data = await CementService.GetQuickPathPageDataAsync(urlName);
+        data = await CementService.GetQuickPathPageDataAsync(urlName, _cts.Token);
         if(data is not null)
         {
             NavState.SetNavState(data.PageTitle,true,"/markets/cement");
         }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

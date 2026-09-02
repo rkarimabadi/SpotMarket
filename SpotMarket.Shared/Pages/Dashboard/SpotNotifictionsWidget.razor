@@ -1,5 +1,6 @@
-﻿
+
 @inject IDashboardService DashboardService
+@implements IDisposable
 @if (data != null && data.Items.Any())
 {
     <div class="widget-container">
@@ -33,9 +34,16 @@
     [Parameter]
     public string Title { get; set; } = "آخرین اطلاعیه‌ها";
     private SpotNotificationData? data;
+    private CancellationTokenSource _cts = new();
     protected override async Task OnInitializedAsync()
     {
-        data = await DashboardService.GetspotNotifications();
+        data = await DashboardService.GetspotNotifications(_cts.Token);
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
     private string GetIconClass(SpotNotificationCategory category) => category switch
     {

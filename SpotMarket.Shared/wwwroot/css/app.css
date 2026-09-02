@@ -96,38 +96,131 @@ h1:focus {
         content: "An error has occurred."
     }
 
-.loading-progress {
-    position: relative;
-    display: block;
-    width: 8rem;
-    height: 8rem;
-    margin: 20vh auto 1rem auto;
-}
+/* ------------------------------------------------------------------
+   صفحه شروع برنامه
 
-    .loading-progress circle {
-        fill: none;
-        stroke: #e0e0e0;
-        stroke-width: 0.6rem;
-        transform-origin: 50% 50%;
-        transform: rotate(-90deg);
-    }
+   این بخش پیش از بارگذاری بلیزور و تنها با CSS نمایش داده می‌شود، پس نباید به
+   هیچ اسکریپت یا کامپوننتی وابسته باشد. درصد بارگذاری را خود بلیزور در متغیرهای
+   ‎--blazor-load-percentage‎ و ‎--blazor-load-percentage-text‎ می‌گذارد.
+   ------------------------------------------------------------------ */
 
-        .loading-progress circle:last-child {
-            stroke: #1b6ec2;
-            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
-            transition: stroke-dasharray 0.05s ease-in-out;
-        }
-
-.loading-progress-text {
-    position: absolute;
+.app-splash {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: var(--safe-area-inset-top) 1.5rem calc(var(--safe-area-inset-bottom) + 1.5rem);
+    background-color: var(--background-color);
     text-align: center;
-    font-weight: bold;
-    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
 }
 
-    .loading-progress-text:after {
-        content: var(--blazor-load-percentage-text, "Loading");
+.splash-logo {
+    width: 88px;
+    height: 88px;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 28px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+    box-shadow: 0 12px 28px rgba(var(--primary-color-rgb), 0.35);
+    animation: splash-breathe 2.4s ease-in-out infinite;
+}
+
+    .splash-logo svg {
+        width: 44px;
+        height: 44px;
     }
+
+@keyframes splash-breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.06);
+    }
+}
+
+.splash-name {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+}
+
+.splash-tagline {
+    margin: 0 0 1.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary-color);
+}
+
+.splash-progress {
+    width: 100%;
+    max-width: 220px;
+}
+
+.splash-progress-track {
+    height: 5px;
+    border-radius: 99px;
+    background-color: var(--gray-300);
+    overflow: hidden;
+}
+
+.splash-progress-bar {
+    height: 100%;
+    width: var(--blazor-load-percentage, 0%);
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--primary-light), var(--primary-color));
+    transition: width 0.15s ease-out;
+}
+
+.splash-progress-text {
+    margin-top: 0.6rem;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary-color);
+}
+
+    .splash-progress-text:after {
+        content: var(--blazor-load-percentage-text, "در حال آماده‌سازی…");
+    }
+
+/* میزبان هیبرید فایل‌های برنامه را دانلود نمی‌کند، پس درصدی برای نمایش وجود ندارد
+   و به‌جای آن نواری در حال حرکت نشان داده می‌شود. */
+.app-splash.is-indeterminate .splash-progress-bar {
+    width: 40%;
+    animation: splash-sweep 1.2s ease-in-out infinite;
+}
+
+.app-splash.is-indeterminate .splash-progress-text:after {
+    content: "در حال آماده‌سازی…";
+}
+
+@keyframes splash-sweep {
+    0% {
+        transform: translateX(150%);
+    }
+
+    100% {
+        transform: translateX(-150%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .splash-logo,
+    .app-splash.is-indeterminate .splash-progress-bar {
+        animation: none;
+    }
+}
+
+[data-bs-theme="dark"] .splash-progress-track {
+    background-color: var(--gray-700);
+}
 
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
@@ -666,7 +759,7 @@ body {
     padding: 8px 12px;
     border-radius: 15px;
     margin-bottom: 8px;
-    max-width: 80%;
+    max-width: 100%;
     word-wrap: break-word;
 }
 
