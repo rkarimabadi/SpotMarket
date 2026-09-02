@@ -1,4 +1,4 @@
-/* کادر نوشتن روی نوار پایین ثابت می‌ماند، پس رشته گفتگو به همان اندازه فضای
+﻿/* کادر نوشتن روی نوار پایین ثابت می‌ماند، پس رشته گفتگو به همان اندازه فضای
    خالی انتها لازم دارد تا آخرین پیام زیر آن پنهان نشود. */
 .chat-thread {
     padding-bottom: 6.5rem;
@@ -66,12 +66,20 @@
     border-top: 1px solid var(--border-color);
 }
 
+/* نوار پس‌زمینه تا لبه‌ی صفحه کشیده می‌شود، ولی محتوای آن هم‌عرض رشته‌ی گفتگو
+   می‌ماند: پهنا روی این ردیف بسته می‌شود، نه روی نوار. */
+.composer-row,
+.composer-note,
+.composer-disabled {
+    max-width: 544px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .composer-row {
     display: flex;
     align-items: flex-end;
     gap: 0.5rem;
-    max-width: 544px;
-    margin: 0 auto;
 }
 
 .composer-input {
@@ -93,6 +101,17 @@
     .composer-input:focus {
         border-color: var(--primary-color);
     }
+
+/* در صفحه‌های لمسی، اگر اندازه‌ی قلمِ ورودی کمتر از ۱۶ پیکسل باشد سافاریِ iOS
+   هنگام فوکوس خودش صفحه را بزرگ‌نمایی می‌کند و دیگر به حالت اول برنمی‌گرداند؛
+   نتیجه‌اش این است که نوار ثابتِ پایین از کادر دید بیرون می‌زند و کاربر باید
+   دستی صفحه را کوچک کند. ۱۶ پیکسل این بزرگ‌نمایی را از ریشه حذف می‌کند. */
+@media (pointer: coarse) {
+    .composer-input {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+}
 
 .composer-button {
     flex-shrink: 0;
