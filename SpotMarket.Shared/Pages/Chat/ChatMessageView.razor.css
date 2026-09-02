@@ -81,6 +81,23 @@
     color: var(--text-primary-color);
 }
 
+/* پیوند به صفحه‌ی یک موجودیت (کارگزار، عرضه‌کننده، کالا، عرضه، تالار).
+   زیرخط نقطه‌چین به‌جای زیرخط پیوسته، تا در جدول‌های پرردیف شلوغ نشود. */
+.chat-rich-text ::deep .chat-link {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+}
+
+.chat-rich-text ::deep .chat-link:hover,
+.chat-rich-text ::deep .chat-link:focus-visible {
+    text-decoration-style: solid;
+    color: var(--primary-light);
+}
+
 .chat-rich-text ::deep blockquote {
     margin: 0.5rem 0;
     padding: 0.25rem 0.75rem;
