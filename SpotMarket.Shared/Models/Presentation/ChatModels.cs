@@ -93,6 +93,16 @@ namespace SpotMarket.Shared.Models.Presentation
 
         /// <summary>خطا در تولید پاسخ</summary>
         public const string Error = "error";
+
+        /// <summary>
+        /// نسخه‌ی اصلاح‌شده‌ی کل پاسخ — متنی که تا این لحظه از رویدادهای delta ساخته شده
+        /// باید یک‌جا با <c>Text</c> جایگزین شود.
+        ///
+        /// سرور نگهبان زبان فارسی دارد که فقط پس از کامل‌شدن متن می‌تواند قضاوت کند، ولی تا
+        /// آن لحظه تکه‌ها فرستاده شده‌اند. این رویداد اختیاری است و فقط وقتی می‌آید که
+        /// واقعاً اصلاحی انجام شده باشد.
+        /// </summary>
+        public const string Correction = "correction";
     }
 
     /// <summary>

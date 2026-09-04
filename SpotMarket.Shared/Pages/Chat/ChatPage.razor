@@ -286,6 +286,18 @@
                 }
                 break;
 
+            case ChatStreamEventTypes.Correction:
+                // سرور متن کامل را پس از پایان تولید بررسی کرده و نسخه‌ی اصلاح‌شده فرستاده
+                // است. متنی که از تکه‌ها ساخته‌ایم یک‌جا جایگزین می‌شود؛ این رویداد فقط وقتی
+                // می‌آید که اصلاحی لازم بوده باشد.
+                if (!string.IsNullOrEmpty(evt.Text))
+                {
+                    reply.Content = evt.Text;
+                    reply.IsPending = false;
+                    StateHasChanged();
+                }
+                break;
+
             case ChatStreamEventTypes.Error:
                 reply.IsError = true;
                 reply.Content = evt.Text ?? "خطایی در تولید پاسخ رخ داد.";
