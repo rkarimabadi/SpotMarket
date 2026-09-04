@@ -7,7 +7,12 @@
     <div class="trend-chart-card">
         <div class="widget-header">
             <div class="price-info">
-                <div class="current-price">@data.CurrentPrice.ToString("N0", new CultureInfo("fa-IR"))</div>
+                <div class="current-price">
+                    @data.CurrentPrice.ToString("N0", new CultureInfo("fa-IR"))
+                    @* واحد پول از داده می‌آید و همیشه ریال نیست؛ اگر نامشخص باشد صراحتاً
+                       گفته می‌شود تا خالی‌بودن با «فراموش شده» اشتباه نگیرد. *@
+                    <span class="price-currency">@CurrencyLabel(data.CurrencyUnit)</span>
+                </div>
             </div>
 
             <div class="date-info @(data.IsOutdated ? "outdated" : "")">
@@ -76,7 +81,7 @@
                     <span>@highlight.Title</span>
                 </div>
                 <div class="item-value">
-                    @highlight.Value <span class="item-unit">@highlight.Unit</span>
+                    @highlight.Value <span class="item-unit">@CurrencyLabel(highlight.Unit)</span>
                 </div>
             </div>
         }
@@ -103,6 +108,14 @@
     {
         data = await CommodityService.GetPriceTrendsAsync(CommodityId);
     }
+    /// <summary>
+    /// برچسب واحد. سرور دیگر پیش‌فرض «ریال» نمی‌گذارد، چون قیمت‌ها همیشه ریالی نیستند و
+    /// واحد اشتباه از نبودِ واحد بدتر است. اینجا خالی‌بودن صریح اعلام می‌شود تا کاربر آن را
+    /// با یک قلمِ جاافتاده اشتباه نگیرد.
+    /// </summary>
+    private static string CurrencyLabel(string? unit) =>
+        string.IsNullOrWhiteSpace(unit) ? "واحد نامشخص" : unit;
+
     private MarkupString GenerateSvgTextLabel(PriceHistoryPoint item, double x)
     {
         var xFormatted = x.ToString(CultureInfo.InvariantCulture);

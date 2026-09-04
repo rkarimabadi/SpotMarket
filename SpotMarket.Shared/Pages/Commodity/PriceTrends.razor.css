@@ -219,3 +219,11 @@
 [data-bs-theme="dark"] .bar-chart-container rect.historical {
     fill: var(--gray-600);
 }
+
+/* واحد پول کنار قیمت اصلی؛ کوچک‌تر و کم‌رنگ‌تر تا عدد را تحت‌الشعاع قرار ندهد. */
+.current-price .price-currency {
+    font-size: 0.6em;
+    font-weight: 400;
+    color: var(--text-secondary-color);
+    margin-inline-start: 0.25rem;
+}
