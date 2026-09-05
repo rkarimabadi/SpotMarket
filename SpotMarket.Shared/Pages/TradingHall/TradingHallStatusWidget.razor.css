@@ -51,10 +51,6 @@
         background-color: var(--success-color);
     }
 
-    .progress-segment.in-trading {
-        background-color: var(--warning-color);
-    }
-
     .progress-segment.remaining {
         background-color: var(--border-color);
     }
@@ -82,74 +78,10 @@
         background-color: var(--success-color);
     }
 
-    .dot.in-trading {
-        background-color: var(--warning-color);
-    }
-
     .dot.remaining {
         background-color: var(--border-color);
     }
 
-/* Divider */
-.divider {
-    height: 1px;
-    background-color: var(--border-color);
-    margin: 1.25rem 0;
-}
-
-/* Timing & Status Section */
-.timing-status-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.timing-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--text-secondary-color);
-}
-
-    .timing-item .bi {
-        font-size: 1.25rem;
-    }
-
-.status-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-}
-
-.status-open {
-    color: var(--success-color);
-}
-
-    .status-open .status-dot {
-        background-color: var(--success-color);
-    }
-
-.status-preopening {
-    color: var(--warning-color);
-}
-
-    .status-preopening .status-dot {
-        background-color: var(--warning-color);
-    }
-
-.status-closed {
-    color: var(--danger-color);
-}
-
-    .status-closed .status-dot {
-        background-color: var(--danger-color);
-    }
+/* بخش «ساعت کار و وضعیت تالار» و نوارِ «در حال معامله» از این ویجت حذف شدند چون داده‌ی
+   واقعی نداشتند (دلیل کامل در بالای فایل .razor). قاعده‌های CSS‌شان هم با آن‌ها برداشته شد
+   تا شیوه‌نامه سرنخِ گمراه‌کننده برای بخشی که دیگر رندر نمی‌شود باقی نگذارد. */

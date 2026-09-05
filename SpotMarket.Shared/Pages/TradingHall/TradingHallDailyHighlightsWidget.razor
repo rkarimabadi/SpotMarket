@@ -7,7 +7,7 @@
 else if (_data != null)
 {
     <div class="widget-header">
-        <h3 class="widget-title">برترین‌های روز</h3>
+        <h3 class="widget-title">@_title</h3>
     </div>
     <div class="segment-control">
         <button class="@GetSegmentClass("value")" @onclick='() => SetActiveSegment("value")'>بیشترین ارزش</button>
@@ -41,9 +41,19 @@ else if (_data != null)
     private DailyHighlightsData? _data;
     private string _activeSegment = "value";
 
+    // «روز» در عنوان، روزِ مؤثر است نه لزوماً امروز؛ در روزهای غیرمعاملاتی تاریخ نوشته
+    // می‌شود تا کاربر ارقام آخرین روز معاملاتی را به امروز نسبت ندهد.
+    private string _title = "برترین‌های روز";
+
     protected override async Task OnInitializedAsync()
     {
         _data = await HallService.GetHighlightsDataAsync(MarketId);
+
+        if (_data != null && !_data.IsForToday && !string.IsNullOrWhiteSpace(_data.EffectiveDate))
+        {
+            _title = $"برترین‌های {_data.EffectiveDate}";
+        }
+
         _isLoading = false;
     }
 

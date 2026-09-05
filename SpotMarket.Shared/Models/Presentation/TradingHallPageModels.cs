@@ -23,6 +23,16 @@ namespace SpotMarket.Shared.Models.Presentation
         public HallStatus Status { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
+
+        /// <summary>
+        /// روزی که این ارقام به آن مربوط‌اند (شمسی). سرور «روز مؤثر» را برمی‌گرداند: امروز
+        /// اگر روز معاملاتی باشد، وگرنه آخرین روز معاملاتی — پس عنوان ویجت نباید «امروز» را
+        /// ثابت بنویسد.
+        /// </summary>
+        public string? EffectiveDate { get; set; }
+
+        /// <summary>آیا <see cref="EffectiveDate"/> همان امروز است.</summary>
+        public bool IsForToday { get; set; }
     }
 
     // 2. Models for the "Trades" Tab
@@ -47,5 +57,11 @@ namespace SpotMarket.Shared.Models.Presentation
         public List<HighlightItem> TopValueTrades { get; set; } = new();
         public List<HighlightItem> HottestCompetitions { get; set; } = new();
         public List<HighlightItem> HeaviestCompetitions { get; set; } = new();
+
+        /// <summary>روزی که این برترین‌ها به آن مربوط‌اند (شمسی).</summary>
+        public string? EffectiveDate { get; set; }
+
+        /// <summary>آیا <see cref="EffectiveDate"/> همان امروز است.</summary>
+        public bool IsForToday { get; set; }
     }
 }
